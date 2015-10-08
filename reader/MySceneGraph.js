@@ -121,11 +121,81 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
  
  if(elems == null) return "translate element is missing";
  
- if(elems.length != 1) return "invalid number of 'translate' elemts is found. (expected=11; found="+elems.length+")";
+ if(elems.length != 1) return "invalid number of 'translate' elements is found. (expected=11; found="+elems.length+")";
  
  var translate = elems[0];
  
  this.translate =[];
+ 
+ this.translate[ 'x' ] = this.reader.getFloat(translate,'x',true);
+ this.translate[ 'y' ] = this.reader.getFloat(translate,'y',true);
+ this.translate[ 'z' ] = this.reader.getFloat(translate,'z',true);
+ 
+ console.log("\tTRANSLATE -x : " +this.translate['x']);
+ console.log("\tTRANSLATE -y : " +this.translate['y']);
+ console.log("\tTRANSLATE -z : " +this.translate['z']);
+ 
+ //ROTATION
+ 
+ var elems = initials.getElementsByTagName("rotation");
+ 
+ if(elems == null) return "rotation element is missing";
+ 
+ if(elems.length != 1) return return "invalid number of 'rotation' elements is found. (expected=11; found="+elems.length+")";
+ 
+ this.rotation[ [],[],[] ];
+ 
+ for( var i=0 ; i < 3 ;i++)
+ {
+ 
+ var rotation = elems[i];
+ 
+ this.rotation[i]['axis'] = this.reader.getString(rotation,'axis',true);
+ if(this.rotation[i]['axis']!='x' &&
+			this.rotation[i]['axis']!='y' &&
+			this.rotation[i]['axis']!='z')
+			return "invalid "+(i+1)+" 'axis' value found. (expected=[x,y,z]; found="+this.rotation[i]['axis']+")";
+			
+ this.rotation[i]['angle'] = this.reader.getFloat(rotation,'angle',true);
+ 
+ console.log("\tROTATION["+i+"] - axis:"+this.rotation[i]['axis']);
+ console.log("\tROTATION["+i+"] - angle:"+this.rotation[i]['angle']);
+ 
+ 
+ }
+ 
+ //SCALE 
+ 
+ var elems = initials.getElementsByTagName("scale");
+ 
+ if(elems == null) return "scale element is missing";
+ 
+ if(elems.length != 1) return return "invalid number of 'scale' elements is found. (expected=11; found="+elems.length+")";
+ 
+ var scale = elems[0];
+
+	this.scale=[];
+	this.scale["sx"]=this.reader.getFloat(scale,"sx",true);
+	this.scale["sy"]=this.reader.getFloat(scale,"sy",true);
+	this.scale["sz"]=this.reader.getFloat(scale,"sz",true);
+	console.log("\tSCALE - sx:"+this.scale["sx"]);
+	console.log("\tSCALE - sy:"+this.scale["sy"]);
+	console.log("\tSCALE - sz:"+this.scale["sz"]);
+
+	//REFERENCE
+
+	var elems = initials.getElementsByTagName('reference');
+	if (elems == null)  return "reference element is missing.";
+	if (elems.length != 1) return "invalid number of 'reference' elements found. (expected=1; found="+elems.length+")";
+
+	var reference = elems[0];
+
+	this.reference=this.reader.getFloat(reference,'length',true);
+
+	console.log("\tREFERENCE:"+this.reference);
+	
+	};
+ 
 MySceneGraph.prototype.onXMLError=function (message) {
 	console.error("XML Loading Error: "+message);	
 	this.loadedOk=false;
