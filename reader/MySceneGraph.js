@@ -88,7 +88,44 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 /*
  * Callback to be executed on any read error
  */
+ MySceneGraph.prototype.parseInitials = function(rootElement)
+ {
  
+ console.log("INITIALS");
+ 
+ var elems = rootElement.getElementsByTagName("INITIALS");
+ if(elems == null) return "INITIALS element is missing";
+ if(elems.length != 1) return "Invalid number of 'INITIALS' (expected 1 but was "elems.length") ";
+ var initials = elems[0];
+ 
+ //FRUSTUM
+ 
+ var elems = initials.getElementsByTagName("frustum");
+ 
+ if(elems == null) return "frustum element is missing";
+ if (elems.length != 1) return "invalid number of 'frustum' elements found. (expected=1; found="+elems.length+")";
+ 
+ var frustum = elems[0];
+ 
+ this.frustum[] = [];
+ 
+ this.frustum['near'] = this.reader.getFloat(frustum,'near',true);
+ this.frustum['far'] = this.reader.getFloat(frustum,'far',true);
+ 
+ console.log("\tFRUSTUM - near:"+this.frustum['near']);
+ console.log("\tFRUSTUM - far:"+this.frustum['far']);
+ 
+ //TRANSLATE
+ 
+ var elems = initials.getElementsByTagName("translate");
+ 
+ if(elems == null) return "translate element is missing";
+ 
+ if(elems.length != 1) return "invalid number of 'translate' elemts is found. (expected=11; found="+elems.length+")";
+ 
+ var translate = elems[0];
+ 
+ this.translate =[];
 MySceneGraph.prototype.onXMLError=function (message) {
 	console.error("XML Loading Error: "+message);	
 	this.loadedOk=false;
