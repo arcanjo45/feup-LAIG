@@ -47,7 +47,7 @@ MySceneGraph.prototype.onXMLReady=function()
  */
 MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 	
-	var elems =  rootElement.getElementsByTagName('globals');
+	/*var elems =  rootElement.getElementsByTagName('globals');
 	if (elems == null) {
 		return "globals element is missing.";
 	}
@@ -81,7 +81,7 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 		// process each element and store its information
 		this.list[e.id]=e.attributes.getNamedItem("coords").value;
 		console.log("Read list item id "+ e.id+" with value "+this.list[e.id]);
-	};
+	};*/
 
 };
 	
