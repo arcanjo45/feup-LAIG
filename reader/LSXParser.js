@@ -48,7 +48,7 @@ LSXParser.prototype.onXMLReady = function() {
         this.onXMLError(error);
         return;
     }
-
+*/
     console.log("---------Lights----------");
 
     error = this.parseLights(mainElement);
@@ -56,7 +56,7 @@ LSXParser.prototype.onXMLReady = function() {
         this.onXMLError(error);
         return;
     }
-
+/*
     console.log("---------Textures----------");
 
     error = this.parseTextures(mainElement);
@@ -141,7 +141,7 @@ LSXParser.prototype.parseInitials = function(mainElement) {
 
     this.initials.reference = this.reader.getFloat(r_length, 'length');
 
-    this.initials.print();
+    //this.initials.print();
 
     return null;
 };
@@ -175,3 +175,89 @@ function Initials() {
     };
 }
 
+
+LSXParser.prototype.parseLights= function(mainElement){
+
+    var light_list = mainElement.getElementsByTagName("LIGHTS")[0];
+
+  if(light_list == null) return " Element <LIGHTS> is missing";
+
+  var lights = light_list.getElementsByTagName("LIGHT");
+  if(lights== null)return " Element <LIGHT> is missing";
+
+  for(i = 0; i < lights.length;i++)
+  {
+    var light = new Light(this.reader.getString(lights[i],'id'));
+
+    light.enabled = this.reader.getBoolean(lights[i].getElementsByTagName('enable')[0],'value');
+    light.ambient = this.parseColor(lights[i].getElementsByTagName('ambient')[0]);
+    light.diffuse = this.parseColor(lights[i].getElementsByTagName('diffuse')[0]);
+    light.specular = this.parseColor(lights[i].getElementsByTagName('specular')[0]);
+
+    var aux = lights[i].getElementsByTagName('position')[0];
+        light.position.x = this.reader.getFloat(aux, 'x');
+        light.position.y = this.reader.getFloat(aux, 'y');
+        light.position.z = this.reader.getFloat(aux, 'z');
+        light.position.w = this.reader.getFloat(aux, 'w');
+
+    light.print();
+    this.lights.push(light);
+  }
+
+return null;
+
+
+};
+
+function Light(id) {
+    this.id = id;
+    this.enabled = false;
+    this.position = {
+        x: 0.0,
+        y: 0.0,
+        z: 0.0,
+        w: 0.0
+    };
+    this.ambient = {
+        r: 0.0,
+        g: 0.0,
+        b: 0.0,
+        a: 0.0
+    };
+    this.diffuse = {
+        r: 0.0,
+        g: 0.0,
+        b: 0.0,
+        a: 0.0
+    };
+    this.specular = {
+        r: 0.0,
+        g: 0.0,
+        b: 0.0,
+        a: 0.0
+    };
+
+    this.print = function() {
+        console.log("Light " + this.id + " - " + (this.enabled ? "On" : "Off"));
+        console.log("Position: " + this.position.x + " " + this.position.y + " " + this.position.z + " " + this.position.w);
+        console.log("Ambient: " + printColor(this.ambient));
+        console.log("Diffuse: " + printColor(this.diffuse));
+        console.log("Specular: " + printColor(this.specular));
+    };
+
+    
+
+}
+
+LSXParser.prototype.parseColor = function(element) {
+    var color = {};
+    color.r = this.reader.getFloat(element, 'r');
+    color.g = this.reader.getFloat(element, 'g');
+    color.b = this.reader.getFloat(element, 'b');
+    color.a = this.reader.getFloat(element, 'a');
+    return color;
+};
+
+var printColor = function(c) {
+    return "(" + c.r + ", " + c.g + ", " + c.b + ", " + c.a + ")";
+};
