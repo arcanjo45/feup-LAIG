@@ -303,20 +303,32 @@ for(i=0; i < leafs.length;i++)
 
 	if(leaf.type == "rectangle")
 	{
-		for( var j=0; j < args_aux.length;j++)
+		for( var j=0; j < args_aux.length; j++)
 		{
             leaf.args.push(parseFloat(args_aux[j]));
 		}
 	}
-	else
-
-
-	if(leaf.type == "sphere")
+	else if(leaf.type == "sphere")
 	{
 		leaf.args.push(parseFloat(args_aux[0]));
         leaf.args.push(parseInt(args_aux[1]));
         leaf.args.push(parseInt(args_aux[2]));
 	}
+    else if(leaf.type == "cylinder")
+    {
+        leaf.args.push(parseFloat(args_aux[0]));
+        leaf.args.push(parseFloat(args_aux[1]));
+        leaf.args.push(parseFloat(args_aux[2]));
+        leaf.args.push(parseInt(args_aux[3]));
+        leaf.args.push(parseFloat(args_aux[4]));
+    }
+    else if(leaf.type == "triangle")
+    {
+        for( var j=0; j < args_aux.length; j++)
+        {
+            leaf.args.push(parseFloat(args_aux[j]));
+        }
+    }
 
         leaf.print();
         this.leaves.push(leaf);
