@@ -10,7 +10,7 @@ function LSXParser(filename, scene) {
 
     // Scene graph data
     this.initials = new Initials();
-  //  this.illumination = new Illumination();
+    this.illumination = new Illumination();
     this.lights = [];
     this.textures = [];
     this.materials = [];
@@ -40,7 +40,7 @@ LSXParser.prototype.onXMLReady = function() {
         return;
     }
 
-/*
+
     console.log("---------Illumination----------");
 
     error = this.parseIllumination(mainElement);
@@ -48,7 +48,7 @@ LSXParser.prototype.onXMLReady = function() {
         this.onXMLError(error);
         return;
     }
-*/
+
     console.log("---------Lights----------");
 
     error = this.parseLights(mainElement);
@@ -262,6 +262,25 @@ LSXParser.prototype.parseTextures = function(mainElement){
 
 };
 
+LSXParser.prototype.parseIllumination = function(mainElement)
+{
+
+    var ilumins = mainElement.getElementsByTagName('ILLUMINATION')[0];
+
+    if(ilumins == null) return "ILLUMINATION element is missing";
+
+    var ambient = ilumins.getElementsByTagName('ambient')[0];
+
+    this.illumination.ambient = this.parseColor(ambient);
+
+    var background = ilumins.getElementsByTagName('background')[0];
+
+    this.illumination.background= this.parseColor(background);
+
+    this.illumination.print();
+
+};
+
 function Light(id) {
     this.id = id;
     this.enabled = false;
@@ -337,6 +356,29 @@ function Material(id){
         console.log("Diffuse: " + printColor(this.diffuse));
         console.log("Specular: " + printColor(this.specular));
         console.log("Emission: " + printColor(this.emission));
+    };
+}
+
+function Illumination()
+{
+	this.amient = {
+		r: 0.0,
+        g: 0.0,
+        b: 0.0,
+        a: 0.0
+	};
+
+	this.background = {
+        r: 0.0,
+        g: 0.0,
+        b: 0.0,
+        a: 0.0
+	};
+
+	 this.print = function() {
+        console.log("Ambient: " + printColor(this.ambient));
+        console.log("Background: " + printColor(this.background));
+        console.log("Doubleside: " + (this.doubleside ? "Yes" : "No"));
     };
 }
 
