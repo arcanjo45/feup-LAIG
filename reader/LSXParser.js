@@ -281,6 +281,43 @@ LSXParser.prototype.parseIllumination = function(mainElement)
 
 };
 
+LSXParser.prototype.parseLeaves = function(mainElement)
+{
+	var lista_leafs = mainElement.getElementsByTagName('LEAVES')[0];
+
+	if(lista_leafs == null) return "<LEAVES> element is missing"
+
+	var leafs = lista_leafs.getElementsByTagName('LEAF');
+
+for(i=0; i < leafs.length;i++)
+{
+
+	var leaf = new Leaf(leafs[i].getAttribute('id'));
+
+	leaf.type = this.reader.getItem(leafs[i],'type',['rectangle', 'cylinder', 'sphere', 'triangle']);
+
+	leaf.args = leafs[i].getAttribute('args');
+
+
+}
+
+};
+
+function Leaf(id){
+
+	this.id= id;
+	this.type = "";
+	this.args = [];
+
+	this.print() = function(){
+
+		console.log( "Leaf" + this.id);
+		console.log( "Type" + this.type);
+		console.log( "Args" + this.args);
+
+
+	};
+}
 function Light(id) {
     this.id = id;
     this.enabled = false;
