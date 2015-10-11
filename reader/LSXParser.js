@@ -56,7 +56,7 @@ LSXParser.prototype.onXMLReady = function() {
         this.onXMLError(error);
         return;
     }
-/*
+
     console.log("---------Textures----------");
 
     error = this.parseTextures(mainElement);
@@ -64,7 +64,7 @@ LSXParser.prototype.onXMLReady = function() {
         this.onXMLError(error);
         return;
     }
-*/
+
     console.log("---------Materials----------");
 
     error = this.parseMaterials(mainElement);
@@ -114,6 +114,7 @@ LSXParser.prototype.parseInitials = function(mainElement) {
     this.initials.translation.y = this.reader.getFloat(translation, 'y');
     this.initials.translation.z = this.reader.getFloat(translation, 'z');
 
+
     //Rotations
     var rotations = initials_list.getElementsByTagName('rotation');
     if (rotations.length != 3 || rotations == null) return "Needs 3 <rotation> elements";
@@ -141,7 +142,7 @@ LSXParser.prototype.parseInitials = function(mainElement) {
 
     this.initials.reference = this.reader.getFloat(r_length, 'length');
 
-    //this.initials.print();
+    this.initials.print();
 
     return null;
 };
@@ -237,6 +238,30 @@ LSXParser.prototype.parseMaterials = function(mainElement){
 
 };
 
+LSXParser.prototype.parseTextures = function(mainElement){
+    var text_list = mainElement.getElementsByTagName('TEXTURES')[0];
+
+    if (text_list == null) return "<TEXTURES> element is missing.";
+
+    var texts = text_list.getElementsByTagName('TEXTURE');
+
+    for (i = 0; i < texts.length; i++) {
+        var textura = new Texture(texts[i].getAttribute('id'));
+
+        textura.path = texts[i].getElementsByTagName('file')[0].getAttribute('path');
+
+        var aux = texts[i].getElementsByTagName('amplif_factor')[0];
+        textura.amplif_factor.s = this.reader.getFloat(aux, 's');
+        textura.amplif_factor.t = this.reader.getFloat(aux, 't');
+
+        textura.print();
+        this.textures.push(textura);
+    }
+
+    return null;
+
+};
+
 function Light(id) {
     this.id = id;
     this.enabled = false;
@@ -312,6 +337,25 @@ function Material(id){
         console.log("Diffuse: " + printColor(this.diffuse));
         console.log("Specular: " + printColor(this.specular));
         console.log("Emission: " + printColor(this.emission));
+    };
+}
+
+function Texture(id)
+{
+	this.id=id;
+
+	this.path = "";
+
+	this.amplif_factor = {
+		s : 0.0,
+		t : 0.0
+
+	};
+
+	 this.print = function() {
+        console.log("Texture " + this.id);
+        console.log("Path: " + this.path);
+        console.log("Amplif Factor: " + "(s:" + this.amplif_factor.s + ", t:" + this.amplif_factor.t + ")");
     };
 }
 
