@@ -72,7 +72,7 @@ LSXParser.prototype.onXMLReady = function() {
         this.onXMLError(error);
         return;
     }
-/*
+
     console.log("---------Leaves----------");
 
     error = this.parseLeaves(mainElement);
@@ -80,7 +80,7 @@ LSXParser.prototype.onXMLReady = function() {
         this.onXMLError(error);
         return;
     }
-
+/*
     console.log("---------Nodes----------");
 
     error = this.parseNodes(mainElement);
@@ -291,15 +291,38 @@ LSXParser.prototype.parseLeaves = function(mainElement)
 
 for(i=0; i < leafs.length;i++)
 {
-
+//console.log(leafs.length);
 	var leaf = new Leaf(leafs[i].getAttribute('id'));
 
 	leaf.type = this.reader.getItem(leafs[i],'type',['rectangle', 'cylinder', 'sphere', 'triangle']);
 
-	leaf.args = leafs[i].getAttribute('args');
+	var args_aux = leafs[i].getAttribute('args').split(" ");
 
+
+
+
+	if(leaf.type == "rectangle")
+	{
+		for( var j=0; j < args_aux.length;j++)
+		{
+            leaf.args.push(parseFloat(args_aux[j]));
+		}
+	}
+	else
+
+
+	if(leaf.type == "sphere")
+	{
+		leaf.args.push(parseFloat(args_aux[0]));
+        leaf.args.push(parseInt(args_aux[1]));
+        leaf.args.push(parseInt(args_aux[2]));
+	}
+
+        leaf.print();
+        this.leaves.push(leaf);
 
 }
+
 
 };
 
@@ -309,11 +332,11 @@ function Leaf(id){
 	this.type = "";
 	this.args = [];
 
-	this.print() = function(){
+	this.print= function(){
 
-		console.log( "Leaf" + this.id);
-		console.log( "Type" + this.type);
-		console.log( "Args" + this.args);
+		console.log( "Leaf " + this.id);
+		console.log( "Type " + this.type);
+		console.log( "Args " + this.args);
 
 
 	};
