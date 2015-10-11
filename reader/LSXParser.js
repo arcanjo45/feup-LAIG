@@ -107,7 +107,7 @@ LSXParser.prototype.parseInitials = function(mainElement) {
     this.initials.frustum.far = this.reader.getFloat(frustum, 'far');
 
     //Translation
-    var translation = initials_list.getElementsByTagName('translate')[0];
+    var translation = initials_list.getElementsByTagName('translation')[0];
     if (translation == null) return "<translation> element is missing";
 
     this.initials.translation.x = this.reader.getFloat(translation, 'x');
