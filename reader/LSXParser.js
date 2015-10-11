@@ -64,7 +64,7 @@ LSXParser.prototype.onXMLReady = function() {
         this.onXMLError(error);
         return;
     }
-
+*/
     console.log("---------Materials----------");
 
     error = this.parseMaterials(mainElement);
@@ -72,7 +72,7 @@ LSXParser.prototype.onXMLReady = function() {
         this.onXMLError(error);
         return;
     }
-
+/*
     console.log("---------Leaves----------");
 
     error = this.parseLeaves(mainElement);
@@ -209,6 +209,34 @@ return null;
 
 };
 
+LSXParser.prototype.parseMaterials = function(mainElement){
+
+	var mat_list = mainElement.getElementsByTagName("MATERIALS")[0];
+
+	if(mat_list == null) return "Element <MATERIALS> is missing";
+
+	var mats = mat_list.getElementsByTagName("MATERIAL");
+
+	for( i=0; i < mats.length;i++)
+	{
+		var material = new Material(mats[i].getAttribute('id'));
+
+		material.ambient = this.parseColor(mats[i].getElementsByTagName('ambient')[0]);
+		material.specular = this.parseColor(mats[i].getElementsByTagName('specular')[0]);
+		material.diffuse = this.parseColor(mats[i].getElementsByTagName('diffuse')[0]);
+		material.emission = this.parseColor(mats[i].getElementsByTagName('emission')[0]);
+
+		material.shine = this.reader.getFloat(mats[i].getElementsByTagName('shininess')[0],'value');
+
+		material.print();
+
+		this.materials.push(material);
+	}
+
+	return null;
+
+};
+
 function Light(id) {
     this.id = id;
     this.enabled = false;
@@ -247,6 +275,44 @@ function Light(id) {
 
     
 
+}
+
+function Material(id){
+	this.id = id;
+    this.shininess = 0.0;
+    this.ambient = {
+        r: 0.0,
+        g: 0.0,
+        b: 0.0,
+        a: 0.0
+    };
+    this.diffuse = {
+        r: 0.0,
+        g: 0.0,
+        b: 0.0,
+        a: 0.0
+    };
+    this.specular = {
+        r: 0.0,
+        g: 0.0,
+        b: 0.0,
+        a: 0.0
+    };
+    this.emission = {
+        r: 0.0,
+        g: 0.0,
+        b: 0.0,
+        a: 0.0
+    };
+
+    this.print = function() {
+        console.log("Material " + this.id);
+        console.log("Shininess: " + this.shininess);
+        console.log("Ambient: " + printColor(this.ambient));
+        console.log("Diffuse: " + printColor(this.diffuse));
+        console.log("Specular: " + printColor(this.specular));
+        console.log("Emission: " + printColor(this.emission));
+    };
 }
 
 LSXParser.prototype.parseColor = function(element) {
