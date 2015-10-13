@@ -11,7 +11,7 @@ function getUrlVars() {
     return vars;
 }	 
 
-serialInclude(['../lib/CGF.js', 'LSXParser.js','LSXScene.js',
+serialInclude(['../lib/CGF.js', 'LSXParser.js','LSXScene.js','MySphere.js','MyQuad','MyCylinderWithTops.js','MyCylinder.js','MyCircle.js',
 
 main=function()
 {
