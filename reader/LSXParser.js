@@ -19,7 +19,7 @@ function LSXParser(filename, scene) {
     this.nodes = [];
 }
 
-
+var deg2rad = Math.PI / 180;
 LSXParser.prototype.onXMLError = function(message) {
     console.error("LSX loading error: " + message);
     this.loadedOK = false;
@@ -80,7 +80,7 @@ LSXParser.prototype.onXMLReady = function() {
         this.onXMLError(error);
         return;
     }
-/*
+
     console.log("---------Nodes----------");
 
     error = this.parseNodes(mainElement);
@@ -88,11 +88,12 @@ LSXParser.prototype.onXMLReady = function() {
         this.onXMLError(error);
         return;
     }
-*/
+
     console.log("-------------------");
 
     this.loadedOK = true;
     this.scene.onGraphLoaded();
+    console.log("ola");
 };
 
 LSXParser.prototype.parseInitials = function(mainElement) {
@@ -140,9 +141,9 @@ LSXParser.prototype.parseInitials = function(mainElement) {
     var r_length = initials_list.getElementsByTagName('reference')[0];
     if (r_length == null) return "<reference> element is missing";
 
-    this.initials.reference = this.reader.getFloat(r_length, 'length');
+    this.initials.reference = this.reader.getFloat(r_length, 'length',1);
 
-    this.initials.print();
+    //this.initials.print();
 
     return null;
 };
@@ -201,7 +202,7 @@ LSXParser.prototype.parseLights= function(mainElement){
         light.position.z = this.reader.getFloat(aux, 'z');
         light.position.w = this.reader.getFloat(aux, 'w');
 
-    light.print();
+    //light.print();
     this.lights.push(light);
   }
 
@@ -229,7 +230,7 @@ LSXParser.prototype.parseMaterials = function(mainElement){
 
 		material.shine = this.reader.getFloat(mats[i].getElementsByTagName('shininess')[0],'value');
 
-		material.print();
+		//material.print();
 
 		this.materials.push(material);
 	}
@@ -254,7 +255,7 @@ LSXParser.prototype.parseTextures = function(mainElement){
         textura.amplif_factor.s = this.reader.getFloat(aux, 's');
         textura.amplif_factor.t = this.reader.getFloat(aux, 't');
 
-        textura.print();
+       // textura.print();
         this.textures.push(textura);
     }
 
@@ -277,7 +278,7 @@ LSXParser.prototype.parseIllumination = function(mainElement)
 
     this.illumination.background= this.parseColor(background);
 
-    this.illumination.print();
+    //this.illumination.print();
 
 };
 
@@ -330,12 +331,77 @@ for(i=0; i < leafs.length;i++)
         }
     }
 
-        leaf.print();
+       // leaf.print();
         this.leaves.push(leaf);
 
 }
 
 
+};
+
+LSXParser.prototype.parseNodes = function(mainElement) {
+    var nodes_list = mainElement.getElementsByTagName('NODES')[0];
+    if (nodes_list == null) return "<NODES> element is missing.";
+
+    var root_node = nodes_list.getElementsByTagName('ROOT')[0];
+    this.root_id = this.reader.getString(root_node, 'id');
+    console.log("ROOT Node: " + this.root_id);
+
+    var nodes = nodes_list.getElementsByTagName('NODE');
+
+    for (i = 0; i < nodes.length; i++) {
+        var node = new Node(nodes[i].getAttribute('id'));
+        node.material = this.reader.getString(nodes[i].getElementsByTagName('MATERIAL')[0], 'id');
+        node.texture = this.reader.getString(nodes[i].getElementsByTagName('TEXTURE')[0], 'id');
+
+        // Transforms
+        var children = nodes[i].children;
+        for (j = 0; j < children.length; j++) {
+            switch (children[j].tagName) {
+                case "TRANSLATION":
+                    var trans = [];
+                    trans.push(this.reader.getFloat(children[j], "x"));
+                    trans.push(this.reader.getFloat(children[j], "y"));
+                    trans.push(this.reader.getFloat(children[j], "z"));
+                    // console.log("trans: " + trans);
+                    mat4.translate(node.matrix, node.matrix, trans);
+                    break;
+                case "SCALE":
+                    var scale = [];
+                    scale.push(this.reader.getFloat(children[j], "sx"));
+                    scale.push(this.reader.getFloat(children[j], "sy"));
+                    scale.push(this.reader.getFloat(children[j], "sz"));
+                    // console.log("scale: " + scale);
+                    mat4.scale(node.matrix, node.matrix, scale);
+                    break;
+                case "ROTATION":
+                    var axis = this.reader.getItem(children[j], "axis", ["x", "y", "z"]);
+                    var angle = this.reader.getFloat(children[j], "angle") * deg2rad;
+                    var rot = [0, 0, 0];
+
+                    // console.log("rot: " + axis + " " + angle + " ");
+                    rot[["x", "y", "z"].indexOf(axis)] = 1;
+                    mat4.rotate(node.matrix, node.matrix, angle, rot);
+                    break;
+            }
+        }
+
+        //Descendants
+        var desc = nodes[i].getElementsByTagName('DESCENDANTS')[0];
+        if (desc == null) return "No <DESCENDANTS> tag found";
+
+        var d_list = desc.getElementsByTagName('DESCENDANT');
+        if (d_list.length < 1) return "Need at least 1 <DESCENDANT>";
+
+        for (j = 0; j < d_list.length; j++) {
+            node.descendants.push(d_list[j].getAttribute('id'));
+        }
+
+       // node.print();
+        this.nodes.push(node);
+    }
+
+    return null;
 };
 
 function Leaf(id){
@@ -470,6 +536,23 @@ function Texture(id)
         console.log("Texture " + this.id);
         console.log("Path: " + this.path);
         console.log("Amplif Factor: " + "(s:" + this.amplif_factor.s + ", t:" + this.amplif_factor.t + ")");
+    };
+}
+
+function Node(id) {
+    this.id = id;
+    this.material = null;
+    this.texture = null;
+    this.matrix = mat4.create();
+
+    this.descendants = [];
+
+    this.print = function() {
+        console.log("Node " + this.id);
+        console.log("Material " + this.material);
+        console.log("Texture " + this.texture);
+        console.log("Matrix " + this.matrix);
+        console.log("Descendants: " + this.descendants);
     };
 }
 

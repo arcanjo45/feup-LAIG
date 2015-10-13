@@ -11,13 +11,13 @@ function getUrlVars() {
     return vars;
 }	 
 
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'LSXParser.js',
+serialInclude(['../lib/CGF.js', 'LSXParser.js','LSXScene.js',
 
 main=function()
 {
 	// Standard application, scene and interface setup
     var app = new CGFapplication(document.body);
-    var myScene = new XMLscene();
+    var myScene = new LSXScene();
     var myInterface = new CGFinterface();
 
     app.init();
