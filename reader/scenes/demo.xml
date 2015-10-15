@@ -12,16 +12,16 @@
            <enable value="1" />                         <!-- enable/disable -->
            <position x="0.5" y="0.5" z="1" w="1" />       <!-- light position -->
            <ambient r="0" g="0" b="0" a="1" />        <!-- ambient component -->
-           <diffuse r="0.9" g="0.9" b="0.9" a="1" />        <!-- diffuse component -->
-           <specular r="0.5" g="0.5" b="0.5" a="1" />       <!-- specular component -->
+           <diffuse r="1" g="1" b="1" a="1" />        <!-- diffuse component -->
+           <specular r="1" g="1" b="1" a="1" />       <!-- specular component -->
         </LIGHT>
 
         <LIGHT id="L2">                                    <!-- light identifier -->
            <enable value="1" />                          <!-- enable/disable -->
            <position x="2" y="2" z="-2" w="0.1" />       <!-- light position -->
            <ambient r="0" g="0" b="0" a="1" />        <!-- ambient component -->
-           <diffuse r="0.9" g="0.9" b="0.9" a="1" />        <!-- diffuse component -->
-           <specular r="0.5" g="0.5" b="0.5" a="1" />       <!-- specular component -->
+           <diffuse r="1" g="1" b="1" a="1" />        <!-- diffuse component -->
+           <specular r="1" g="1" b="1" a="1" />       <!-- specular component -->
         </LIGHT>
 
        <!-- NOTE: this block "LIGHT" must be repeated as necessary with different "id" -->
@@ -54,10 +54,10 @@
     <MATERIALS>
         <MATERIAL id="madeira">
             <shininess value="10"/>
-            <specular r="200" g="100" b="50" a="1"/>
-            <diffuse r="150" g="20" b="45" a="0" /> 
-            <ambient r="75" g="90" b="67" a="2" /> 
-            <emission r="40" g="12" b="29" a="1" />
+            <specular r="0.78" g="0.39" b="0.196" a="1"/>
+            <diffuse r="0.59" g="0.078" b="0.176" a="0" /> 
+            <ambient r="0.29" g="0.35" b="0.26" a="0" /> 
+            <emission r="0.156" g="0.047" b="0.113" a="1" />
         </MATERIAL>
 
         <MATERIAL id="pedra">  
@@ -259,7 +259,7 @@
             <MATERIAL id="null"/>
             <TEXTURE id="null"/>
 
-            <TRANSLATION x="0.2" y="" z="0.2" />
+            <TRANSLATION x="0.2" y="0" z="0.2" />
             <SCALE sx="0.2" sy="1.75" sz="0.2"/>
 
             <DESCENDANTS>

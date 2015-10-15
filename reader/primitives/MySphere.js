@@ -6,11 +6,19 @@
  {
         CGFobject.call(this,scene);
 
-  this.args = args ;
+  this.args = args || [1.0, 8, 8];
 
     this.radius = this.args[0];
     this.slices = this.args[1];
     this.stacks = this.args[2];
+
+
+console.log( this.radius );
+
+console.log(this.slices);
+
+console.log(this.stacks);
+
 
         this.initBuffers();
  };
@@ -44,9 +52,9 @@
                 for (i = 0; i < this.slices; i++)
                 {
                        
-                        var coordX0 = Math.sin(verticalAtual) * Math.cos(horizontalAtual)*this.radious;
-                        var coordY0 = Math.cos(verticalAtual)*this.radious;
-                        var coordZ0 = Math.sin(verticalAtual) * Math.sin(horizontalAtual)*this.radious;
+                        var coordX0 = Math.sin(verticalAtual) * Math.cos(horizontalAtual)*this.radius;
+                        var coordY0 = Math.cos(verticalAtual)*this.radius;
+                        var coordZ0 = Math.sin(verticalAtual) * Math.sin(horizontalAtual)*this.radius;
  
                         this.vertices.push(coordX0);
                         this.normals.push(coordX0);
@@ -56,15 +64,15 @@
                         this.normals.push(coordZ0);
                         numVertexes++;
  
-                        var coordX2 = Math.sin(verticalDepois) * Math.cos(horizontalAtual)*this.radious;
-                        var coordY2 = Math.cos(verticalDepois)*this.radious;
-                        var coordZ2 = Math.sin(verticalDepois) * Math.sin(horizontalAtual)*this.radious;
+                        var coordX2 = Math.sin(verticalDepois) * Math.cos(horizontalAtual)*this.radius;
+                        var coordY2 = Math.cos(verticalDepois)*this.radius;
+                        var coordZ2 = Math.sin(verticalDepois) * Math.sin(horizontalAtual)*this.radius;
  
                         horizontalAtual += horizontalStep;
  
-                        var coordX1 = Math.sin(verticalAtual) * Math.cos(horizontalAtual)*this.radious;
-                        var coordY1 = Math.cos(verticalAtual)*this.radious;
-                        var coordZ1 = Math.sin(verticalAtual) * Math.sin(horizontalAtual)*this.radious;
+                        var coordX1 = Math.sin(verticalAtual) * Math.cos(horizontalAtual)*this.radius;
+                        var coordY1 = Math.cos(verticalAtual)*this.radius;
+                        var coordZ1 = Math.sin(verticalAtual) * Math.sin(horizontalAtual)*this.radius;
  
                         this.vertices.push(coordX1);
                         this.normals.push(coordX1);
@@ -74,9 +82,9 @@
                         this.normals.push(coordZ1);
                         numVertexes++;
  
-                        var coordX3 = Math.sin(verticalDepois) * Math.cos(horizontalAtual)*this.radious;
-                        var coordY3 = Math.cos(verticalDepois)*this.radious;
-                        var coordZ3 = Math.sin(verticalDepois) * Math.sin(horizontalAtual)*this.radious;
+                        var coordX3 = Math.sin(verticalDepois) * Math.cos(horizontalAtual)*this.radius;
+                        var coordY3 = Math.cos(verticalDepois)*this.radius;
+                        var coordZ3 = Math.sin(verticalDepois) * Math.sin(horizontalAtual)*this.radius;
  
                        
                         this.vertices.push(coordX2);
@@ -130,9 +138,9 @@
                 for (i = 0; i < this.slices; i++)
                 {
                        
-                        var coordX0 = Math.sin(verticalAtual) * Math.cos(horizontalAtual)*this.radious;
-                        var coordY0 = -Math.cos(verticalAtual)*this.radious;
-                        var coordZ0 = Math.sin(verticalAtual) * Math.sin(horizontalAtual)*this.radious;
+                        var coordX0 = Math.sin(verticalAtual) * Math.cos(horizontalAtual)*this.radius;
+                        var coordY0 = -Math.cos(verticalAtual)*this.radius;
+                        var coordZ0 = Math.sin(verticalAtual) * Math.sin(horizontalAtual)*this.radius;
  
                         this.vertices.push(coordX0);
                         this.normals.push(coordX0);
@@ -141,15 +149,15 @@
                         this.vertices.push(coordZ0);
                         this.normals.push(coordZ0);
  
-                        var coordX2 = Math.sin(verticalDepois) * Math.cos(horizontalAtual)*this.radious;
-                        var coordY2 = -Math.cos(verticalDepois)*this.radious;
-                        var coordZ2 = Math.sin(verticalDepois) * Math.sin(horizontalAtual)*this.radious;
+                        var coordX2 = Math.sin(verticalDepois) * Math.cos(horizontalAtual)*this.radius;
+                        var coordY2 = -Math.cos(verticalDepois)*this.radius;
+                        var coordZ2 = Math.sin(verticalDepois) * Math.sin(horizontalAtual)*this.radius;
  
                         horizontalAtual += horizontalStep;
  
-                        var coordX1 = Math.sin(verticalAtual) * Math.cos(horizontalAtual)*this.radious;
-                        var coordY1 = -Math.cos(verticalAtual)*this.radious;
-                        var coordZ1 = Math.sin(verticalAtual) * Math.sin(horizontalAtual)*this.radious;
+                        var coordX1 = Math.sin(verticalAtual) * Math.cos(horizontalAtual)*this.radius;
+                        var coordY1 = -Math.cos(verticalAtual)*this.radius;
+                        var coordZ1 = Math.sin(verticalAtual) * Math.sin(horizontalAtual)*this.radius;
  
                         this.vertices.push(coordX1);
                         this.normals.push(coordX1);
@@ -158,9 +166,9 @@
                         this.vertices.push(coordZ1);
                         this.normals.push(coordZ1);
  
-                        var coordX3 = Math.sin(verticalDepois) * Math.cos(horizontalAtual)*this.radious;
-                        var coordY3 = -Math.cos(verticalDepois)*this.radious;
-                        var coordZ3 = Math.sin(verticalDepois) * Math.sin(horizontalAtual)*this.radious;
+                        var coordX3 = Math.sin(verticalDepois) * Math.cos(horizontalAtual)*this.radius;
+                        var coordY3 = -Math.cos(verticalDepois)*this.radius;
+                        var coordZ3 = Math.sin(verticalDepois) * Math.sin(horizontalAtual)*this.radius;
  
                        
                         this.vertices.push(coordX2);
