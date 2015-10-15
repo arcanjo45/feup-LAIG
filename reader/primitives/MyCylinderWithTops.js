@@ -1,6 +1,8 @@
-function MyCylinderWithTops(scene,slices,stacks) {
+function MyCylinderWithTops(scene,args) {
  	CGFobject.call(this, scene);
 
+ 	this.args[0]=slices;
+    this.args[1]=stacks;
  	this.body = new MyCylinder(scene, slices, stacks);
  	
  	this.top = new MyCircle(scene, slices);

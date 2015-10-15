@@ -202,7 +202,7 @@ LSXParser.prototype.parseLights= function(mainElement){
         light.position.z = this.reader.getFloat(aux, 'z');
         light.position.w = this.reader.getFloat(aux, 'w');
 
-    //light.print();
+    light.print();
     this.lights.push(light);
   }
 
@@ -238,7 +238,12 @@ LSXParser.prototype.parseMaterials = function(mainElement){
 	return null;
 
 };
+LSXParser.prototype.findNode = function(id) {
+    for (i = 0; i < this.nodes.length; i++)
+        if (this.nodes[i].id == id) return this.nodes[i];
 
+    return null;
+};
 LSXParser.prototype.parseTextures = function(mainElement){
     var text_list = mainElement.getElementsByTagName('TEXTURES')[0];
 
@@ -282,62 +287,79 @@ LSXParser.prototype.parseIllumination = function(mainElement)
 
 };
 
-LSXParser.prototype.parseLeaves = function(mainElement)
-{
-	var lista_leafs = mainElement.getElementsByTagName('LEAVES')[0];
+LSXParser.prototype.parseLeaves = function(mainElement) {
+   var leaves_list = mainElement.getElementsByTagName('LEAVES')[0];
+    if (leaves_list == null) return "<LEAVES> element is missing.";
 
-	if(lista_leafs == null) return "<LEAVES> element is missing"
+    var leaves = leaves_list.getElementsByTagName('LEAF');
+    for (i = 0; i < leaves.length; i++) {
+        var leaf = new Leaf(leaves[i].getAttribute('id'));
+        leaf.type = this.reader.getItem(leaves[i], 'type', ['rectangle', 'cylinder', 'sphere', 'triangle']);
 
-	var leafs = lista_leafs.getElementsByTagName('LEAF');
-
-for(i=0; i < leafs.length;i++)
-{
-//console.log(leafs.length);
-	var leaf = new Leaf(leafs[i].getAttribute('id'));
-
-	leaf.type = this.reader.getItem(leafs[i],'type',['rectangle', 'cylinder', 'sphere', 'triangle']);
-
-	var args_aux = leafs[i].getAttribute('args').split(" ");
-
-
-
-
-	if(leaf.type == "rectangle")
-	{
-		for( var j=0; j < args_aux.length; j++)
-		{
-            leaf.args.push(parseFloat(args_aux[j]));
-		}
-	}
-	else if(leaf.type == "sphere")
-	{
-		leaf.args.push(parseFloat(args_aux[0]));
-        leaf.args.push(parseInt(args_aux[1]));
-        leaf.args.push(parseInt(args_aux[2]));
-	}
-    else if(leaf.type == "cylinder")
-    {
-        leaf.args.push(parseFloat(args_aux[0]));
-        leaf.args.push(parseFloat(args_aux[1]));
-        leaf.args.push(parseFloat(args_aux[2]));
-        leaf.args.push(parseInt(args_aux[3]));
-        leaf.args.push(parseFloat(args_aux[4]));
-    }
-    else if(leaf.type == "triangle")
-    {
-        for( var j=0; j < args_aux.length; j++)
-        {
-            leaf.args.push(parseFloat(args_aux[j]));
+        var args_aux = leaves[i].getAttribute('args').split(" ");
+        for (var j = 0; j < args_aux.length; j++) {
+            if (args_aux[j] === ""){
+                args_aux.splice(j, 1);
+                --j;
+            }
         }
+        switch (leaf.type) {
+            case "rectangle":
+                if (args_aux.length != 4)
+                    return "Invalid number of arguments for type 'rectangle'";
+
+            for (var j = 0; j < args_aux.length; j++)
+                    leaf.args.push(parseFloat(args_aux[j]));
+
+                break;
+            case "cylinder":
+                if (args_aux.length != 5)
+                    return "Invalid number of arguments for type 'cylinder'";
+
+                leaf.args.push(parseFloat(args_aux[0]));
+                leaf.args.push(parseFloat(args_aux[1]));
+                leaf.args.push(parseFloat(args_aux[2]));
+                leaf.args.push(parseInt(args_aux[3]));
+                leaf.args.push(parseInt(args_aux[4]));
+                break;
+            case "sphere":
+                if (args_aux.length != 3)
+                    return "Invalid number of arguments for type 'sphere'";
+
+                leaf.args.push(parseFloat(args_aux[0]));
+                leaf.args.push(parseInt(args_aux[1]));
+                leaf.args.push(parseInt(args_aux[2]));
+                break;
+            case "triangle":
+                if (args_aux.length != 9)
+                    return "Invalid number of arguments for type 'triangle'";
+
+                for (j = 0; j < args_aux.length; j++)
+                    leaf.args.push(parseFloat(args_aux[j]));
+
+                break;
+            default:
+                return "Type " + "\"" + leaf.type + "\" not valid.";
+        }
+
+        leaf.print();
+        this.leaves.push(leaf);
     }
 
-       // leaf.print();
-        this.leaves.push(leaf);
+    return null;
+};
 
+LSXParser.prototype.idExists = function(IDs, id) {
+	var exists = false;
+	for (var i = 0; i < IDs.length; i++) {
+		if (IDs[i] == id)
+			exists = true;
+	}
+	if (exists)
+		return true;
+	else false;
 }
 
-
-};
 
 LSXParser.prototype.parseNodes = function(mainElement) {
     var nodes_list = mainElement.getElementsByTagName('NODES')[0];
@@ -397,12 +419,13 @@ LSXParser.prototype.parseNodes = function(mainElement) {
             node.descendants.push(d_list[j].getAttribute('id'));
         }
 
-       // node.print();
+        node.print();
         this.nodes.push(node);
     }
 
     return null;
 };
+
 
 function Leaf(id){
 
@@ -539,22 +562,7 @@ function Texture(id)
     };
 }
 
-function Node(id) {
-    this.id = id;
-    this.material = null;
-    this.texture = null;
-    this.matrix = mat4.create();
 
-    this.descendants = [];
-
-    this.print = function() {
-        console.log("Node " + this.id);
-        console.log("Material " + this.material);
-        console.log("Texture " + this.texture);
-        console.log("Matrix " + this.matrix);
-        console.log("Descendants: " + this.descendants);
-    };
-}
 
 LSXParser.prototype.parseColor = function(element) {
     var color = {};
