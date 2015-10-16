@@ -330,13 +330,13 @@
     for (i = 0; i < this.nodes.length; i++) {
                 var node = this.nodes[i];
                 this.pushMatrix();
-                //node.material.setTexture(node.texture);
-                /*
+                if(node.material != null)
+                node.material.setTexture(node.texture);
                 if (node.texture != null) {
                     node.primitive.updateTex(node.texture.amplif_factor.s, node.texture.amplif_factor.t);
                 }
      
-                */
+                
                 if(node.material != null)
                 node.material.apply();
                 this.multMatrix(node.matrix);

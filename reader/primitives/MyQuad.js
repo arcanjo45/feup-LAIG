@@ -32,14 +32,24 @@
  	3, 2, 1
  	];
 
- 	
- 	this.texCoords = [
- 	 this.minS, this.maxT,
- 	 this.maxS, this.maxT,
- 	 this.minS, this.minT,
- 	 this.maxS, this.minT
- 	  ];
+
+ 
+
 
  	this.primitiveType = this.scene.gl.TRIANGLES;
  	this.initGLBuffers();
  };
+
+
+
+
+ 	  MyQuad.prototype.updateTex = function(S, T) {
+    this.texCoords = [
+        0, 0,
+        0, T,
+        S, 0,
+        S, T
+    ];
+
+        this.updateTexCoordsGLBuffers();
+};

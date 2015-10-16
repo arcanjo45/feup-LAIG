@@ -98,3 +98,6 @@
 	 this.primitiveType = this.scene.gl.TRIANGLES;
 	 this.initGLBuffers();
  };
+
+ Cylinder.prototype.updateTex = function(S, T) {
+};
