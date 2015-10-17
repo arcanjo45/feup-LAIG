@@ -13,13 +13,18 @@ MyInterface.prototype.init = function(application){
 
 	//this.gui.add(this.scene, 'LightsInterface');
 
-	var group = this.gui.addFolder("Lights");
 
-	group.add(this.scene, 'light0_on');
-	group.add(this.scene, 'light1_on');
-	//group.add(this.scene, 'light2_on');
-	//group.add(this.scene, 'light3_on');
-	//this.gui.add(this.scene, 'stop');
+
+};
+
+MyInterface.prototype.callLight = function()
+{
+
+ var group = this.gui.addFolder("Lights");
+
+for(light in this.scene.lightsEnabled)
+     group.add(this.scene.lightsEnabled, light);
+
 };
 
 // NAO FUNCIONA. NAO SEI COMO POR A DAR. ALTEREI MERDAS NA LSXScene pra tentar. NAO DEU TIREI TUDO.

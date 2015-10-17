@@ -28,13 +28,13 @@ LSXScene.prototype.init = function(application){
     this.grafo=[];
     var graphRootID;
 
-    this.light0_on = true;
-	this.light1_on = true;
+    
 
     this.textures = [];
     this.materials = [];
     this.leaves = [];
     this.nodes = [];
+   this.lightsEnabled = [];
 
     this.axis = new CGFaxis(this);
 
@@ -138,6 +138,13 @@ LSXScene.prototype.initCameras = function() {
 
         };
 
+        LSXScene.prototype.setInterface = function(interface)
+        {
+
+            this.interface=interface;
+
+        };
+
         LSXScene.prototype.initLights = function(){
 
             this.shader.bind();
@@ -153,6 +160,8 @@ LSXScene.prototype.initCameras = function() {
                 else
                     this.lights[i].disable();
 
+                this.lightsEnabled[luz.id] = luz.enabled;
+
                 this.lights[i].setPosition(luz.position.x,luz.position.y,luz.position.z);
                 this.lights[i].setAmbient(luz.ambient.r,luz.ambient.g,luz.ambient.b,luz.ambient.a);
                 this.lights[i].setDiffuse(luz.diffuse.r,luz.diffuse.g,luz.diffuse.b,luz.diffuse.a);
@@ -165,8 +174,10 @@ LSXScene.prototype.initCameras = function() {
 
 
 
-
+                 
                 this.shader.unbind();
+
+                this.interface.callLight();
             };
 LSXScene.prototype.updateLights = function() {
 	for (i = 0; i < this.lights.length; i++)
@@ -293,16 +304,21 @@ LSXScene.prototype.updateLights = function() {
 
 LSXScene.prototype.update = function(){
 
-	if (this.light0_on)
-		this.lights[0].enable();
-	else if (!this.light0_on)
-		this.lights[0].disable();
+for(light in this.lightsEnabled)
+{
+    for( var i=0; i < this.graph.lights.length;i++)
+    {
+        if(this.graph.lights[i].id == light)
+        {
+            if(this.lightsEnabled[light])
+                this.lights[i].enable();
+            else
+                this.lights[i].disable();
+            continue;
 
-	if (this.light1_on)
-		this.lights[1].enable();
-	else if (!this.light1_on)
-		this.lights[1].disable();
-
+        }
+    }
+}
 
 };
  LSXScene.prototype.display = function() {
