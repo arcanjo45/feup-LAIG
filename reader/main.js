@@ -23,6 +23,7 @@ serialInclude(['../lib/CGF.js',
     'Element.js',
     'Node.js',
     'primitives/Cylinder.js',
+    'MyInterface.js',
     
 
 main=function()
