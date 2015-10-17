@@ -173,17 +173,7 @@ LSXScene.prototype.updateLights = function() {
 		this.lights[i].update();
 }
 
-            function Node(){
-                this.material=null;
-                this.texture=null;
-                this.m=null;
-                this.descendents=[];
-            }
 
-            Node.prototype.setMatrix=function(m){
-                this.m=mat4.clone(m);
-                console.log(this.m);
-            };
 
             LSXScene.prototype.initLeaves = function()
             {

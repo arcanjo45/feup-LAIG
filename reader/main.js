@@ -24,6 +24,12 @@ serialInclude(['../lib/CGF.js',
     'Node.js',
     'primitives/Cylinder.js',
     'MyInterface.js',
+    'Initials.js',
+    'Leaf.js',
+    'Light.js',
+    'Material.js',
+    'Illumination.js',
+    'Texture.js',
     
 
 main=function()

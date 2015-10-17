@@ -8,6 +8,10 @@ function Node(id) {
    
 }
 
+Node.prototype.setMatrix=function(m){
+ this.m=mat4.clone(m);
+ console.log(this.m);
+            };
 
 
     Node.prototype.print = function() {
