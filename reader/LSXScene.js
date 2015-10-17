@@ -28,6 +28,9 @@ LSXScene.prototype.init = function(application){
     this.grafo=[];
     var graphRootID;
 
+    this.light0_on = true;
+	this.light1_on = true;
+
     this.textures = [];
     this.materials = [];
     this.leaves = [];
@@ -165,6 +168,10 @@ LSXScene.prototype.initCameras = function() {
 
                 this.shader.unbind();
             };
+LSXScene.prototype.updateLights = function() {
+	for (i = 0; i < this.lights.length; i++)
+		this.lights[i].update();
+}
 
             function Node(){
                 this.material=null;
@@ -294,9 +301,21 @@ LSXScene.prototype.initCameras = function() {
             SceneMaterial.prototype = Object.create(CGFappearance.prototype);
             SceneMaterial.prototype.constructor = SceneMaterial;
 
+LSXScene.prototype.update = function(){
+
+	if (this.light0_on)
+		this.lights[0].enable();
+	else if (!this.light0_on)
+		this.lights[0].disable();
+
+	if (this.light1_on)
+		this.lights[1].enable();
+	else if (!this.light1_on)
+		this.lights[1].disable();
 
 
-            LSXScene.prototype.display = function() {
+};
+ LSXScene.prototype.display = function() {
                 this.shader.bind();
                 this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
                 this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
@@ -313,7 +332,7 @@ LSXScene.prototype.initCameras = function() {
                   this.axis.display();
 
                   this.setDefaultAppearance();
-
+                  this.update();
                   for (var i = 0; i < this.lights.length; i++)
                     this.lights[i].update();
     // Nodes

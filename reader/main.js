@@ -31,7 +31,7 @@ main=function()
 	// Standard application, scene and interface setup
     var app = new CGFapplication(document.body);
     var myScene = new LSXScene();
-    var myInterface = new CGFinterface();
+    var myInterface = new MyInterface();
 
     app.init();
 
