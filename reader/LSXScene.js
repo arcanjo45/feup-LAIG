@@ -57,18 +57,17 @@ LSXScene.prototype.initCameras = function() {
 
         LSXScene.prototype.onGraphLoaded = function()
         {
-    /*
-             this.camera.near = this.graph.initials.frustum.near;
-             this.camera.far = this.graph.initials.frustum.far;
+    
+
      
-             */
+             this.axis = new CGFaxis(this,this.graph.initials.reference);
 
             this.applyInitials();
 
             this.initLights();
 
 
-            this.axis = new CGFaxis(this,this.graph.initials.reference);
+
 
              
             this.gl.clearColor(this.graph.illumination.background.r, this.graph.illumination.background.g,this.graph.illumination.background.b, this.graph.illumination.background.a);
@@ -81,9 +80,11 @@ LSXScene.prototype.initCameras = function() {
                 aux = new SceneMaterial(this, mat[i].id);
                 aux.setAmbient(mat[i].ambient.r, mat[i].ambient.g, mat[i].ambient.b, mat[i].ambient.a);
                 aux.setDiffuse(mat[i].diffuse.r, mat[i].diffuse.g, mat[i].diffuse.b, mat[i].diffuse.a);
+                //aux.setAmbient(1, 1, 1, 1);
+                //aux.setDiffuse(1, 1, 1, 1);
                 aux.setSpecular(mat[i].specular.r, mat[i].specular.g, mat[i].specular.b, mat[i].specular.a);
                 aux.setEmission(mat[i].emission.r, mat[i].emission.g, mat[i].emission.b, mat[i].emission.a);
-                aux.setShininess(mat[i].shininess);
+                aux.setShininess(mat[i].shine);
 
                 this.materials.push(aux);
             }
@@ -108,6 +109,13 @@ LSXScene.prototype.initCameras = function() {
         SceneTexture.prototype.constructor = SceneTexture;
         LSXScene.prototype.applyInitials = function(){
 
+              this.camera.near = this.graph.initials.frustum.near;
+             this.camera.far = this.graph.initials.frustum.far;
+
+            var initMatrix = mat4.create();
+
+            mat4.identity(initMatrix);
+
             var iniciais = this.graph.initials;
 
             var trans = iniciais.translation;
@@ -116,24 +124,26 @@ LSXScene.prototype.initCameras = function() {
 
             var scal = iniciais.scale;
 
-            this.translate(trans.x,trans.y,trans.z);
+            mat4.translate(initMatrix,initMatrix,[this.graph.initials.translation.x,this.graph.initials.translation.y,this.graph.initials.translation.z]);
 
             for(var i=0; i < rots.length;i++)
             {
                 if(rots[i].axis == 'x')
-                    this.rotate(rots[i].angle*deg2rad,1,0,0);
+                    mat4.rotate(initMatrix,initMatrix,rots[i].angle*deg2rad,[1,0,0]);
 
                 if(rots[i].axis == 'y')
-                    this.rotate(rots[i].angle*deg2rad,0,1,0);
+                    mat4.rotate(initMatrix,initMatrix,rots[i].angle*deg2rad,[0,1,0]);
 
                 if(rots[i].axis == 'z')
-                    this.rotate(rots[i].angle*deg2rad,0,0,1);
+                    mat4.rotate(initMatrix,initMatrix,rots[i].angle*deg2rad,[0,0,1]);
 
             }
 
-            this.scale(scal.sx,scal.sy,scal.sz);
+           mat4.scale(initMatrix,initMatrix,[this.graph.initials.scale.sx,this.graph.initials.scale.sy,this.graph.initials.scale.sz]);
 
-            console.log(iniciais.translation);
+           this.multMatrix(initMatrix);
+
+            console.log(initMatrix);
 
 
         };
@@ -155,6 +165,8 @@ LSXScene.prototype.initCameras = function() {
             {
                 var luz = this.graph.lights[i];
 
+                console.log(luz.enabled);
+
                 if(luz.enabled)
                     this.lights[i].enable();
                 else
@@ -162,9 +174,10 @@ LSXScene.prototype.initCameras = function() {
 
                 this.lightsEnabled[luz.id] = luz.enabled;
 
-                this.lights[i].setPosition(luz.position.x,luz.position.y,luz.position.z);
+                this.lights[i].setPosition(luz.position.x,luz.position.y,luz.position.z,luz.position.w);
                 this.lights[i].setAmbient(luz.ambient.r,luz.ambient.g,luz.ambient.b,luz.ambient.a);
                 this.lights[i].setDiffuse(luz.diffuse.r,luz.diffuse.g,luz.diffuse.b,luz.diffuse.a);
+               // this.lights[i].setDiffuse(luz.diffuse.r,luz.diffuse.g,luz.diffuse.b,luz.diffuse.a);
                 this.lights[i].setSpecular(luz.specular.r,luz.specular.g,luz.specular.b,luz.specular.a);
                 this.lights[i].setVisible(true);
                 this.lights[i].update();
@@ -172,8 +185,8 @@ LSXScene.prototype.initCameras = function() {
                     //aux = this.lights[i];
                 }
 
-
-
+                    
+                  
                  
                 this.shader.unbind();
 
@@ -311,7 +324,10 @@ for(light in this.lightsEnabled)
         if(this.graph.lights[i].id == light)
         {
             if(this.lightsEnabled[light])
+            {
+               // console.log(this.lightsEnabled[light]);
                 this.lights[i].enable();
+            }
             else
                 this.lights[i].disable();
             continue;
@@ -347,6 +363,12 @@ for(light in this.lightsEnabled)
         this.pushMatrix();
         if(node.material != null)
             node.material.setTexture(node.texture);
+        else
+            if(node.material == null)
+            {
+                node.material = this.materialDefault;
+                node.material.setTexture(node.texture);
+            }
         if (node.texture != null) {
             node.primitive.updateTex(node.texture.amplif_factor.s, node.texture.amplif_factor.t);
         }

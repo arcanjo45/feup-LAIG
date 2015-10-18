@@ -203,7 +203,7 @@ LSXParser.prototype.parseMaterials = function(mainElement){
 
 		material.shine = this.reader.getFloat(mats[i].getElementsByTagName('shininess')[0],'value');
 
-		//material.print();
+		material.print();
 
 		this.materials.push(material);
 	}
@@ -269,7 +269,7 @@ LSXParser.prototype.parseLeaves = function(mainElement) {
         var leaf = new Leaf(leaves[i].getAttribute('id'));
         leaf.type = this.reader.getItem(leaves[i], 'type', ['rectangle', 'cylinder', 'sphere', 'triangle']);
 
-        var args_aux = leaves[i].getAttribute('args').split(" ");
+        var args_aux = leaves[i].getAttribute('args').split(/\s+/g);
         for (var j = 0; j < args_aux.length; j++) {
             if (args_aux[j] === ""){
                 args_aux.splice(j, 1);
