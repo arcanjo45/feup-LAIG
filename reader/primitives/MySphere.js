@@ -123,4 +123,9 @@ MySphere.prototype.initBuffers = function() {
 };
 
 MySphere.prototype.updateTex = function(S, T) {
+
+	this.S=S;
+	this.T=T;
+
+    
 };
