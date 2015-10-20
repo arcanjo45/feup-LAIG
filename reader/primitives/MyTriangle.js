@@ -62,6 +62,6 @@ MyTriangle.prototype.updateTex = function(ampS, ampT) {
 		this.texCoords[i + 1] = this.nonScaledTexCoords[i+1] / ampT;
 	}
 
-	this.updateTexCoordsGLBuffers();
+	//this.updateTexCoordsGLBuffers();
 }
  

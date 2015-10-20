@@ -1,3 +1,8 @@
+/**
+ * LSXParser constructor
+ * @param {String} filename 
+ * @param {Object} scene
+ */
 function LSXParser(filename, scene) {
     this.loadedOK = null;
 
@@ -20,13 +25,22 @@ function LSXParser(filename, scene) {
 }
 
 var deg2rad = Math.PI / 180;
+
+/**
+ * LSXParser onXMLerror
+ * @param {String} message
+
+ Imprime mensagem em caso de erro no load do Parser
+ */
 LSXParser.prototype.onXMLError = function(message) {
     console.error("LSX loading error: " + message);
     this.loadedOK = false;
 };
 
-
-
+/**
+ * LSXParser onXMLReady
+ Ativa todas as funções de parsing
+ */
 LSXParser.prototype.onXMLReady = function() {
     console.log("LSX loaded successfully.");
 
@@ -96,6 +110,13 @@ LSXParser.prototype.onXMLReady = function() {
     console.log("ola");
 };
 
+/**
+ * LSXParseInitials
+ * @param {Graph} mainElement
+
+ Função que faz parsing dos Initials e coloca a sua informação em variaveis
+ */
+
 LSXParser.prototype.parseInitials = function(mainElement) {
     var initials_list = mainElement.getElementsByTagName('INITIALS')[0];
     if (initials_list == null) return "<INITIALS> element is missing.";
@@ -148,9 +169,12 @@ LSXParser.prototype.parseInitials = function(mainElement) {
     return null;
 };
 
+/**
+ * LSXParseLights
+ * @param {Graph} mainElement
 
-
-
+ Função que faz parsing das Lights e coloca a sua informação em variaveis
+ */
 LSXParser.prototype.parseLights= function(mainElement){
 
     var light_list = mainElement.getElementsByTagName("LIGHTS")[0];
@@ -183,7 +207,12 @@ return null;
 
 
 };
+/**
+ * LSXParseMaterials
+ * @param {Graph} mainElement
 
+ Função que faz parsing dos Materials e coloca a sua informação em variaveis
+ */
 LSXParser.prototype.parseMaterials = function(mainElement){
 
 	var mat_list = mainElement.getElementsByTagName("MATERIALS")[0];
@@ -211,12 +240,24 @@ LSXParser.prototype.parseMaterials = function(mainElement){
 	return null;
 
 };
+/**
+ * LSXParser findNode
+ * @param {String} id
+
+ Função que encontra um Nó do grafo através do seu id
+ */
 LSXParser.prototype.findNode = function(id) {
     for (i = 0; i < this.nodes.length; i++)
         if (this.nodes[i].id == id) return this.nodes[i];
 
     return null;
 };
+/**
+ * LSXParseTextures
+ * @param {Graph} mainElement
+
+ Função que faz parsing das Textures e coloca a sua informação em variaveis
+ */
 LSXParser.prototype.parseTextures = function(mainElement){
     var text_list = mainElement.getElementsByTagName('TEXTURES')[0];
 
@@ -240,7 +281,12 @@ LSXParser.prototype.parseTextures = function(mainElement){
     return null;
 
 };
+/**
+ * LSXParseIllumination
+ * @param {Graph} mainElement
 
+ Função que faz parsing da Illumination e coloca a sua informação em variaveis
+ */
 LSXParser.prototype.parseIllumination = function(mainElement)
 {
 
@@ -259,7 +305,12 @@ LSXParser.prototype.parseIllumination = function(mainElement)
     //this.illumination.print();
 
 };
+/**
+ * LSXParseLeaves
+ * @param {Graph} mainElement
 
+ Função que faz parsing das Leaves e coloca a sua informação em variaveis
+ */
 LSXParser.prototype.parseLeaves = function(mainElement) {
    var leaves_list = mainElement.getElementsByTagName('LEAVES')[0];
     if (leaves_list == null) return "<LEAVES> element is missing.";
@@ -321,7 +372,13 @@ LSXParser.prototype.parseLeaves = function(mainElement) {
 
     return null;
 };
+/**
+ * LSXParser idExists
+ * @param {Array} Ids
+ * @param {String} id
 
+ Função que verifica se um id existe no grafo
+ */
 LSXParser.prototype.idExists = function(IDs, id) {
 	var exists = false;
 	for (var i = 0; i < IDs.length; i++) {
@@ -333,7 +390,12 @@ LSXParser.prototype.idExists = function(IDs, id) {
 	else false;
 }
 
+/**
+ * LSXParseNodes
+ * @param {Graph} mainElement
 
+ Função que faz parsing dos Nodes e coloca a sua informação em variaveis
+ */
 LSXParser.prototype.parseNodes = function(mainElement) {
     var nodes_list = mainElement.getElementsByTagName('NODES')[0];
     if (nodes_list == null) return "<NODES> element is missing.";
@@ -401,7 +463,12 @@ LSXParser.prototype.parseNodes = function(mainElement) {
 
 
 
+/**
+ * LSXParseColor
+ * @param {Object} element
 
+ Função que optimiza a recolha de informação de um No do Grafo
+ */
 LSXParser.prototype.parseColor = function(element) {
     var color = {};
     color.r = this.reader.getFloat(element, 'r');
@@ -411,6 +478,13 @@ LSXParser.prototype.parseColor = function(element) {
     return color;
 };
 
+
+/**
+ * LSXParser PrintColor
+ * @param {Object} c
+
+ Função faz print da informação retirada do Grafo
+ */
 var printColor = function(c) {
     return "(" + c.r + ", " + c.g + ", " + c.b + ", " + c.a + ")";
 };

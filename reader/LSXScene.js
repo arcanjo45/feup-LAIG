@@ -2,6 +2,9 @@
 
 var deg2rad = Math.PI /180;
 
+/**
+ * LSXScene constructor
+ */
 function LSXScene(){
     CGFscene.call(this);
 }
@@ -11,6 +14,12 @@ LSXScene.prototype = Object.create(CGFscene.prototype);
 
 LSXScene.prototype.constructor = LSXScene;
 
+/**
+ * LSXSCene init
+ * @param {Object} application
+
+ Função que inicia os elementos da cena
+ */
 LSXScene.prototype.init = function(application){
 
     CGFscene.prototype.init.call(this,application);
@@ -43,19 +52,34 @@ LSXScene.prototype.init = function(application){
 
 };
 
+/**
+ * LSXSCene initCameras
+ 
+ Função que inicia os elementos da câmara
+ */
 LSXScene.prototype.initCameras = function() {
     this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(30, 30, 30), vec3.fromValues(0, 0, 0));
             //this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(0, 0, 10), vec3.fromValues(0, 0, 0));
         };
 
-        LSXScene.prototype.setDefaultAppearance = function() {
+/**
+ * LSXSCene setDefaultAppearance
+ 
+
+ Função que atribui uma appearance por defeito
+ */
+LSXScene.prototype.setDefaultAppearance = function() {
             this.setAmbient(0.2, 0.4, 0.8, 1.0);
             this.setDiffuse(0.2, 0.4, 0.8, 1.0);
             this.setSpecular(0.2, 0.4, 0.8, 1.0);
             this.setShininess(10.0);
-        };
+ };
 
-        LSXScene.prototype.onGraphLoaded = function()
+ /**
+ * LSXSCene onGraphLoaded
+
+ Função que carrega os elementos do grafo para a cena
+ */LSXScene.prototype.onGraphLoaded = function()
         {
     
 
@@ -99,7 +123,11 @@ LSXScene.prototype.initCameras = function() {
 
             this.initNodes();
         };
+/**
+ * LSXSCene SceneTexture
 
+ Construtor de texturas da cena
+ */
         function SceneTexture(scene, id, path, amplif_factor) {
             CGFtexture.call(this, scene, path);
             this.id = id;
@@ -107,6 +135,12 @@ LSXScene.prototype.initCameras = function() {
         }
         SceneTexture.prototype = Object.create(CGFtexture.prototype);
         SceneTexture.prototype.constructor = SceneTexture;
+/**
+ * LSXSCene applyInitials
+ 
+
+ Função que aplica os Initials a cena
+ */
         LSXScene.prototype.applyInitials = function(){
 
               this.camera.near = this.graph.initials.frustum.near;
@@ -147,14 +181,24 @@ LSXScene.prototype.initCameras = function() {
 
 
         };
-
+/**
+ * LSXSCene setInterface
+ 
+@param {Object} interface
+ Função que aplica uma interface a cena
+ */
         LSXScene.prototype.setInterface = function(interface)
         {
 
             this.interface=interface;
 
         };
+/**
+ * LSXSCene initLights
+ 
 
+ Função que aplica as Lights a cena
+ */
         LSXScene.prototype.initLights = function(){
 
             this.shader.bind();
@@ -192,13 +236,24 @@ LSXScene.prototype.initCameras = function() {
 
                 this.interface.callLight();
             };
+/**
+ * LSXSCene updateLights
+ 
+
+ Função que altera as luzes consoante o indicado pelo utilizador na interface
+ */
 LSXScene.prototype.updateLights = function() {
 	for (i = 0; i < this.lights.length; i++)
 		this.lights[i].update();
 }
 
 
+/**
+ * LSXSCene initLeaves
+ 
 
+ Função que inicia as Leaves na cena
+ */
             LSXScene.prototype.initLeaves = function()
             {
                 for( var i=0; i < this.graph.leaves.length; i++)
@@ -237,14 +292,28 @@ LSXScene.prototype.updateLights = function() {
                 }
             }
 
+/**
+ * LSXSCene initNodes
+ 
 
+ Função que inicia os Nodes na cena
+ */
             LSXScene.prototype.initNodes = function() {
                 var nodes_list = this.graph.nodes;
 
                 var root_node = this.graph.findNode(this.graph.root_id);
                 this.DFS(root_node, root_node.material, root_node.texture, root_node.matrix);
             };
+/**
+ * LSXSCene DFS
+ 
+ @param {Node} node
+ @param {Material} currMaterial
+ @param {Texture} currTexture
+ @param {GlMatrix} currMatrix
 
+ Função recursiva que vai aplicando os materiais e as texturas a todos os nos e seus descendentes
+ */
             LSXScene.prototype.DFS = function(node, currMaterial, currTexture, currMatrix) {
                 var nextMat = node.material;
                 if (node.material == "null") nextMat = currMaterial;
@@ -278,7 +347,13 @@ LSXScene.prototype.updateLights = function() {
                     this.DFS(nextNode, nextMat, nextTex, nextMatrix);
                 }
             };
+/**
+ * LSXSCene getMaterial
 
+ @param {String} id
+
+ Função que encontra um material atraves do seu id
+ */
             LSXScene.prototype.getMaterial = function(id) {
                 if (id == null) return null;
 
@@ -287,7 +362,13 @@ LSXScene.prototype.updateLights = function() {
 
                 return null;
             };
+            /**
+ * LSXSCene getTexture
 
+ @param {String} id
+
+ Função que encontra uma textura atraves do seu id
+ */
             LSXScene.prototype.getTexture = function(id) {
                 if (id == null) return null;
 
@@ -296,7 +377,13 @@ LSXScene.prototype.updateLights = function() {
 
                 return null;
             };
+/**
+ * LSXSCene SceneObject
 
+ @param {String} id
+
+ Função que constroi um objeto da cena com os seus parametros
+ */
             function SceneObject(id) {
                 this.id = id;
                 this.material = null;
@@ -306,7 +393,14 @@ LSXScene.prototype.updateLights = function() {
             }
 
 
+/**
+ * LSXSCene SceneMaterial
 
+ @param {String} id
+ @param {Object} scene
+
+ Função que constroi um material da cena com os seus parametros
+ */
 
             function SceneMaterial(scene, id) {
                 CGFappearance.call(this, scene);
@@ -315,6 +409,11 @@ LSXScene.prototype.updateLights = function() {
             SceneMaterial.prototype = Object.create(CGFappearance.prototype);
             SceneMaterial.prototype.constructor = SceneMaterial;
 
+/**
+ * LSXSCene update
+
+ Função que verifica a cada momento se uma luz esta ativa ou não
+ */
 LSXScene.prototype.update = function(){
 
 for(light in this.lightsEnabled)
@@ -337,6 +436,12 @@ for(light in this.lightsEnabled)
 }
 
 };
+
+/**
+ * LSXSCene display
+
+ Função que faz display de toda a cena
+ */
  LSXScene.prototype.display = function() {
                 this.shader.bind();
                 this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
