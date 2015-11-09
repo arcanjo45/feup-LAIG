@@ -22,6 +22,7 @@ function LSXParser(filename, scene) {
     this.leaves = [];
     this.root_id = null;
     this.nodes = [];
+    this.animations = {};
 }
 
 var deg2rad = Math.PI / 180;
@@ -46,6 +47,13 @@ LSXParser.prototype.onXMLReady = function() {
 
     var mainElement = this.reader.xmlDoc.documentElement;
 
+    console.log("---------Animations--------");
+
+    var error = this.parseAnimations(mainElement);
+    if(error != null){
+        this.onXMLError(error);
+        return;
+    }
 
     console.log("---------INITIALS----------");
 
@@ -206,6 +214,65 @@ LSXParser.prototype.parseLights= function(mainElement){
 
 return null;
 
+
+};
+
+LSXParser.prototype.parseAnimations = function(mainElement){
+
+var anim_list = mainElement.getElementsByTagName("ANIMATIONS")[0];
+
+if(anim_list == null) return "Element <ANIMATIONS> is missing";
+
+var anims = anim_list.getElementsByTagName("ANIMATION");
+
+for(i=0; i < anims.length;i++)
+{
+    var currAnimation = {};
+    var currControlPoints = [];
+    
+    currAnimation["id"] = this.reader.getString(anims[i],"id",true);
+    currAnimation["span"] = this.reader.getString(anims[i],"span",true);
+    currAnimation["type"] = this.reader.getString(anims[i],"type",true);
+
+    if(currAnimation["type"] == "circular")
+    {
+
+        var coords = this.reader.getString(anims[i],"center",true);
+
+        currAnimation["center"] = coords.trim().split(/\s+/);
+
+        for(var j=0; j < currAnimation["center"].length;j++)
+        {
+            currAnimation["center"][j] = parseFloat(currAnimation["center"][j]);
+        }
+        currAnimation["radius"] = this.reader.getFloat(anims[i],"radius");
+        currAnimation["startAng"] = this.reader.getFloat(anims[i],"startAng");
+        currAnimation["rotAng"] = this.reader.getFloat(anims[i],"rotAng");
+    }
+    else if(currAnimation["type"] == "linear")
+    {
+        var cntrl_points = anims[i].getElementsByTagName("controlpoint");
+
+        for( var j=0 ; j < cntrl_points.length;j++)
+        {
+            var coord_x = this.reader.getFloat(cntrl_points[j],"xx",true);
+            var coord_y = this.reader.getFloat(cntrl_points[j],"yy",true);
+            var coord_z = this.reader.getFloat(cntrl_points[j],"zz",true);
+
+            var ctrlPoint = {};
+                ctrlPoint["xx"] = coord_x;
+                ctrlPoint["yy"] = coord_y;
+                ctrlPoint["zz"] = coord_z;
+                        
+                currControlPoints[j] = ctrlPoint;
+        }
+        currAnimation["control_points"] = currControlPoints;
+    }
+    this.animations[currAnimation["id"]] = currAnimation;
+
+}
+
+console.log(this.animations);
 
 };
 /**
