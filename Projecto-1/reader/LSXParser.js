@@ -46,6 +46,7 @@ LSXParser.prototype.onXMLReady = function() {
 
     var mainElement = this.reader.xmlDoc.documentElement;
 
+
     console.log("---------INITIALS----------");
 
     var error = this.parseInitials(mainElement);
