@@ -22,7 +22,7 @@ function LSXParser(filename, scene) {
     this.leaves = [];
     this.root_id = null;
     this.nodes = [];
-    this.animations = {};
+    this.anims = [];
 }
 
 var deg2rad = Math.PI / 180;
@@ -227,52 +227,41 @@ var anims = anim_list.getElementsByTagName("ANIMATION");
 
 for(i=0; i < anims.length;i++)
 {
-    var currAnimation = {};
-    var currControlPoints = [];
-    
-    currAnimation["id"] = this.reader.getString(anims[i],"id",true);
-    currAnimation["span"] = this.reader.getString(anims[i],"span",true);
-    currAnimation["type"] = this.reader.getString(anims[i],"type",true);
+    var id = anims[i].getAttribute('id');
+    var span = this.reader.getFloat(anims[i],'span');
+    var type = this.reader.getString(anims[i],'type');
 
-    if(currAnimation["type"] == "circular")
+    var args = [];
+
+    if(type == "linear")
     {
-
-        var coords = this.reader.getString(anims[i],"center",true);
-
-        currAnimation["center"] = coords.trim().split(/\s+/);
-
-        for(var j=0; j < currAnimation["center"].length;j++)
+        var control_pts = anims[i].getElementsByTagName('controlpoint');
+        for(var j=0; j < control_pts.length;j++)
         {
-            currAnimation["center"][j] = parseFloat(currAnimation["center"][j]);
+            var cntrl_pnt = [];
+            cntrl_pnt.push(this.reader.getFloat(control_pts[j],'xx'));
+            cntrl_pnt.push(this.reader.getFloat(control_pts[j],'yy'));
+            cntrl_pnt.push(this.reader.getFloat(control_pts[j],'zz'));
+
+            args.push(cntrl_pnt);
         }
-        currAnimation["radius"] = this.reader.getFloat(anims[i],"radius");
-        currAnimation["startAng"] = this.reader.getFloat(anims[i],"startAng");
-        currAnimation["rotAng"] = this.reader.getFloat(anims[i],"rotAng");
     }
-    else if(currAnimation["type"] == "linear")
+    else if(type == "circular")
     {
-        var cntrl_points = anims[i].getElementsByTagName("controlpoint");
-
-        for( var j=0 ; j < cntrl_points.length;j++)
-        {
-            var coord_x = this.reader.getFloat(cntrl_points[j],"xx",true);
-            var coord_y = this.reader.getFloat(cntrl_points[j],"yy",true);
-            var coord_z = this.reader.getFloat(cntrl_points[j],"zz",true);
-
-            var ctrlPoint = {};
-                ctrlPoint["xx"] = coord_x;
-                ctrlPoint["yy"] = coord_y;
-                ctrlPoint["zz"] = coord_z;
-                        
-                currControlPoints[j] = ctrlPoint;
-        }
-        currAnimation["control_points"] = currControlPoints;
+        args["center"] = this.reader.getVector3(anims[i],'center');
+        args["radius"] = this.reader.getFloat(anims[i],'radius');
+        args["startang"] = this.reader.getFloat(anims[i],'startang');
+        args["rotang"] = this.reader.getFloat(anims[i],'rotang');
     }
-    this.animations[currAnimation["id"]] = currAnimation;
+
+    var y = new Anim(id,span,type,args)
+    y.print();
+    this.anims.push(y);
+    //anims.print();
 
 }
 
-console.log(this.animations);
+
 
 };
 /**
@@ -300,7 +289,7 @@ LSXParser.prototype.parseMaterials = function(mainElement){
 
 		material.shine = this.reader.getFloat(mats[i].getElementsByTagName('shininess')[0],'value');
 
-		material.print();
+		//material.print();
 
 		this.materials.push(material);
 	}
@@ -434,7 +423,7 @@ LSXParser.prototype.parseLeaves = function(mainElement) {
                 return "Type " + "\"" + leaf.type + "\" not valid.";
         }
 
-        leaf.print();
+        //leaf.print();
         this.leaves.push(leaf);
     }
 
@@ -522,7 +511,7 @@ LSXParser.prototype.parseNodes = function(mainElement) {
             node.descendants.push(d_list[j].getAttribute('id'));
         }
 
-        node.print();
+        //node.print();
         this.nodes.push(node);
     }
 
