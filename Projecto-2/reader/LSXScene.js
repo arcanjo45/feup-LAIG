@@ -42,12 +42,17 @@ LSXScene.prototype.init = function(application){
     this.textures = [];
     this.materials = [];
     this.leaves = [];
-    this.nodes = [];
+    this.objects = [];
+    this.anims = [];
    this.lightsEnabled = [];
 
     this.axis = new CGFaxis(this);
 
     this.materialDefault = new CGFappearance(this);
+
+
+    this.currTime = new Date().getTime();
+    this.setUpdatePeriod(10);
 
 
 };
@@ -120,6 +125,27 @@ LSXScene.prototype.setDefaultAppearance = function() {
             }
 
             this.initLeaves();
+
+            //Animations
+
+            var anims = this.graph.anims;
+
+            for(i=0; i < anims.length;i++)
+            {
+                if(anims[i].type == "linear")
+                {
+                    this.anims.push(new LinearAnimation(anims[i].id,anims[i].span,anims[i].args));
+                }
+                else
+                    if(anims[i].type == "circular")
+                    {
+                        this.anims.push(new CircularAnimation(anims[i].id,anims[i].span,anims[i].args["center"],
+                                                                                        anims[i].args["radius"],
+                                                                                        anims[i].args["startang"],
+                                                                                        anims[i].args["rotang"]));
+                    }
+                    console.log(anims[i]);
+            }
 
             this.initNodes();
         };
@@ -302,7 +328,7 @@ LSXScene.prototype.updateLights = function() {
                 var nodes_list = this.graph.nodes;
 
                 var root_node = this.graph.findNode(this.graph.root_id);
-                this.DFS(root_node, root_node.material, root_node.texture, root_node.matrix);
+                this.DFS(root_node, root_node.material, root_node.texture, root_node.matrix,root_node.anims);
             };
 /**
  * LSXSCene DFS
@@ -314,7 +340,7 @@ LSXScene.prototype.updateLights = function() {
 
  Função recursiva que vai aplicando os materiais e as texturas a todos os nos e seus descendentes
  */
-            LSXScene.prototype.DFS = function(node, currMaterial, currTexture, currMatrix) {
+            LSXScene.prototype.DFS = function(node, currMaterial, currTexture, currMatrix,currAnims) {
                 var nextMat = node.material;
                 if (node.material == "null") nextMat = currMaterial;
 
@@ -325,6 +351,10 @@ LSXScene.prototype.updateLights = function() {
                 var nextMatrix = mat4.create();
                 mat4.multiply(nextMatrix, currMatrix, node.matrix);
 
+                var nextAnims = currAnims.concat(node.anims);
+
+                console.log(nextAnims);
+
                 for (var i = 0; i < node.descendants.length; i++) {
                     var nextNode = this.graph.findNode(node.descendants[i]);
 
@@ -332,6 +362,10 @@ LSXScene.prototype.updateLights = function() {
                         var aux = new SceneObject(node.descendants[i]);
                         aux.material = this.getMaterial(nextMat);
                         aux.texture = this.getTexture(nextTex);
+                        for(var j=0; j < j < nextAnims.length;j++)
+                        {
+                            aux.anims.push(this.getAnim(nextAnims[i]));
+                        }
                         aux.matrix = nextMatrix;
                         aux.isLeaf = true;
                         for (var j = 0; j < this.leaves.length; j++) {
@@ -340,11 +374,11 @@ LSXScene.prototype.updateLights = function() {
                                 break;
                             }
                         }
-                        this.nodes.push(aux);
+                        this.objects.push(aux);
                         continue;
                     }
 
-                    this.DFS(nextNode, nextMat, nextTex, nextMatrix);
+                    this.DFS(nextNode, nextMat, nextTex, nextMatrix,nextAnims);
                 }
             };
 /**
@@ -361,6 +395,16 @@ LSXScene.prototype.updateLights = function() {
                     if (id == this.materials[i].id) return this.materials[i];
 
                 return null;
+            };
+
+            LSXScene.prototype.getAnim = function(id){
+                if(id == null) return null;
+
+                for(var i=0; i < this.anims.length;i++)
+                    if(id == this.anims[i].id) return this.anims[i];
+
+                return null;
+
             };
             /**
  * LSXSCene getTexture
@@ -384,14 +428,7 @@ LSXScene.prototype.updateLights = function() {
 
  Função que constroi um objeto da cena com os seus parametros
  */
-            function SceneObject(id) {
-                this.id = id;
-                this.material = null;
-                this.texture = null;
-                this.matrix = null;
-                this.primitive = null;
-            }
-
+            
 
 /**
  * LSXSCene SceneMaterial
@@ -437,6 +474,16 @@ for(light in this.lightsEnabled)
 
 };
 
+LSXScene.prototype.update = function(currTime){
+
+	var delta = currTime - this.currTime;
+    this.currTime = currTime;
+
+    for (var i = 0; i < this.anims.length; ++i)
+        this.anims[i].update(delta);
+
+};
+
 /**
  * LSXSCene display
 
@@ -463,6 +510,7 @@ for(light in this.lightsEnabled)
                   for (var i = 0; i < this.lights.length; i++)
                     this.lights[i].update();
     // Nodes
+    /*
     for (i = 0; i < this.nodes.length; i++) {
         var node = this.nodes[i];
         this.pushMatrix();
@@ -486,7 +534,13 @@ for(light in this.lightsEnabled)
         this.popMatrix();
     }
 
+*/
 
+  for(var i =0; i < this.objects.length;i++)
+  {
+  	var obj = this.objects[i];
+  	obj.draw(this);
+  }
 }
 
 this.shader.unbind();

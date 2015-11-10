@@ -4,6 +4,8 @@ function Node(id) {
     this.texture = null;
     this.matrix = mat4.create();
 
+     this.anims = [];
+
     this.descendants = [];
    
 }
@@ -18,6 +20,7 @@ Node.prototype.setMatrix=function(m){
         console.log("Node " + this.id);
         console.log("Material " + this.material);
         console.log("Texture " + this.texture);
+        console.log("Anims: " + this.anims);
         console.log("Matrix " + this.matrix);
         console.log("Descendants: " + this.descendants);
     };

@@ -468,6 +468,15 @@ LSXParser.prototype.parseNodes = function(mainElement) {
         node.material = this.reader.getString(nodes[i].getElementsByTagName('MATERIAL')[0], 'id');
         node.texture = this.reader.getString(nodes[i].getElementsByTagName('TEXTURE')[0], 'id');
 
+
+        //Animations 
+
+        var node_anims = nodes[i].getElementsByTagName('ANIMATION');
+        for (var j = 0; j < node_anims.length; ++j) {
+            var anim_id = node_anims[j].getAttribute("id");
+            node.anims.push(anim_id);
+        }
+
         // Transforms
         var children = nodes[i].children;
         for (j = 0; j < children.length; j++) {

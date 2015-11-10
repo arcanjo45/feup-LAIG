@@ -28,6 +28,11 @@ serialInclude(['../lib/CGF.js',
     'Illumination.js',
     'Texture.js',
     'Anim.js',
+    'SceneObject.js',
+    'animations/Animation.js',
+    'animations/CircularAnimation.js',
+    'animations/LinearAnimation.js',
+
     
 
 main=function()
