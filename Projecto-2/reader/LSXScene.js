@@ -134,6 +134,7 @@ LSXScene.prototype.setDefaultAppearance = function() {
             {
                 if(anims[i].type == "linear")
                 {
+                    console.log("oi");
                     this.anims.push(new LinearAnimation(anims[i].id,anims[i].span,anims[i].args));
                 }
                 else
@@ -362,7 +363,7 @@ LSXScene.prototype.updateLights = function() {
                         var aux = new SceneObject(node.descendants[i]);
                         aux.material = this.getMaterial(nextMat);
                         aux.texture = this.getTexture(nextTex);
-                        for(var j=0; j < j < nextAnims.length;j++)
+                        for(var k=0; k < nextAnims.length;k++)
                         {
                             aux.anims.push(this.getAnim(nextAnims[i]));
                         }
@@ -451,38 +452,8 @@ LSXScene.prototype.updateLights = function() {
 
  Função que verifica a cada momento se uma luz esta ativa ou não
  */
-LSXScene.prototype.update = function(){
 
-for(light in this.lightsEnabled)
-{
-    for( var i=0; i < this.graph.lights.length;i++)
-    {
-        if(this.graph.lights[i].id == light)
-        {
-            if(this.lightsEnabled[light])
-            {
-               // console.log(this.lightsEnabled[light]);
-                this.lights[i].enable();
-            }
-            else
-                this.lights[i].disable();
-            continue;
 
-        }
-    }
-}
-
-};
-
-LSXScene.prototype.update = function(currTime){
-
-	var delta = currTime - this.currTime;
-    this.currTime = currTime;
-
-    for (var i = 0; i < this.anims.length; ++i)
-        this.anims[i].update(delta);
-
-};
 
 /**
  * LSXSCene display
@@ -506,7 +477,7 @@ LSXScene.prototype.update = function(currTime){
                   this.axis.display();
 
                   this.setDefaultAppearance();
-                  this.update();
+                 
                   for (var i = 0; i < this.lights.length; i++)
                     this.lights[i].update();
     // Nodes
@@ -544,4 +515,33 @@ LSXScene.prototype.update = function(currTime){
 }
 
 this.shader.unbind();
+};
+
+LSXScene.prototype.update = function(currTime){
+
+for(light in this.lightsEnabled)
+{
+    for( var i=0; i < this.graph.lights.length;i++)
+    {
+        if(this.graph.lights[i].id == light)
+        {
+            if(this.lightsEnabled[light])
+            {
+               // console.log(this.lightsEnabled[light]);
+                this.lights[i].enable();
+            }
+            else
+                this.lights[i].disable();
+            continue;
+
+        }
+    }
+}
+
+var delta = currTime - this.currTime;
+    this.currTime = currTime;
+console.log(delta);
+    for (var i = 0; i < this.anims.length; ++i)
+        this.anims[i].update(delta);
+
 };

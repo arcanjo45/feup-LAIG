@@ -8,7 +8,7 @@ function SceneObject(id) {
  this.anims = [];
 }
 
-SceneObject.prototype.updateText = function()
+SceneObject.prototype.updateTex = function()
 {
 	this.material.setTexture(this.texture);
 
@@ -22,16 +22,18 @@ SceneObject.prototype.draw = function(scene)
 
     scene.pushMatrix();
 
-    this.updateText();
+    this.updateTex();
     this.material.apply();
 
     for(var i=0; i < this.anims.length;i++)
     {
     	scene.multMatrix(this.anims[i].matrix);
+         console.log(this.anims[i].matrix);
+         
     }
 
     scene.multMatrix(this.matrix);
-    console.log(this.matrix);
+
 
     this.primitive.display();
 
