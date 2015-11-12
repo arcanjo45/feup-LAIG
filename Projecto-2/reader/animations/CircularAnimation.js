@@ -2,12 +2,58 @@ function CircularAnimation(id,time,center,rad,stang,rtang)
 {
 	Animation.call(this,id,time);
 
+	
+	this.radius = rad;
+	this.startang = stang;
+	this.rotang = rtang;
+	this.span = time;
+
 	this.center = center;
-	this.rad = rad;
-	this.stang = stang;
-	this.rtang = rtang;
+
+	this.initial = true;
+	this.time =0;
+
+	this.finalAng = this.startang + this.rotang;
+
+	console.log("FINAL ANG: " + this.finalAng);
+
+	this.speed = this.rotang/(this.span*1000);
+
+	console.log("FINAL ANG: " + this.speed);
+
+	this.currentang = this.startang;
+
+	this.currtime = 0;
+
 }
 
 CircularAnimation.prototype = Object.create(Animation.prototype);
 
 CircularAnimation.prototype.constructor = CircularAnimation;
+
+CircularAnimation.prototype.update = function(delta)
+{
+
+   if(this.time > this.span)
+   {
+   	this.time = this.span;
+   }
+   else
+   {
+	this.time = this.time + delta/1000;
+
+	this.currentang = this.startang + this.rotang*(this.time/this.span)
+
+	console.log("CURRENT ANG " + this.currentang);
+}
+
+mat4.identity(this.matrix);
+
+
+		mat4.translate(this.matrix,this.matrix,[this.center[0],this.center[1],this.center[2]]);
+	//	console.log(nodematrix);
+		mat4.rotate(this.matrix,this.matrix, (this.currentang*Math.PI)/180.0, [0,1,0]);
+	//	console.log(nodematrix);
+		mat4.translate(this.matrix, this.matrix,[this.radius,0,0]);
+
+};

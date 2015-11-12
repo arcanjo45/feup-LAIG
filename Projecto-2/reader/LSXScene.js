@@ -134,12 +134,14 @@ LSXScene.prototype.setDefaultAppearance = function() {
             {
                 if(anims[i].type == "linear")
                 {
-                    console.log("oi");
+                    
                     this.anims.push(new LinearAnimation(anims[i].id,anims[i].span,anims[i].args));
                 }
                 else
                     if(anims[i].type == "circular")
+
                     {
+                    	console.log("oi");
                         this.anims.push(new CircularAnimation(anims[i].id,anims[i].span,anims[i].args["center"],
                                                                                         anims[i].args["radius"],
                                                                                         anims[i].args["startang"],

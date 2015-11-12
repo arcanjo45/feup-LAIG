@@ -15,7 +15,7 @@ LinearAnimation.prototype.update = function(delta){
 
 	delta = delta/1000;
 
-    console.log(delta);
+   // console.log(delta);
 
     if (this.currTime <= this.time - delta)
         this.currTime += delta;
