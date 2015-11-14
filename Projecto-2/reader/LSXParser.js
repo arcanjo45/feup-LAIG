@@ -375,7 +375,7 @@ LSXParser.prototype.parseLeaves = function(mainElement) {
     var leaves = leaves_list.getElementsByTagName('LEAF');
     for (i = 0; i < leaves.length; i++) {
         var leaf = new Leaf(leaves[i].getAttribute('id'));
-        leaf.type = this.reader.getItem(leaves[i], 'type', ['rectangle', 'cylinder', 'sphere', 'triangle']);
+        leaf.type = this.reader.getItem(leaves[i], 'type', ['rectangle', 'cylinder', 'sphere', 'triangle', 'plane']);
 
         var args_aux = leaves[i].getAttribute('args').split(/\s+/g);
         for (var j = 0; j < args_aux.length; j++) {
@@ -418,6 +418,12 @@ LSXParser.prototype.parseLeaves = function(mainElement) {
                 for (j = 0; j < args_aux.length; j++)
                     leaf.args.push(parseFloat(args_aux[j]));
 
+                break;
+            case "plane":
+                if (args_aux.length != 1)
+                    return "Invalid number of arguments for type 'triangle'";
+
+                leaf.args.push(parseInt(args_aux[0]));
                 break;
             default:
                 return "Type " + "\"" + leaf.type + "\" not valid.";

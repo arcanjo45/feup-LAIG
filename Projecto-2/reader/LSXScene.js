@@ -230,7 +230,7 @@ LSXScene.prototype.setDefaultAppearance = function() {
  */
         LSXScene.prototype.initLights = function(){
 
-            this.shader.bind();
+            //this.shader.bind();
 
             this.luzes = [];
 
@@ -261,7 +261,7 @@ LSXScene.prototype.setDefaultAppearance = function() {
                     
                   
                  
-                this.shader.unbind();
+                //this.shader.unbind();
 
                 this.interface.callLight();
             };
@@ -314,6 +314,13 @@ LSXScene.prototype.updateLights = function() {
                     if(leaf.type == "cylinder")
                     {
                         var primitive = new Cylinder(this,leaf.args);
+                        primitive.id = leaf.id;
+                        this.leaves.push(primitive);
+                    }
+
+                    if(leaf.type == "plane")
+                    {
+                        var primitive = new MyPlane(this,leaf.args);
                         primitive.id = leaf.id;
                         this.leaves.push(primitive);
                     }
@@ -463,7 +470,7 @@ LSXScene.prototype.updateLights = function() {
  Função que faz display de toda a cena
  */
  LSXScene.prototype.display = function() {
-                this.shader.bind();
+                //this.shader.bind();
                 this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
                 this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
@@ -516,7 +523,7 @@ LSXScene.prototype.updateLights = function() {
   }
 }
 
-this.shader.unbind();
+//this.shader.unbind();
 };
 
 LSXScene.prototype.update = function(currTime){
