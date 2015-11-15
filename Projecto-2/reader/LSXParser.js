@@ -9,9 +9,11 @@ function LSXParser(filename, scene) {
     this.scene = scene;
     scene.graph = this;
 
+    this.path = "scenes/" + filename;
     this.reader = new CGFXMLreader();
-    this.reader.open('scenes/' + filename, this);
-    console.log("LSXParser for " + filename + ".");
+    this.reader.open(this.path, this);
+    this.texture_path = this.path.substring(0, this.path.lastIndexOf("/")) + "/";
+    console.log("LSXParser for " + this.path + ".");
 
     // Scene graph data
     this.initials = new Initials();
@@ -325,7 +327,8 @@ LSXParser.prototype.parseTextures = function(mainElement){
     for (i = 0; i < texts.length; i++) {
         var textura = new Texture(texts[i].getAttribute('id'));
 
-        textura.path = texts[i].getElementsByTagName('file')[0].getAttribute('path');
+     var relpath = texts[i].getElementsByTagName('file')[0].getAttribute('path');
+        textura.path = this.texture_path + relpath;
 
         var aux = texts[i].getElementsByTagName('amplif_factor')[0];
         textura.amplif_factor.s = this.reader.getFloat(aux, 's');
@@ -381,7 +384,7 @@ LSXParser.prototype.parseLeaves = function(mainElement) {
 
         var args_aux;
 
-        leaf.type = this.reader.getItem(leaves[i], 'type', ['rectangle', 'cylinder', 'sphere', 'triangle', 'plane', 'patch']);
+        leaf.type = this.reader.getItem(leaves[i], 'type', ['rectangle', 'cylinder', 'sphere', 'triangle', 'plane', 'patch','terrain']);
 
         if(leaf.type == "plane"){
             leaf.args.push(this.reader.getInteger(leaves[i], 'parts'));
@@ -414,6 +417,15 @@ LSXParser.prototype.parseLeaves = function(mainElement) {
 
             if(controlPoints.length != (order+1)*(order+1)) {console.error(controlPoints.length + " is not the correct number of control points. It must be " + ((order+1)*(order+1)));}
             else leaf.args.push(controlPoints);
+        }
+        else if(leaf.type == "terrain")
+        {
+             var texture_path, heightmap_path;
+                texture_path = heightmap_path = this.texture_path;
+                texture_path += this.reader.getString(leaves[i], 'texture');
+                heightmap_path += this.reader.getString(leaves[i], 'heightmap');
+                console.log(texture_path);
+                leaf.args.push(texture_path, heightmap_path);
         }
 
         else{

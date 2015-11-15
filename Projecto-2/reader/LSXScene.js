@@ -331,6 +331,13 @@ LSXScene.prototype.updateLights = function() {
                         primitive.id = leaf.id;
                         this.leaves.push(primitive);
                     }
+                    if(leaf.type == "terrain")
+                    {
+                        var primitive = new MyTerrain(this,leaf.args);
+                        console.log(leaf.args);
+                        primitive.id = leaf.id;
+                        this.leaves.push(primitive);
+                    }
 
                 }
             }

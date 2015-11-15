@@ -11,6 +11,8 @@ function SceneObject(id) {
 
 SceneObject.prototype.updateTex = function()
 {
+
+  if(this.material == null) return;
 	this.material.setTexture(this.texture);
 
 	if(this.texture == null) return;
@@ -23,6 +25,7 @@ SceneObject.prototype.draw = function(scene)
 
     scene.pushMatrix();
     this.updateTex();
+    if(this.material != null)
     this.material.apply();
 
     // Anims transformations
@@ -37,9 +40,9 @@ SceneObject.prototype.draw = function(scene)
 
 SceneObject.prototype.updateAnims = function(delta) {
     if (this.anims.length == 0 || this.currAnim >= this.anims.length) return;
-    console.log(this.anims);
+    //console.log(this.anims);
 
     if (this.anims[this.currAnim].done) ++this.currAnim;
     else if(this.currAnim < this.anims.length) this.anims[this.currAnim].update(delta);
-    console.log(this.anims[this.currAnim]);
+    //console.log(this.anims[this.currAnim]);
 };
