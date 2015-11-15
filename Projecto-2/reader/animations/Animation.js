@@ -11,6 +11,6 @@ Animation.prototype.contructor = Animation;
 Animation.prototype.update = function(delta){};
 
 Animation.prototype.reset = function(){
-
-	this.currTime=0;
 };
+
+Animation.prototype.clone = function() {};

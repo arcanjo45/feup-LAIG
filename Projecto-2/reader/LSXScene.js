@@ -374,7 +374,8 @@ LSXScene.prototype.updateLights = function() {
                         aux.texture = this.getTexture(nextTex);
                         for(var k=0; k < nextAnims.length;k++)
                         {
-                            aux.anims.push(this.getAnim(nextAnims[i]));
+                           var anim = this.getAnim(nextAnims[k]).clone();
+                            aux.anims.push(anim);
                         }
                         aux.matrix = nextMatrix;
                         aux.isLeaf = true;
@@ -549,8 +550,8 @@ for(light in this.lightsEnabled)
 
 var delta = currTime - this.currTime;
     this.currTime = currTime;
-console.log(delta);
-    for (var i = 0; i < this.anims.length; ++i)
-        this.anims[i].update(delta);
+//console.log(delta);
+    for (var i = 0; i < this.objects.length; ++i)
+        this.objects[i].updateAnims(delta);
 
 };

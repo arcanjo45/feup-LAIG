@@ -11,7 +11,7 @@ function CircularAnimation(id,time,center,rad,stang,rtang)
 	this.center = center;
 
 	this.initial = true;
-	this.time =0;
+	this.ctime =0;
 
 	this.finalAng = this.startang + this.rotang;
 
@@ -34,15 +34,15 @@ CircularAnimation.prototype.constructor = CircularAnimation;
 CircularAnimation.prototype.update = function(delta)
 {
 
-   if(this.time > this.span)
+   if(this.ctime >= this.span)
    {
-   	this.time = this.span;
+   	this.done=true;
    }
    else
    {
-	this.time = this.time + delta/1000;
+	this.ctime = this.ctime + delta/1000;
 
-	this.currentang = this.startang + this.rotang*(this.time/this.span)
+	this.currentang = this.startang + this.rotang*(this.ctime/this.span)
 
 	console.log("CURRENT ANG " + this.currentang);
 }
@@ -56,4 +56,13 @@ mat4.identity(this.matrix);
 	//	console.log(nodematrix);
 		mat4.translate(this.matrix, this.matrix,[this.radius,0,0]);
 
+};
+
+CircularAnimation.prototype.clone = function(delta) {
+    return new CircularAnimation(this.id,
+        this.span,
+        this.center,
+        this.radius,
+        this.startang,
+        this.rotang);
 };
