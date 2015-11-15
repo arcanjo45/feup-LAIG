@@ -368,7 +368,67 @@ LSXParser.prototype.parseIllumination = function(mainElement)
 
  Função que faz parsing das Leaves e coloca a sua informação em variaveis
  */
+
 LSXParser.prototype.parseLeaves = function(mainElement) {
+
+    var leaves_list = mainElement.getElementsByTagName('LEAVES')[0];
+    if(leaves_list == null) return "<LEAVES> element is missing.";
+
+    var leaves = leaves_list.getElementsByTagName('LEAF');
+
+    for (var i = 0; i < leaves.length; i++){
+        var leaf = new Leaf(leaves[i].getAttribute('id'));
+
+        var args_aux;
+
+        leaf.type = this.reader.getItem(leaves[i], 'type', ['rectangle', 'cylinder', 'sphere', 'triangle', 'plane', 'patch']);
+
+        if(leaf.type == "plane"){
+            leaf.args.push(this.reader.getInteger(leaves[i], 'parts'));
+        }
+
+        else if(leaf.type == "patch"){
+            var order = this.reader.getInteger(leaves[i], 'order');
+            if (order < 1 || order > 3) 
+                return "Invalid order! Order has to be either 1, 2 or 3";
+            else leaf.args.push(order);
+
+            var partsU = this.reader.getInteger(leaves[i], 'partsU');
+            var partsV = this.reader.getInteger(leaves[i], 'partsV');
+
+            leaf.args.push(partsU);
+            leaf.args.push(partsV);
+
+            var controlPoints = [];
+            var controlPointsReader = leaves[i].getElementsByTagName('controlpoint');
+
+            for(var k = 0; k < controlPointsReader.length; k++){
+                var tmpControlPoint = [];
+
+                tmpControlPoint[0] = this.reader.getFloat(controlPointsReader[k], 'x');
+                tmpControlPoint[1] = this.reader.getFloat(controlPointsReader[k], 'y');
+                tmpControlPoint[2] = this.reader.getFloat(controlPointsReader[k], 'z');
+                tmpControlPoint[3] = 1;
+                controlPoints.push(tmpControlPoint);
+            }
+
+            if(controlPoints.length != (order+1)*(order+1)) {console.error(controlPoints.length + " is not the correct number of control points. It must be " + ((order+1)*(order+1)));}
+            else leaf.args.push(controlPoints);
+        }
+
+        else{
+            args_aux = leaves[i].getAttribute('args').split(/\s+/g);
+
+            for(var j = 0; j < args_aux.length; j++){
+                leaf.args.push(parseFloat(args_aux[j]));
+            }
+        }
+
+        this.leaves.push(leaf);
+    }
+}
+
+/*LSXParser.prototype.parseLeaves = function(mainElement) {
    var leaves_list = mainElement.getElementsByTagName('LEAVES')[0];
     if (leaves_list == null) return "<LEAVES> element is missing.";
 
@@ -420,10 +480,7 @@ LSXParser.prototype.parseLeaves = function(mainElement) {
 
                 break;
             case "plane":
-                if (args_aux.length != 1)
-                    return "Invalid number of arguments for type 'triangle'";
-
-                leaf.args.push(parseInt(args_aux[0]));
+                leaf.args.push(this.reader.getInteger(leaves[i], 'parts'));
                 break;
             default:
                 return "Type " + "\"" + leaf.type + "\" not valid.";
@@ -434,7 +491,7 @@ LSXParser.prototype.parseLeaves = function(mainElement) {
     }
 
     return null;
-};
+};*/
 /**
  * LSXParser idExists
  * @param {Array} Ids

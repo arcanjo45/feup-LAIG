@@ -325,6 +325,13 @@ LSXScene.prototype.updateLights = function() {
                         this.leaves.push(primitive);
                     }
 
+                    if(leaf.type == "patch")
+                    {
+                        var primitive = new MyPatch(this,leaf.args);
+                        primitive.id = leaf.id;
+                        this.leaves.push(primitive);
+                    }
+
                 }
             }
 
