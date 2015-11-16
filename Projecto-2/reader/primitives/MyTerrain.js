@@ -20,7 +20,7 @@ function MyTerrain(scene,args){
 
     this.terrainShader = new CGFshader(scene.gl, "shaders/terrain.vert", "shaders/terrain.frag");
     this.terrainShader.setUniformsValues({uSampler2: 1});
-    this.terrainShader.setUniformsValues({multiplier: 0.25});
+    this.terrainShader.setUniformsValues({multiplier: 0.35});
 
     this.plane = new MyPlane(scene, [50]);
     console.log("estou aqui");
