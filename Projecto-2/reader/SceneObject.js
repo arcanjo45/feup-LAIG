@@ -28,11 +28,15 @@ SceneObject.prototype.draw = function(scene)
     if(this.material != null)
     this.material.apply();
 
+
+
     // Anims transformations
     if (this.currAnim < this.anims.length)
         scene.multMatrix(this.anims[this.currAnim].matrix);
+   
 
     scene.multMatrix(this.matrix);
+
 
     this.primitive.display();
     scene.popMatrix();

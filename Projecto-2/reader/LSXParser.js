@@ -221,49 +221,47 @@ return null;
 
 LSXParser.prototype.parseAnimations = function(mainElement){
 
-var anim_list = mainElement.getElementsByTagName("ANIMATIONS")[0];
+    var anim_list = mainElement.getElementsByTagName("ANIMATIONS")[0];
 
-if(anim_list == null) return "Element <ANIMATIONS> is missing";
+    if(anim_list == null) return "Element <ANIMATIONS> is missing";
 
-var anims = anim_list.getElementsByTagName("ANIMATION");
+    var anims = anim_list.getElementsByTagName("ANIMATION");
 
-for(i=0; i < anims.length;i++)
-{
-    var id = anims[i].getAttribute('id');
-    var span = this.reader.getFloat(anims[i],'span');
-    var type = this.reader.getString(anims[i],'type');
-
-    var args = [];
-
-    if(type == "linear")
+    for(i=0; i < anims.length;i++)
     {
-        var control_pts = anims[i].getElementsByTagName('controlpoint');
-        for(var j=0; j < control_pts.length;j++)
+        var id = anims[i].getAttribute('id');
+        var span = this.reader.getFloat(anims[i],'span');
+        var type = this.reader.getString(anims[i],'type');
+
+        var args = [];
+
+        if(type == "linear")
         {
-            var cntrl_pnt = [];
-            cntrl_pnt.push(this.reader.getFloat(control_pts[j],'xx'));
-            cntrl_pnt.push(this.reader.getFloat(control_pts[j],'yy'));
-            cntrl_pnt.push(this.reader.getFloat(control_pts[j],'zz'));
+            var control_pts = anims[i].getElementsByTagName('controlpoint');
+            for(var j=0; j < control_pts.length;j++)
+            {
+                var cntrl_pnt = [];
+                cntrl_pnt.push(this.reader.getFloat(control_pts[j],'xx'));
+                cntrl_pnt.push(this.reader.getFloat(control_pts[j],'yy'));
+                cntrl_pnt.push(this.reader.getFloat(control_pts[j],'zz'));
 
-            args.push(cntrl_pnt);
+                args.push(cntrl_pnt);
+            }
         }
+        else if(type == "circular")
+        {
+            args["center"] = this.reader.getVector3(anims[i],'center');
+            args["radius"] = this.reader.getFloat(anims[i],'radius');
+            args["startang"] = this.reader.getFloat(anims[i],'startang');
+            args["rotang"] = this.reader.getFloat(anims[i],'rotang');
+        }
+
+        var y = new Anim(id,span,type,args)
+        y.print();
+        this.anims.push(y);
+        //anims.print();
+
     }
-    else if(type == "circular")
-    {
-        args["center"] = this.reader.getVector3(anims[i],'center');
-        args["radius"] = this.reader.getFloat(anims[i],'radius');
-        args["startang"] = this.reader.getFloat(anims[i],'startang');
-        args["rotang"] = this.reader.getFloat(anims[i],'rotang');
-    }
-
-    var y = new Anim(id,span,type,args)
-    y.print();
-    this.anims.push(y);
-    //anims.print();
-
-}
-
-
 
 };
 /**

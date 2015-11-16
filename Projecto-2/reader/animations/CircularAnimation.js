@@ -25,6 +25,8 @@ function CircularAnimation(id,time,center,rad,stang,rtang)
 
 	this.currtime = 0;
 
+	console.log(this.radius);
+
 }
 
 CircularAnimation.prototype = Object.create(Animation.prototype);
@@ -50,11 +52,15 @@ CircularAnimation.prototype.update = function(delta)
 mat4.identity(this.matrix);
 
 
+
+
 		mat4.translate(this.matrix,this.matrix,[this.center[0],this.center[1],this.center[2]]);
 	//	console.log(nodematrix);
 		mat4.rotate(this.matrix,this.matrix, (this.currentang*Math.PI)/180.0, [0,1,0]);
 	//	console.log(nodematrix);
+
 		mat4.translate(this.matrix, this.matrix,[this.radius,0,0]);
+		console.log("Raio :" + this.radius);
 
 };
 
