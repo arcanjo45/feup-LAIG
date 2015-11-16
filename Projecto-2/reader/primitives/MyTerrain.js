@@ -1,9 +1,9 @@
 function MyTerrain(scene,args){
 
-CGFobject.call(this, scene);
-this.args=args;
+    CGFobject.call(this, scene);
+    this.args=args;
 
-this.mat = new CGFappearance(scene);
+    this.mat = new CGFappearance(scene);
 
     this.mat.setAmbient(0.3, 0.3, 0.3, 1);
 
