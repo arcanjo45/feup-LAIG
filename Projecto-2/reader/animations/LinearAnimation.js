@@ -2,6 +2,7 @@ function LinearAnimation(id, time, controlPoints) {
     Animation.call(this, id, time);
     this.cp = controlPoints;
     this.pos = [];
+    this.currTime =0;
 }
 LinearAnimation.prototype = Object.create(Animation.prototype);
 LinearAnimation.prototype.constructor = LinearAnimation;
@@ -12,7 +13,10 @@ LinearAnimation.prototype.update = function(delta) {
     this.currTime = Math.min(this.time, this.currTime + delta);
 
     if (this.currTime == this.time)
+    {
         this.done = true;
+        return;
+    }
 
     var nextPos = this.interp();
 

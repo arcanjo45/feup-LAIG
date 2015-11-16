@@ -150,20 +150,22 @@
     </INITIALS>
 
     <ANIMATIONS>
-        <ANIMATION id="teste" span="10" type="linear">
+        <ANIMATION id="teste" span="15" type="linear">
             <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="3" yy="0" zz="0" />
-            <controlpoint xx="3" yy="0" zz="-2" />
+            <controlpoint xx="0" yy="0" zz="18" />
+            <controlpoint xx="18" yy="0" zz="18" />
+            <controlpoint xx="18" yy="0" zz="-18"/>
+            <controlpoint xx="-18" yy="0" zz="-18"/>
             
         </ANIMATION>
 
-        <ANIMATION id="teste2" span="10" type="linear">
+        <ANIMATION id="teste2" span="20" type="linear">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="-3" yy="0" zz="0" />
             <controlpoint xx="0" yy="0" zz="0" />
         </ANIMATION>
 
-        <ANIMATION id="circ" span="5" type="circular" center="1 0 -2" radius="2" startang="0" rotang="360" />
+        <ANIMATION id="circ" span="15" type="circular" center="-18 0 -16" radius="2" startang="0" rotang="360" />
     </ANIMATIONS>
 
     <MATERIALS>
@@ -221,7 +223,7 @@
         <LEAF id="circle" type="cylinder" args="0 1 0 20 20" />
         <LEAF id="tube" type="cylinder" args="1 0.4 0.4 20 20"/>
         <LEAF id="p1" type="plane" parts="20"/>
-        <LEAF id="terrain" type="terrain" texture="res/colorMap.jpg" heightmap="res/hmap.jpg" />
+        <LEAF id="terrain" type="terrain" texture="res/terr.jpg" heightmap="res/hg.jpg" />
         <LEAF id="patch1" type="patch" order="3" partsU="20" partsV="20">
             <controlpoint x="-0.65" y="0" z="0.6"/>
             <controlpoint x="-0.9" y="0" z="0.25"/>
@@ -338,7 +340,7 @@
             <ANIMATION id="circ"/>
 
 
-           <TRANSLATION x="0" y="2" z="0"/>
+           <TRANSLATION x="0" y="5" z="0"/>
             <SCALE sx="0.5" sy="0.5" sz="0.5"/>
 
             <DESCENDANTS>

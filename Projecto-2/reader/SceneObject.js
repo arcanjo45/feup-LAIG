@@ -43,6 +43,6 @@ SceneObject.prototype.updateAnims = function(delta) {
     console.log(this.anims);
 
     if (this.anims[this.currAnim].done) ++this.currAnim;
-    else if(this.currAnim < this.anims.length) this.anims[this.currAnim].update(delta);
+    if(this.currAnim < this.anims.length) this.anims[this.currAnim].update(delta);
     //console.log(this.anims[this.currAnim]);
 };
