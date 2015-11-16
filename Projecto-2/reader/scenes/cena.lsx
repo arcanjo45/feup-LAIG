@@ -142,7 +142,7 @@
         </TEXTURE>
 
          <TEXTURE id="benfica">
-            <file path="res/xx.jpg"/>
+            <file path="res/m.jpg"/>
             <amplif_factor s="1" t="1"/>
         </TEXTURE>
 
@@ -336,7 +336,7 @@
             <TEXTURE id="null" />
 
             <TRANSLATION x="0" y="0" z="0"/>
-            <SCALE sx="40" sy="20" sz="40"/>
+            <SCALE sx="80" sy="40" sz="80"/>
 
             <DESCENDANTS>
                 <DESCENDANT id="terrain" />
@@ -353,7 +353,7 @@
 
 
 
-           <TRANSLATION x="0" y="5" z="0"/>
+           <TRANSLATION x="0" y="7" z="0"/>
             <SCALE sx="0.5" sy="0.5" sz="0.5"/>
 
             <DESCENDANTS>
@@ -376,7 +376,7 @@
 
 
 
-           <TRANSLATION x="5" y="5" z="0"/>
+           <TRANSLATION x="5" y="7" z="0"/>
             <SCALE sx="0.5" sy="0.5" sz="0.5"/>
 
             <DESCENDANTS>
@@ -398,8 +398,7 @@
             <ANIMATION id="circ"/>
 
 
-
-           <TRANSLATION x="-5" y="5" z="0"/>
+           <TRANSLATION x="-5" y="7" z="0"/>
             <SCALE sx="0.5" sy="0.5" sz="0.5"/>
 
             <DESCENDANTS>
