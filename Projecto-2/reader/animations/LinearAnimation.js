@@ -1,96 +1,47 @@
-function LinearAnimation(id,span,controlpoints)
-{
-     Animation.call(this,id,span);
-
-    this.controlPoints = controlpoints;
-    this.velocity = 0;
-    this.distance = 0;
-    this.currentDistance = 0;
-    this.distanceList = {};
-    this.currentTranslation = vec3.fromValues(0,0,0);
-    this.currentRotation = 0;
-    this.currentJ = 0;
-    this.span=span;
-    
-    this.initBuffers();
+function LinearAnimation(id, time, controlPoints) {
+    Animation.call(this, id, time);
+    this.cp = controlPoints;
+    this.pos = [];
 }
-
-
 LinearAnimation.prototype = Object.create(Animation.prototype);
-
 LinearAnimation.prototype.constructor = LinearAnimation;
 
-LinearAnimation.prototype.initBuffers = function()
-{
-    var tempVec = vec3.create();
+LinearAnimation.prototype.update = function(delta) {
+    delta = delta / 1000;
 
-for(var i = 0; i < this.controlPoints.length - 1;i++){
+    this.currTime = Math.min(this.time, this.currTime + delta);
 
-vec3.sub(tempVec,this.controlPoints[i+1], this.controlPoints[i]);
-this.distance += Math.abs(vec3.length(tempVec));
-this.distanceList[i] = (this.distance);
-console.log("distance list = " + this.distanceList[i]);
-}
+    if (this.currTime == this.time)
+        this.done = true;
 
-this.velocity = this.distance/(this.span*1000);
+    var nextPos = this.interp();
 
-console.log("span = " + this.span);
-console.log("Velocity = " + this.velocity + "\n Distance = " + this.distance + "\nControl Points = " + this.controlPoints );
+    // Calc rotations
+    var dirVec = vec3.fromValues(nextPos[0] - this.pos[0],
+        0,
+        nextPos[2] - this.pos[2]);
+    var rotAng;
+    if (vec3.length(dirVec) > 0) {
+        vec3.normalize(dirVec, dirVec);
+        rotAng = Math.acos(vec3.dot(dirVec, vec3.fromValues(0, 0, 1)));
+    } else rotAng = 0;
 
-}
+    var sign = dirVec[0] < 0 ? -1 : 1;
+    rotAng *= sign;
 
-LinearAnimation.prototype.update = function(delta){
+    this.pos = nextPos;
 
-    this.currentDistance += delta*this.velocity;
-    
-    //var tempMatrix = mat4.create();
-    
     mat4.identity(this.matrix);
-    
-    var i,j = 0,tempCurrentPoint = 0;
-
-    for(i in this.distanceList){
-        tempCurrentPoint = j+1;
-            if(this.distanceList[i] >= this.currentDistance)
-            {
-            break;
-        }
-        j++;
-    }
-    if(j != this.controlPoints.length-1){
-    
-    var direction = vec3.create();  
-    vec3.sub(direction,this.controlPoints[j+1],this.controlPoints[j]);  
-    
-    var percent;    
-    if(i > 0)
-        percent = delta*this.velocity/(this.distanceList[i]-this.distanceList[i-1]);
-    else percent = delta*this.velocity/this.distanceList[i];
-    
-    vec3.scale(direction,direction,percent);
-    
-    vec3.add(this.currentTranslation,this.currentTranslation,direction);    
-    if(this.currentJ != j){
-        this.currentJ = j;
-        if(vec3.length(vec3.fromValues(direction[0],0,direction[2])) != 0)
-        this.currentRotation = Math.atan2(direction[0], direction[2]);
-        }
-    }
-    else this.done=true;
-
-    
-    mat4.translate(this.matrix,this.matrix,this.currentTranslation);
-
-    mat4.rotateY(this.matrix,this.matrix,this.currentRotation);
-
+    mat4.translate(this.matrix, this.matrix, this.pos);
+    mat4.rotateY(this.matrix, this.matrix, rotAng);
 
 };
 
 LinearAnimation.prototype.interp = function() {
-    var deltaTimeCP = this.time / (this.cp.length-1);
+    var deltaTimeCP = this.time / (this.cp.length - 1);
 
-    var currCPIndex = Math.floor(this.currTime/deltaTimeCP);
-    var nextCPIndex = Math.ceil(this.currTime/deltaTimeCP);
+    var currCPIndex = Math.floor(this.currTime / deltaTimeCP);
+    var nextCPIndex = Math.ceil(this.currTime / deltaTimeCP);
 
     var currCP = this.cp[currCPIndex];
     var nextCP = this.cp[nextCPIndex];
@@ -105,11 +56,11 @@ LinearAnimation.prototype.interp = function() {
 };
 
 function linearInterp(a, b, f) {
-    return (a * (1.0-f)) + (b * f);
+    return (a * (1.0 - f)) + (b * f);
 }
 
 LinearAnimation.prototype.clone = function(delta) {
     return new LinearAnimation(this.id,
-        this.span,
-        this.controlPoints);
+        this.time,
+        this.cp);
 };

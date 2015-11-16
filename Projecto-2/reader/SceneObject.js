@@ -40,7 +40,7 @@ SceneObject.prototype.draw = function(scene)
 
 SceneObject.prototype.updateAnims = function(delta) {
     if (this.anims.length == 0 || this.currAnim >= this.anims.length) return;
-    //console.log(this.anims);
+    console.log(this.anims);
 
     if (this.anims[this.currAnim].done) ++this.currAnim;
     else if(this.currAnim < this.anims.length) this.anims[this.currAnim].update(delta);

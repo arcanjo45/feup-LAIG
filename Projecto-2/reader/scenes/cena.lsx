@@ -153,7 +153,8 @@
         <ANIMATION id="teste" span="10" type="linear">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="3" yy="0" zz="0" />
-            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="3" yy="0" zz="-2" />
+            
         </ANIMATION>
 
         <ANIMATION id="teste2" span="10" type="linear">
@@ -162,7 +163,7 @@
             <controlpoint xx="0" yy="0" zz="0" />
         </ANIMATION>
 
-        <ANIMATION id="circ" span="10" type="circular" center="0 0 2" radius="2" startang="-180" rotang="360" />
+        <ANIMATION id="circ" span="5" type="circular" center="1 0 -2" radius="2" startang="0" rotang="360" />
     </ANIMATIONS>
 
     <MATERIALS>
@@ -220,8 +221,8 @@
         <LEAF id="circle" type="cylinder" args="0 1 0 20 20" />
         <LEAF id="tube" type="cylinder" args="1 0.4 0.4 20 20"/>
         <LEAF id="p1" type="plane" parts="20"/>
-        <LEAF id="terrain" type="terrain" texture="res/terrain.jpg" heightmap="res/heightmap.jpg" />
-        <LEAF id="patch1" type="patch" order="3" partsU="5" partsV="5">
+        <LEAF id="terrain" type="terrain" texture="res/colorMap.jpg" heightmap="res/hmap.jpg" />
+        <LEAF id="patch1" type="patch" order="3" partsU="20" partsV="20">
             <controlpoint x="-0.65" y="0" z="0.6"/>
             <controlpoint x="-0.9" y="0" z="0.25"/>
             <controlpoint x="-0.9" y="0" z="-0.25"/>
@@ -320,8 +321,8 @@
             <MATERIAL id="null" />
             <TEXTURE id="null" />
 
-            <TRANSLATION x="7.5" y="0" z="7.5"/>
-            <SCALE sx="15" sy="15" sz="15"/>
+            <TRANSLATION x="0" y="0" z="0"/>
+            <SCALE sx="40" sy="20" sz="40"/>
 
             <DESCENDANTS>
                 <DESCENDANT id="terrain" />
@@ -332,7 +333,12 @@
             <MATERIAL id="null"/>
             <TEXTURE id="null"/>
 
-            <TRANSLATION x="6" y="5" z="4"/>
+
+            <ANIMATION id="teste"/>
+            <ANIMATION id="circ"/>
+
+
+           <TRANSLATION x="0" y="2" z="0"/>
             <SCALE sx="0.5" sy="0.5" sz="0.5"/>
 
             <DESCENDANTS>

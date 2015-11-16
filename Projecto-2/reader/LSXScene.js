@@ -498,7 +498,7 @@ LSXScene.prototype.updateLights = function() {
                 this.applyViewMatrix();
                 if(this.graph.loadedOK)
                 {
-                  this.axis.display();
+                  //this.axis.display();
 
                   this.setDefaultAppearance();
                  
