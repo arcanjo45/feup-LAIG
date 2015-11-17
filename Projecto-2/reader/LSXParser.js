@@ -544,7 +544,7 @@ LSXParser.prototype.parseNodes = function(mainElement) {
 
         //Animations 
 
-        var node_anims = nodes[i].getElementsByTagName('ANIMATION');
+        var node_anims = nodes[i].getElementsByTagName('animationref');
         for (var j = 0; j < node_anims.length; ++j) {
             var anim_id = node_anims[j].getAttribute("id");
             node.anims.push(anim_id);

@@ -372,11 +372,11 @@
             <TEXTURE id="null"/>
 
 
-            <ANIMATION id="teste"/>
-            <ANIMATION id="teste"/>
-            <ANIMATION id="teste"/>
-            <ANIMATION id="teste"/>
-            <ANIMATION id="teste"/>
+            <animationref id="teste"/>
+            <animationref id="teste"/>
+            <animationref id="teste"/>
+            <animationref id="teste"/>
+            <animationref id="teste"/>
 
 
 
@@ -401,7 +401,7 @@
 
            <TRANSLATION x="-0" y="9" z="0"/>
             <SCALE sx="0.5" sy="0.5" sz="0.5"/>
-            <ANIMATION id="circ"/>
+            <animationref id="circ"/>
 
             <DESCENDANTS>
                 <DESCENDANT id="pat2"/>
@@ -418,7 +418,7 @@
             <MATERIAL id="null"/>
             <TEXTURE id="null"/>
 
-            <ANIMATION id="circ2"/>
+            <animationref id="circ2"/>
 
            <TRANSLATION x="0" y="11" z="0"/>
             <SCALE sx="0.5" sy="0.5" sz="0.5"/>
@@ -437,7 +437,7 @@
             <MATERIAL id="null"/>
             <TEXTURE id="null"/>
 
-           <ANIMATION id="circ3"/>
+           <animationref id="circ3"/>
 
            <TRANSLATION x="0" y="9" z="0"/>
             <SCALE sx="0.5" sy="0.5" sz="0.5"/>
@@ -456,7 +456,7 @@
             <MATERIAL id="null"/>
             <TEXTURE id="null"/>
 
-           <ANIMATION id="circ4"/>
+           <animationref id="circ4"/>
 
            <TRANSLATION x="0" y="9" z="0"/>
             <SCALE sx="0.5" sy="0.5" sz="0.5"/>
@@ -476,11 +476,11 @@
             <TEXTURE id="null"/>
 
 
-            <ANIMATION id="teste2"/>
-            <ANIMATION id="teste2"/>
-            <ANIMATION id="teste2"/>
-            <ANIMATION id="teste2"/>
-            <ANIMATION id="teste2"/>
+            <animationref id="teste2"/>
+            <animationref id="teste2"/>
+            <animationref id="teste2"/>
+            <animationref id="teste2"/>
+            <animationref id="teste2"/>
 
 
 

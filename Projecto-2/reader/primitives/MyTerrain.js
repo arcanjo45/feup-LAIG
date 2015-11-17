@@ -1,3 +1,13 @@
+/**
+ * My Terrain
+
+ @param {CGFObject} scene
+ @param {Array} args
+
+ Função que constroi um objeto do My Terrain com os seus parametros e que cria um shader atraves da primitiva MyPlane
+ */
+
+
 function MyTerrain(scene,args){
 
     CGFobject.call(this, scene);
@@ -26,6 +36,13 @@ function MyTerrain(scene,args){
     console.log("estou aqui");
 }
 
+/**
+ * My Terrain
+
+
+
+ Função que faz display do shader aplicando-lhe o seu material e activando os seus shaders
+ */
 MyTerrain.prototype.display = function() {
 
 	console.log(this.mat);

@@ -421,7 +421,13 @@ LSXScene.prototype.updateLights = function() {
 
                 return null;
             };
+/**
+ * LSXSCene getAnim
 
+ @param {String} id
+
+ Função que encontra uma animação atraves do seu id
+ */
             LSXScene.prototype.getAnim = function(id){
                 if(id == null) return null;
 

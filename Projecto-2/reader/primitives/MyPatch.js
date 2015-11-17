@@ -1,3 +1,12 @@
+
+/**
+ * My Patch
+
+ @param {CGFObject} scene
+ @param {Array} args
+
+ Função que constroi um objeto do tipo My Patch com os seus parametros 
+ */
 function MyPatch(scene, args){
 	this.args = args;
 
@@ -18,6 +27,14 @@ function MyPatch(scene, args){
 MyPatch.prototype = Object.create(CGFnurbsObject.prototype);
 MyPatch.prototype.constructor = MyPatch;
 
+
+/**
+ * My Patch
+
+ @param {Array} Points
+
+ Função que retorna os controlpoints da primitiva MyPatch
+ */
 MyPatch.prototype.getControlPoints = function(Points){
 	var resArray = [];
 	var ind;
@@ -32,6 +49,13 @@ MyPatch.prototype.getControlPoints = function(Points){
 	return resArray;
 }
 
+/**
+ * My Patch
+
+ @param {Array} Points
+
+ Funçao que retorn os Knots do MyPatchS
+ */
 MyPatch.prototype.getKnots = function() {
     var knots = [];
     for (var i = 0; i <= this.order ; i++)

@@ -1,3 +1,14 @@
+/**
+ * Linear Animation
+
+ @param {String} id
+ @param {float} time
+ @param {Array} controlpoints
+
+ Função que constroi um objeto do tipo LinearAnimation com os seus parametros
+ */
+
+
 function LinearAnimation(id, time, controlPoints) {
     Animation.call(this, id, time);
     this.cp = controlPoints;
@@ -7,6 +18,13 @@ function LinearAnimation(id, time, controlPoints) {
 LinearAnimation.prototype = Object.create(Animation.prototype);
 LinearAnimation.prototype.constructor = LinearAnimation;
 
+/**
+ * Linear Animation
+
+ @param {float} delta
+
+ Função que da update a animação através do tempo delta que é passado como argumento
+ */
 LinearAnimation.prototype.update = function(delta) {
     delta = delta / 1000;
 
@@ -41,6 +59,12 @@ LinearAnimation.prototype.update = function(delta) {
 
 };
 
+/**
+ * Linear Animation
+
+
+ Função que realiza uma interpolação linear com os valores de tempo da animação
+ */
 LinearAnimation.prototype.interp = function() {
     var deltaTimeCP = this.time / (this.cp.length - 1);
 
@@ -59,10 +83,24 @@ LinearAnimation.prototype.interp = function() {
     return interpPoint;
 };
 
+
+/**
+ * Linear Animation
+
+
+ Formula da interpolação linear
+ */
 function linearInterp(a, b, f) {
     return (a * (1.0 - f)) + (b * f);
 }
 
+
+/**
+ * Linear Animation
+
+
+Função que faz clone das animações de forma a torna-las independentes
+ */
 LinearAnimation.prototype.clone = function(delta) {
     return new LinearAnimation(this.id,
         this.time,

@@ -1,3 +1,15 @@
+
+/**
+ * Circular Animation
+
+ @param {String} id
+ @param {float} time
+ @param {Array} center
+ @param {float} rad
+ @param {float} stang
+ @param {float} rtang
+ Função que constroi um objeto do tipo CircularAnimation com os seus parametros e que calcula a velocidade de rotação do objeto
+ */
 function CircularAnimation(id,time,center,rad,stang,rtang)
 {
 	Animation.call(this,id,time);
@@ -33,6 +45,13 @@ CircularAnimation.prototype = Object.create(Animation.prototype);
 
 CircularAnimation.prototype.constructor = CircularAnimation;
 
+/**
+ * Circular Animation
+
+ @param {float} delta
+
+ Função que da update ao movimento de rotação de objeto atraves do delta e que aplica as matrizes de transformação das animações ao objeto
+ */
 CircularAnimation.prototype.update = function(delta)
 {
 
@@ -64,6 +83,13 @@ mat4.identity(this.matrix);
 
 };
 
+
+/**
+ * CircularAnimation
+
+
+Função que faz clone das animações de forma a torna-las independentes
+ */
 CircularAnimation.prototype.clone = function(delta) {
     return new CircularAnimation(this.id,
         this.span,
