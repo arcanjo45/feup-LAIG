@@ -275,6 +275,27 @@
             <controlpoint x="0.9" y="0" z="-0.25"/>
             <controlpoint x="0.65" y="0" z="-0.6"/>
         </LEAF>
+        <LEAF id="patch2" type="patch" order="3" partsU="20" partsV="20">
+            <controlpoint x="-0.6" y="0" z="2.359"/>
+            <controlpoint x="-0.75" y="0" z="0.698"/>
+            <controlpoint x="-0.75" y="0" z="-0.141"/>
+            <controlpoint x="-0.5" y="0" z="-1.051"/>
+
+            <controlpoint x="-0.25" y="0" z="4.197"/>
+            <controlpoint x="-0.25" y="0" z="0.825"/>
+            <controlpoint x="-0.2" y="0" z="-0.303"/>
+            <controlpoint x="0" y="0" z="-2.389"/>
+
+            <controlpoint x="0.25" y="0" z="4.197"/>
+            <controlpoint x="0.25" y="0" z="0.825"/>
+            <controlpoint x="0.2" y="0" z="-0.303"/>
+            <controlpoint x="0" y="0" z="-2.389"/>
+
+            <controlpoint x="0.6" y="0" z="2.359"/>
+            <controlpoint x="0.75" y="0" z="0.698"/>
+            <controlpoint x="0.75" y="0" z="-0.141"/>
+            <controlpoint x="0.5" y="0" z="-1.051"/>
+        </LEAF>
     </LEAVES>
 
     <NODES>
@@ -286,6 +307,7 @@
             <TEXTURE id="null"/>
 
             <DESCENDANTS>
+            	<DESCENDANT id="prancha"/>
                 <DESCENDANT id="balloon"/>
                 <DESCENDANT id="balloon2"/>
                 <DESCENDANT id="balloon3"/>
@@ -295,6 +317,18 @@
                 <DESCENDANT id="shad"/>
                 <DESCENDANT id="rope"/>
             </DESCENDANTS>
+        </NODE>
+
+        <NODE id="prancha">
+        	<MATERIAL id="plastico"/>
+        	<TEXTURE id="green"/>
+
+        	<TRANSLATION x="6" y="0.5" z="2"/>
+        	<SCALE sx="0.5" sy="0.5" sz="0.5"/>
+
+        	<DESCENDANTS>
+        		<DESCENDANT id="patch2"/>
+        	</DESCENDANTS>
         </NODE>
 
         <NODE id="rope">
