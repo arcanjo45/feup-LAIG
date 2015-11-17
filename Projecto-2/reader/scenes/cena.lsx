@@ -161,6 +161,11 @@
             <amplif_factor s="1" t="1"/>
         </TEXTURE>
 
+        <TEXTURE id="peixe">
+            <file path="res/peixe.jpg"/>
+            <amplif_factor s="1" t="1"/>
+        </TEXTURE>
+
        <!-- NOTE: this block "TEXTURE" must be repeated as necessary with different "id" -->
     </TEXTURES> 
 
@@ -196,6 +201,9 @@
          <ANIMATION id="circ2" span="120" type="circular" center="32 0 -15" radius="2" startang="0" rotang="3600" />
          <ANIMATION id="circ3" span="120" type="circular" center="-22 0 -15" radius="2" startang="0" rotang="3600" />
          <ANIMATION id="circ4" span="120" type="circular" center="32 0 25" radius="2" startang="0" rotang="3600" />
+         <ANIMATION id="peixe" span="120" type="circular" center="6 1 2" radius="2" startang="0" rotang="3600" />
+         <ANIMATION id="peixe2" span="120" type="circular" center="-25 1 7" radius="2" startang="0" rotang="3600" />
+         <ANIMATION id="peixe3" span="120" type="circular" center="17 1 -25" radius="2" startang="0" rotang="3600" />
     </ANIMATIONS>
 
     <MATERIALS>
@@ -308,6 +316,8 @@
 
             <DESCENDANTS>
             	<DESCENDANT id="prancha"/>
+            	<DESCENDANT id="prancha2"/>
+            	<DESCENDANT id="prancha3"/>
                 <DESCENDANT id="balloon"/>
                 <DESCENDANT id="balloon2"/>
                 <DESCENDANT id="balloon3"/>
@@ -321,9 +331,48 @@
 
         <NODE id="prancha">
         	<MATERIAL id="plastico"/>
-        	<TEXTURE id="green"/>
+        	<TEXTURE id="peixe"/>
 
-        	<TRANSLATION x="6" y="0.5" z="2"/>
+        	<animationref id="peixe"/>
+        	<animationref id="peixe"/>
+        	<animationref id="peixe"/>
+        	<animationref id="peixe"/>
+        	<animationref id="peixe"/>
+
+        	<SCALE sx="0.5" sy="0.5" sz="0.5"/>
+
+        	<DESCENDANTS>
+        		<DESCENDANT id="patch2"/>
+        	</DESCENDANTS>
+        </NODE>
+
+        <NODE id="prancha2">
+        	<MATERIAL id="plastico"/>
+        	<TEXTURE id="peixe"/>
+
+        	<animationref id="peixe2"/>
+        	<animationref id="peixe2"/>
+        	<animationref id="peixe2"/>
+        	<animationref id="peixe2"/>
+        	<animationref id="peixe2"/>
+
+        	<SCALE sx="0.5" sy="0.5" sz="0.5"/>
+
+        	<DESCENDANTS>
+        		<DESCENDANT id="patch2"/>
+        	</DESCENDANTS>
+        </NODE>
+
+        <NODE id="prancha3">
+        	<MATERIAL id="plastico"/>
+        	<TEXTURE id="peixe"/>
+
+        	<animationref id="peixe3"/>
+        	<animationref id="peixe3"/>
+        	<animationref id="peixe3"/>
+        	<animationref id="peixe3"/>
+        	<animationref id="peixe3"/>
+
         	<SCALE sx="0.5" sy="0.5" sz="0.5"/>
 
         	<DESCENDANTS>
