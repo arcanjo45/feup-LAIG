@@ -142,7 +142,7 @@
         </TEXTURE>
 
          <TEXTURE id="benfica">
-            <file path="res/m.jpg"/>
+            <file path="res/b.jpg"/>
             <amplif_factor s="1" t="1"/>
         </TEXTURE>
 
@@ -208,7 +208,7 @@
 
     <MATERIALS>
         <MATERIAL id="madeira">
-            <shininess value="10"/>
+            <shininess value="1"/>
             <specular r="0.78" g="0.39" b="0.196" a="1"/>
             <diffuse r="0.59" g="0.078" b="0.176" a="0" /> 
             <ambient r="0.29" g="0.35" b="0.26" a="0" /> 
@@ -216,7 +216,7 @@
         </MATERIAL>
 
         <MATERIAL id="pedra">  
-            <shininess value="12" />
+            <shininess value="1" />
             <specular r="0.125" g="0.22" b="0.043" a="1" />
             <diffuse r="0.648" g="0.578" b="0.739" a="1" />
             <ambient r="0.316" g="0.333" b="0.376" a="1" />
@@ -224,11 +224,18 @@
         </MATERIAL>
 
         <MATERIAL id="argila">  
-            <shininess value="16" />
+            <shininess value="1" />
             <specular r="0.125" g="0.22" b="0.043" a="1" />
             <diffuse r="0.870" g="0.482" b="0.259" a="0" /> 
             <ambient r="0.125" g="0.22" b="0.043" a="1" />
             <emission r="0.365" g="0.274" b="0.220" a="0" />
+        </MATERIAL>
+          <MATERIAL id="preto">  
+            <shininess value="1" />
+            <specular r="0.1" g="0.1" b="0.1" a="1" />
+            <diffuse r="0.1" g="0.1" b="0.1" a="0" /> 
+            <ambient r="0.1" g="0.1" b="0.1" a="1" />
+            <emission r="0.1" g="0.1" b="0.1" a="0" />
         </MATERIAL>
 
         <MATERIAL id="folhas">  
@@ -259,7 +266,7 @@
     <LEAVES>
         <LEAF id="rect" type="rectangle" args="0 1 1 0" />
         <LEAF id="circle" type="cylinder" args="0 1 0 20 20" />
-        <LEAF id="tube" type="cylinder" args="1 0.4 0.4 20 20"/>
+        <LEAF id="tube" type="cylinder" args="1 0.4 0.4 40 40"/>
         <LEAF id="p1" type="plane" parts="20"/>
         <LEAF id="terrain" type="terrain" texture="res/terr.jpg" heightmap="res/hg.jpg" />
         <LEAF id="patch1" type="patch" order="3" partsU="20" partsV="20">
@@ -315,428 +322,21 @@
             <TEXTURE id="null"/>
 
             <DESCENDANTS>
-            	<DESCENDANT id="prancha"/>
-            	<DESCENDANT id="prancha2"/>
-            	<DESCENDANT id="prancha3"/>
-                <DESCENDANT id="balloon"/>
-                <DESCENDANT id="balloon2"/>
-                <DESCENDANT id="balloon3"/>
-                <DESCENDANT id="balloon4"/>
-                <DESCENDANT id="balloon5"/>
-                <DESCENDANT id="balloon6"/>
-                <DESCENDANT id="shad"/>
-                <DESCENDANT id="rope"/>
-            </DESCENDANTS>
-        </NODE>
-
-        <NODE id="prancha">
-        	<MATERIAL id="plastico"/>
-        	<TEXTURE id="peixe"/>
-
-        	<animationref id="peixe"/>
-        	<animationref id="peixe"/>
-        	<animationref id="peixe"/>
-        	<animationref id="peixe"/>
-        	<animationref id="peixe"/>
-
-        	<SCALE sx="0.5" sy="0.5" sz="0.5"/>
-
-        	<DESCENDANTS>
-        		<DESCENDANT id="patch2"/>
-        	</DESCENDANTS>
-        </NODE>
-
-        <NODE id="prancha2">
-        	<MATERIAL id="plastico"/>
-        	<TEXTURE id="peixe"/>
-
-        	<animationref id="peixe2"/>
-        	<animationref id="peixe2"/>
-        	<animationref id="peixe2"/>
-        	<animationref id="peixe2"/>
-        	<animationref id="peixe2"/>
-
-        	<SCALE sx="0.5" sy="0.5" sz="0.5"/>
-
-        	<DESCENDANTS>
-        		<DESCENDANT id="patch2"/>
-        	</DESCENDANTS>
-        </NODE>
-
-        <NODE id="prancha3">
-        	<MATERIAL id="plastico"/>
-        	<TEXTURE id="peixe"/>
-
-        	<animationref id="peixe3"/>
-        	<animationref id="peixe3"/>
-        	<animationref id="peixe3"/>
-        	<animationref id="peixe3"/>
-        	<animationref id="peixe3"/>
-
-        	<SCALE sx="0.5" sy="0.5" sz="0.5"/>
-
-        	<DESCENDANTS>
-        		<DESCENDANT id="patch2"/>
-        	</DESCENDANTS>
-        </NODE>
-
-        <NODE id="rope">
-            <MATERIAL id="null"/>
-            <TEXTURE id="null"/>
-
+            	<DESCENDANT id="peca"/>
             
+            </DESCENDANTS>
+        </NODE>
+
+        <NODE id="peca">
+        	<MATERIAL id="preto"/>
+        	<TEXTURE id="benfica"/>
+
             <ROTATION axis="x" angle="-90"/>
-            <SCALE sx="0.05" sy="0.05" sz="2.5"/>
+        	<SCALE sx="2" sy="2" sz="0.5"/>
 
-            <DESCENDANTS>
-                <DESCENDANT id="tube"/>
-            </DESCENDANTS>
+        	<DESCENDANTS>
+        		<DESCENDANT id="tube"/>
+        	</DESCENDANTS>
         </NODE>
-
-        <NODE id="rope1">
-            <MATERIAL id="plastico"/>
-            <TEXTURE id="corda"/>
-
-
-            <TRANSLATION x="0.5" y="1" z="0.5"/>
-
-            <DESCENDANTS>
-                <DESCENDANT id="rope"/>
-            </DESCENDANTS>
-        </NODE>
-
-        <NODE id="rope2">
-            <MATERIAL id="plastico"/>
-            <TEXTURE id="corda"/>
-
-            <TRANSLATION x="0.5" y="1" z="-0.5"/>
-
-            <DESCENDANTS>
-                <DESCENDANT id="rope"/>
-            </DESCENDANTS>
-        </NODE>
-
-        <NODE id="rope3">
-            <MATERIAL id="plastico"/>
-            <TEXTURE id="corda"/>
-
-            <TRANSLATION x="-0.5" y="1" z="0.5"/>
-
-            <DESCENDANTS>
-                <DESCENDANT id="rope"/>
-            </DESCENDANTS>
-        </NODE>
-
-        <NODE id="rope4">
-            <MATERIAL id="plastico"/>
-            <TEXTURE id="corda"/>
-
-            <TRANSLATION x="-0.5" y="1" z="-0.5"/>
-
-            <DESCENDANTS>
-                <DESCENDANT id="rope"/>
-            </DESCENDANTS>
-        </NODE>
-
-        <NODE id="shad">
-            <MATERIAL id="null" />
-            <TEXTURE id="null" />
-
-            <TRANSLATION x="0" y="0" z="0"/>
-            <SCALE sx="80" sy="40" sz="80"/>
-
-            <DESCENDANTS>
-                <DESCENDANT id="terrain" />
-            </DESCENDANTS>
-        </NODE>
-
-        <NODE id="balloon">
-            <MATERIAL id="null"/>
-            <TEXTURE id="null"/>
-
-
-            <animationref id="teste"/>
-            <animationref id="teste"/>
-            <animationref id="teste"/>
-            <animationref id="teste"/>
-            <animationref id="teste"/>
-
-
-
-           <TRANSLATION x="0" y="7" z="0"/>
-            <SCALE sx="0.5" sy="0.5" sz="0.5"/>
-
-            <DESCENDANTS>
-                <DESCENDANT id="pat"/>
-                <DESCENDANT id="basket"/>
-                <DESCENDANT id="rope1"/>
-                <DESCENDANT id="rope2"/>
-                <DESCENDANT id="rope3"/>
-                <DESCENDANT id="rope4"/>
-            </DESCENDANTS>
-        </NODE>
-
-
-        <NODE id="balloon2">
-            <MATERIAL id="null"/>
-            <TEXTURE id="null"/>
-
-
-           <TRANSLATION x="-0" y="9" z="0"/>
-            <SCALE sx="0.5" sy="0.5" sz="0.5"/>
-            <animationref id="circ"/>
-
-            <DESCENDANTS>
-                <DESCENDANT id="pat2"/>
-                <DESCENDANT id="basket"/>
-                <DESCENDANT id="rope1"/>
-                <DESCENDANT id="rope2"/>
-                <DESCENDANT id="rope3"/>
-                <DESCENDANT id="rope4"/>
-            </DESCENDANTS>
-        </NODE>
-
-
-        <NODE id="balloon3">
-            <MATERIAL id="null"/>
-            <TEXTURE id="null"/>
-
-            <animationref id="circ2"/>
-
-           <TRANSLATION x="0" y="11" z="0"/>
-            <SCALE sx="0.5" sy="0.5" sz="0.5"/>
-
-            <DESCENDANTS>
-                <DESCENDANT id="pat3"/>
-                <DESCENDANT id="basket"/>
-                <DESCENDANT id="rope1"/>
-                <DESCENDANT id="rope2"/>
-                <DESCENDANT id="rope3"/>
-                <DESCENDANT id="rope4"/>
-            </DESCENDANTS>
-        </NODE>
-
-        <NODE id="balloon4">
-            <MATERIAL id="null"/>
-            <TEXTURE id="null"/>
-
-           <animationref id="circ3"/>
-
-           <TRANSLATION x="0" y="9" z="0"/>
-            <SCALE sx="0.5" sy="0.5" sz="0.5"/>
-
-            <DESCENDANTS>
-                <DESCENDANT id="pat4"/>
-                <DESCENDANT id="basket"/>
-                <DESCENDANT id="rope1"/>
-                <DESCENDANT id="rope2"/>
-                <DESCENDANT id="rope3"/>
-                <DESCENDANT id="rope4"/>
-            </DESCENDANTS>
-        </NODE>
-
-          <NODE id="balloon5">
-            <MATERIAL id="null"/>
-            <TEXTURE id="null"/>
-
-           <animationref id="circ4"/>
-
-           <TRANSLATION x="0" y="9" z="0"/>
-            <SCALE sx="0.5" sy="0.5" sz="0.5"/>
-
-            <DESCENDANTS>
-                <DESCENDANT id="pat5"/>
-                <DESCENDANT id="basket"/>
-                <DESCENDANT id="rope1"/>
-                <DESCENDANT id="rope2"/>
-                <DESCENDANT id="rope3"/>
-                <DESCENDANT id="rope4"/>
-            </DESCENDANTS>
-        </NODE>
-
-         <NODE id="balloon6">
-            <MATERIAL id="null"/>
-            <TEXTURE id="null"/>
-
-
-            <animationref id="teste2"/>
-            <animationref id="teste2"/>
-            <animationref id="teste2"/>
-            <animationref id="teste2"/>
-            <animationref id="teste2"/>
-
-
-
-           <TRANSLATION x="0" y="7" z="0"/>
-            <SCALE sx="0.5" sy="0.5" sz="0.5"/>
-
-            <DESCENDANTS>
-                <DESCENDANT id="pat6"/>
-                <DESCENDANT id="basket"/>
-                <DESCENDANT id="rope1"/>
-                <DESCENDANT id="rope2"/>
-                <DESCENDANT id="rope3"/>
-                <DESCENDANT id="rope4"/>
-            </DESCENDANTS>
-        </NODE>
-
-
-        <NODE id="pat">
-            <MATERIAL id="pedra"/>
-            <TEXTURE id="balao"/>
-
-            <TRANSLATION x="0" y="2.5" z="0"/>
-            <SCALE sx="0.85" sy="1" sz="0.85"/>
-
-            <DESCENDANTS>
-                <DESCENDANT id="patch1"/>
-            </DESCENDANTS>
-        </NODE>
-
-        <NODE id="pat2">
-            <MATERIAL id="pedra"/>
-            <TEXTURE id="vermelho"/>
-
-            <TRANSLATION x="0" y="2.5" z="0"/>
-            <SCALE sx="0.85" sy="1" sz="0.85"/>
-
-            <DESCENDANTS>
-                <DESCENDANT id="patch1"/>
-            </DESCENDANTS>
-        </NODE>
-
-         <NODE id="pat3">
-            <MATERIAL id="pedra"/>
-            <TEXTURE id="benfica"/>
-
-            <TRANSLATION x="0" y="2.5" z="0"/>
-            <SCALE sx="0.85" sy="1" sz="0.85"/>
-
-            <DESCENDANTS>
-                <DESCENDANT id="patch1"/>
-            </DESCENDANTS>
-        </NODE>
-
-         <NODE id="pat4">
-            <MATERIAL id="pedra"/>
-            <TEXTURE id="vulc"/>
-
-            <TRANSLATION x="0" y="2.5" z="0"/>
-            <SCALE sx="0.85" sy="1" sz="0.85"/>
-
-            <DESCENDANTS>
-                <DESCENDANT id="patch1"/>
-            </DESCENDANTS>
-        </NODE>
-
-
-         <NODE id="pat5">
-            <MATERIAL id="pedra"/>
-            <TEXTURE id="ss"/>
-
-            <TRANSLATION x="0" y="2.5" z="0"/>
-            <SCALE sx="0.85" sy="1" sz="0.85"/>
-
-            <DESCENDANTS>
-                <DESCENDANT id="patch1"/>
-            </DESCENDANTS>
-        </NODE>
-
-             <NODE id="pat6">
-            <MATERIAL id="pedra"/>
-            <TEXTURE id="top"/>
-
-            <TRANSLATION x="0" y="2.5" z="0"/>
-            <SCALE sx="0.85" sy="1" sz="0.85"/>
-
-            <DESCENDANTS>
-                <DESCENDANT id="patch1"/>
-            </DESCENDANTS>
-        </NODE>
-
-        <NODE id="basket">
-            <MATERIAL id="madeira"/>
-            <TEXTURE id="cesto"/>
-
-            <TRANSLATION x="-0.5" y="0" z="-0.5"/>
-
-            <DESCENDANTS>
-                <DESCENDANT id="Right" />
-                <DESCENDANT id="Left" />
-                <DESCENDANT id="Bottom" />
-                <DESCENDANT id="Back" />
-                <DESCENDANT id="Front" />
-            </DESCENDANTS>
-        </NODE>
-
-        <NODE id="Right">
-            <MATERIAL id="null" />
-            <TEXTURE id="null" />
-
-            <TRANSLATION x="0" y="1" z="0" />
-            <ROTATION axis="x" angle="180" />
-
-            <DESCENDANTS>
-                <DESCENDANT id="rect" />
-            </DESCENDANTS>
-        </NODE>
-
-        <NODE id="Left">
-            <MATERIAL id="null" />
-            <TEXTURE id="null" />
-
-            <TRANSLATION x="0" y="0" z="1" />
-
-            <DESCENDANTS>
-                <DESCENDANT id="rect" />
-            </DESCENDANTS>
-        </NODE>
-
-        <NODE id="Bottom">
-            <MATERIAL id="null" />
-            <TEXTURE id="null" />
-
-            <ROTATION axis="x" angle="90" />
-
-            <DESCENDANTS>
-                <DESCENDANT id="rect" />
-            </DESCENDANTS>
-        </NODE>
-
-        <NODE id="Back">
-            <MATERIAL id="null" />
-            <TEXTURE id="null" />
-
-            <ROTATION axis="y" angle="-90" />
-
-            <DESCENDANTS>
-                <DESCENDANT id="rect" />
-            </DESCENDANTS>
-        </NODE>
-
-        <NODE id="Top">
-            <MATERIAL id="null" />
-            <TEXTURE id="null" />
-
-            <TRANSLATION x="0" y="1" z="1" />
-            <ROTATION axis="x" angle="-90" />
-
-            <DESCENDANTS>
-                <DESCENDANT id="rect" />
-            </DESCENDANTS>
-        </NODE>
-
-        <NODE id="Front">
-            <MATERIAL id="null" />
-            <TEXTURE id="null" />
-
-            <TRANSLATION x="1" y="0" z="1" />
-            <ROTATION axis="y" angle="90" />
-
-            <DESCENDANTS>
-                <DESCENDANT id="rect" />
-            </DESCENDANTS>
-        </NODE>
-
     </NODES>
   </SCENE>

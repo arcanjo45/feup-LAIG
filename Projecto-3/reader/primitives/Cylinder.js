@@ -1,103 +1,69 @@
  /**
- * Cylinder
+ * Primitive that represents a cylinder with top and bottom
+ * @class MyFullCylinder
+ * @extends CGFobject
  * @constructor
+ * @module Primitives
+ * @param {CGFscene} scene
+ * @param {Array} args
  */
+function Cylinder(scene, args){
+	  CGFobject.call(this,scene);
+    this.args = args || [1, 1, 1, 8, 8];
 
- function Cylinder(scene, args) {
- 	CGFobject.call(this,scene);
+    this.height = this.args[0];
+    this.botRad = this.args[1];
+    this.topRad = this.args[2];
+    this.stacks = this.args[3];
+	  this.slices = this.args[4];
 
- 	this.args = args;
+    this.cylinder = new MyCylinder(scene, this.slices, this.stacks, this.topRad, this.botRad, this.height);
+    this.cylinder.initBuffers();
 
-	top = typeof top !== 'undefined' ? top : false;
-	bottom = typeof bottom !== 'undefined' ? bottom : false;
-	texture = typeof texture !== 'undefined' ? texture : false;
-	this.top = top;
-	this.bottom = bottom;
-	this.texture = texture;
-	this.topRad = this.args[2];
-	this.bottomRad = this.args[1];
-	this.height = this.args[0];
-	this.slices=this.args[3];
-	this.stacks=this.args[4];
-	this.type = 'cylinder';
+    this.topFace = new MyCircle(scene, this.topRad, this.slices);
+ 	  this.topFace.initBuffers();
 
- 	this.initBuffers();
- };
+    this.botFace = new MyCircle(scene, this.botRad, this.slices);
+ 	  this.botFace.initBuffers();
+}
 
- Cylinder.prototype = Object.create(CGFobject.prototype);
- Cylinder.prototype.constructor = Cylinder;
+Cylinder.prototype = Object.create(CGFobject.prototype);
+Cylinder.prototype.constructor = Cylinder;
 
- Cylinder.prototype.initBuffers = function() {
-	 this.vertices = [];
-	 this.indices = [];
-	 this.normals = [];
-	 this.texCoords = [];
+/**
+ * Method that renders the primitive to the WebGL context
+ * @method display
+ */
+Cylinder.prototype.display = function()
+{
+    this.scene.pushMatrix();
 
-	 var r = this.bottomRad;
-	 var delta_r = (this.topRad-this.bottomRad) / this.stacks;
-	 var delta_rad = 2*Math.PI/this.slices;
-	 var delta_z = this.height / this.stacks;
-	 var m = this.height/(this.bottomRad - this.topRad);
-	 var maxheight;
-	 if(this.bottomRad > this.topRad)
-	 	maxheight = this.topRad*m+this.height;
-	 else maxheight = this.bottomRad*m+this.height;
-	 var indice = 0;
-	 
-	 var acc = 0;
-	 for(var i = 0; i <= this.stacks; i++){
-	 	for(var j= 0; j <= this.slices; j++){
-	   	this.vertices.push(
-		r * Math.cos(j*delta_rad),
-		r * Math.sin(j*delta_rad), 
-		i*delta_z
-		);
-	   if(Math.abs(this.bottomRad - this.topRad) < 0.0001){
-		this.normals.push(
-		Math.cos(j*delta_rad),
-		Math.sin(j*delta_rad), 
-		0);
-	   }
-	   else if(this.bottomRad > this.topRad){
-		this.normals.push(
-		maxheight * Math.cos(j*delta_rad)/Math.sqrt(Math.pow(this.bottomRad, 2) + Math.pow(maxheight, 2)),
-		maxheight * Math.sin(j*delta_rad)/Math.sqrt(Math.pow(this.bottomRad, 2) + Math.pow(maxheight, 2)), 
-		this.bottomRad/Math.sqrt(Math.pow(this.bottomRad, 2) + Math.pow(maxheight, 2))
-		);
-	   }
-	   else{
-		this.normals.push(
-		maxheight * Math.cos(j*delta_rad)/Math.sqrt(Math.pow(this.topRad, 2) + Math.pow(maxheight, 2)),
-		maxheight * Math.sin(j*delta_rad)/Math.sqrt(Math.pow(this.topRad, 2) + Math.pow(maxheight, 2)), 
-		this.topRad/Math.sqrt(Math.pow(this.topRad, 2) + Math.pow(maxheight, 2))
-		);
-	   }
-	   this.texCoords.push(j/this.slices, i/this.stacks);
-	   
-	  }
-	  r = (i+1) * delta_r + this.bottomRad;
-	 }
+    this.scene.translate(0, 0, this.height/2);
 
-	 for(var i = 0; i < this.stacks; i++){
-	  acc = 0;
-	  for(var j = 0; j < this.slices; j++){
-		this.indices.push(
-		 i*(this.slices+1)+j,
-		 i*(this.slices+1)+(j+1),
-		 (i+1)*(this.slices+1)+(j+1)
-		 );
-		this.indices.push(
-		 (i+1)*(this.slices+1)+(j+1),
-		 (i+1)*(this.slices+1)+j,
-		 i*(this.slices+1)+j
-		 );
+    this.scene.pushMatrix();
+    this.scene.translate(0, 0, this.height/2);
+    this.topFace.display();
+    this.scene.popMatrix();
 
-	  }
-	 }
+    this.scene.pushMatrix();
+    this.scene.translate(0, 0, -this.height/2);
+    this.scene.rotate(Math.PI, 1, 0, 0);
+    this.botFace.display();
+    this.scene.popMatrix();
 
-	 this.primitiveType = this.scene.gl.TRIANGLES;
-	 this.initGLBuffers();
- };
+    this.scene.pushMatrix();
+    this.cylinder.display();
+    this.scene.popMatrix();
 
- Cylinder.prototype.updateTex = function(S, T) {
+    this.scene.popMatrix();
+};
+
+/**
+ * Updates the texture coordinates of the primitive
+ * @method updateTex
+ * @param {Float} S
+ * @param {Float} T
+ */
+Cylinder.prototype.updateTex = function(S, T) {
+    this.cylinder.updateTex(S, T);
 };
