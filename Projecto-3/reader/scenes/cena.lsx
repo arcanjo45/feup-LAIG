@@ -142,7 +142,7 @@
         </TEXTURE>
 
          <TEXTURE id="benfica">
-            <file path="res/Board.png"/>
+            <file path="res/z.png"/>
             <amplif_factor s="1" t="1"/>
         </TEXTURE>
 
@@ -333,15 +333,15 @@
 
             <DESCENDANTS>
                 <DESCENDANT id="peca" />
+                 <DESCENDANT id="tab" />
             </DESCENDANTS>
         </NODE>
 
         <NODE id="tab">
         	<MATERIAL id="plastico"/>
         	<TEXTURE id="benfica"/>
-            <SCALE sx="10" sy="10" sz="10"/>
-            <TRANSLATION x="-0.5" y="-0.001" z="0.7" />
-            <ROTATION axis="x" angle="-90"/>
+            <TRANSLATION x="-0.5" y="0" z="0.5" />
+             <ROTATION axis="x" angle="-90"/>
         	<DESCENDANTS>
         		<DESCENDANT id="rect"/>
         	</DESCENDANTS>
@@ -349,9 +349,8 @@
            <NODE id="peca">
             <MATERIAL id="terra"/>
             <TEXTURE id="null"/>
-
-            <TRANSLATION x="1" y="0" z="0"/>
-            <SCALE sx="0.6" sy="1" sz="0.6"/>
+           <SCALE sx="1" sy="1" sz="0.5"/>
+            <TRANSLATION x="0" y="0.1" z="0"/>
             <ROTATION axis="x" angle="-90"/>
             <DESCENDANTS>
                 <DESCENDANT id="tube"/>

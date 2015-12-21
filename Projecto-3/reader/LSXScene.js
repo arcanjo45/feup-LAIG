@@ -153,7 +153,7 @@ LSXScene.prototype.setDefaultAppearance = function() {
     var self = this;
     makeRequest("initialize", function(data) {
         var board = data.target.response;
-         //console.log(board);
+         console.log(board);
         // console.log("[" + typeof board + "]");
         var array = JSON.parse(board);
         console.log(array);
@@ -390,7 +390,7 @@ LSXScene.prototype.updateLights = function() {
 
                 var nextAnims = currAnims.concat(node.anims);
 
-                console.log(nextAnims);
+                //console.log(nextAnims);
 
                 for (var i = 0; i < node.descendants.length; i++) {
                     var nextNode = this.graph.findNode(node.descendants[i]);
