@@ -158,12 +158,12 @@ LSXScene.prototype.setDefaultAppearance = function() {
         var array = JSON.parse(board);
         console.log(array);
         // console.log("[" + typeof array + "]");
-        //var test = new Board(self.graph, array);
-       // test.display();
-        //self.initNodes();
+        var test = new Board(self.graph, array);
+         test.display();
+        self.initNodes();
     });
 
-            this.initNodes();
+            //this.initNodes();
         };
 /**
  * LSXSCene SceneTexture
@@ -517,7 +517,7 @@ LSXScene.prototype.updateLights = function() {
                 this.applyViewMatrix();
                 if(this.graph.loadedOK)
                 {
-                  //this.axis.display();
+                  this.axis.display();
 
                   this.setDefaultAppearance();
                  

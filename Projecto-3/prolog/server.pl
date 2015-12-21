@@ -110,6 +110,7 @@ parse_input(quit, goodbye).
 
 parse_input(initialize,Initial_board):- initial_board(Initial_board).
 
+
 test(_,[],N) :- N =< 0.
 test(A,[A|Bs],N) :- N1 is N-1, test(A,Bs,N1).
 	
