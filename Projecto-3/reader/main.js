@@ -37,6 +37,7 @@ serialInclude(['../lib/CGF.js',
     'animations/LinearAnimation.js',
     'LSXParser.js',
     'LSXScene.js',
+    'plServer.js',
 
     
 

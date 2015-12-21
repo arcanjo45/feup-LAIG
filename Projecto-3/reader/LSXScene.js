@@ -150,6 +150,19 @@ LSXScene.prototype.setDefaultAppearance = function() {
                     console.log(anims[i]);
             }
 
+    var self = this;
+    makeRequest("initialize", function(data) {
+        var board = data.target.response;
+         //console.log(board);
+        // console.log("[" + typeof board + "]");
+        var array = JSON.parse(board);
+        console.log(array);
+        // console.log("[" + typeof array + "]");
+        //var test = new Board(self.graph, array);
+       // test.display();
+        //self.initNodes();
+    });
+
             this.initNodes();
         };
 /**

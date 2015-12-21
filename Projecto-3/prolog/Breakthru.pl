@@ -4,6 +4,8 @@
 :-use_module(library(between)).
 :-use_module(library(random)).
 
+
+
 %%% Jogador Amarelo = 0 %%%
 %%% Jogador Cinzento = 1 %%%
 
@@ -20,7 +22,7 @@ initial_board(
 	[0,0,0,1,1,1,1,1,0,0,0],
 	[0,0,0,0,0,0,0,0,0,0,0]]).
 	
-:-initialization(menu).
+%:-initialization(menu).
 	
 %%%% MENUS %%%%
 
