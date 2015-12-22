@@ -38,7 +38,7 @@ LSXScene.prototype.init = function(application){
     var graphRootID;
 
     
-
+    this.setPickEnabled(true);
     this.textures = [];
     this.materials = [];
     this.leaves = [];
@@ -49,6 +49,8 @@ LSXScene.prototype.init = function(application){
     this.axis = new CGFaxis(this);
 
     this.materialDefault = new CGFappearance(this);
+
+        this.setPickEnabled(true);
 
 
     this.currTime = new Date().getTime();
@@ -158,7 +160,7 @@ LSXScene.prototype.setDefaultAppearance = function() {
         var array = JSON.parse(board);
         console.log(array);
         // console.log("[" + typeof array + "]");
-        var test = new Board(self.graph, array);
+        var test = new Board(self,self.graph, array);
          test.display();
         self.initNodes();
     });
@@ -235,6 +237,24 @@ LSXScene.prototype.setDefaultAppearance = function() {
             this.interface=interface;
 
         };
+
+ LSXScene.prototype.logPicking = function ()
+ {
+    if (this.pickMode == false) {
+        if (this.pickResults != null && this.pickResults.length > 0) {
+            for (var i=0; i< this.pickResults.length; i++) {
+                var obj = this.pickResults[i][0];
+                if (obj){
+                    var customId = this.pickResults[i][1];
+                    console.log("Picked object: " + obj + ", with pick id " + customId);
+                }
+            }
+            this.pickResults.splice(0,this.pickResults.length);
+        }
+    }
+};
+
+
 /**
  * LSXSCene initLights
  
@@ -553,8 +573,16 @@ LSXScene.prototype.updateLights = function() {
   for(var i =0; i < this.objects.length;i++)
   {
   	var obj = this.objects[i];
+    //console.log(obj);
   	obj.draw(this);
+    if(obj.id=="tube")
+    {
+        //console.log(obj);
+     this.registerForPick(i+1, obj);
+    }
   }
+   this.clearPickRegistration();
+   this.logPicking();
 }
 
 //this.shader.unbind();

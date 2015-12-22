@@ -2,6 +2,8 @@ function Piece(position, type) {
     this.x = position[0];
     this.y = position[1];
 
+    this.id = -1;
+
     this.type = "peca";
 /*
     switch (type) {
@@ -20,3 +22,18 @@ function Piece(position, type) {
     }
 */
 }
+
+
+Piece.prototype.setId = function(newId) {
+    this.id=newId;
+};
+
+Piece.prototype.getId = function() {
+    return this.id;
+};
+
+Piece.prototype.setSelectable = function() {
+    this.scene.registerForPick(this.id, this);
+};
+
+

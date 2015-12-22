@@ -1,10 +1,10 @@
-function Board(parser, board) {
+function Board(scene,parser, board) {
+    CGFobject.call(this,scene);
     this.parser = parser;
     this.parser.board = this;
 
     this.pieces = [];
     this.towers = [];
-
     this.board = board;
     this.size = board.length;
 
@@ -24,11 +24,15 @@ function Board(parser, board) {
         }
     }
 
+
     console.log(this.pieces.length + ": " + this.pieces);
     // console.log(this.towers.length + ": " + this.towers);
 }
 
+
+
 Board.prototype.display = function() {
+
     var board_node = this.parser.findNode("board");
 
     for (var i = 0; i < this.pieces.length; ++i) {
@@ -41,6 +45,7 @@ Board.prototype.display = function() {
         board_node.descendants.push("Piece"+i);
         this.parser.nodes.push(node);
     }
+   
 
      for (var i = 0; i < this.towers.length; ++i) {
         var tower = this.towers[i];
