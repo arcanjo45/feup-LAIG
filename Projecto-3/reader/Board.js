@@ -88,6 +88,7 @@ this.costMove = temp[2];
 
 }
 
+
 Board.prototype.display = function() {
 
     this.scene.pushMatrix();
@@ -102,17 +103,21 @@ Board.prototype.display = function() {
             this.fire.bind();
             else this.head_texture.bind();
             this.scene.board[i].display();
+           
             this.scene.pushMatrix();
             switch(this.matrix[row][col]){
             
             case 1: this.scene.translate(0,2,0);        
                     //this.atackingPiece.display();
+                    this.scene.board[i].display();
                     break;
             case 2: this.scene.translate(0,2,0);        
                     //this.defendingPiece.display();
+                    this.scene.board[i].display();
                     break;
             case 5: this.scene.translate(0,2,0);        
                     //this.motherShip.display();
+                    this.scene.board[i].display();
                     break;
             default:
                     break;

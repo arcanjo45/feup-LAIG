@@ -197,6 +197,8 @@ LSXScene.prototype.makePlays = function (Board,finalPick,callback, callbackObj){
 
     var board = matrixToList(Board.matrix);
 
+    console.log(board);
+
 getPrologRequest("makePlay("+board+","+initC[0]+","+initC[1]+","+finalC[0]+","+finalC[1]+")",function(data) {
     
     var matrix = listToMatrix(data.target.response);
@@ -700,7 +702,7 @@ LSXScene.prototype.updateLights = function() {
                   for (var i = 0; i < this.lights.length; i++)
                     this.lights[i].update();
 
-
+            
             this.Board.display();
         
 }

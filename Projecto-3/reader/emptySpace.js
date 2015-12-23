@@ -6,7 +6,7 @@
 	CGFobject.call(this,scene);
 	
 	this.rect = new MyQuad(scene,0,0,1,1);
-	this.rect.updateTex(1,1);
+	this.rect.applyAmplifFactors(1,1);
  }
  
  emptySpace.prototype = Object.create(CGFobject.prototype);

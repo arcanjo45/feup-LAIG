@@ -109,8 +109,11 @@ parse_input(test(C,N), Res) :- test(C,Res,N).
 parse_input(quit, goodbye).
 
 parse_input(initialize,Initial_board):- initial_board(Initial_board).
+
 parse_input(getPlays(Board,Player,CostLeft),[InitList,EndList,CostList]):- listAllPossibleMoves(Board,Player,CostLeft,List),
 															parsingListOfPlays(List,InitList,EndList,CostList).
+
+parse_input(makePlay(Board,X,Y,XF,YF),NewBoard):- movePiece(Board,X,Y,XF,YF,NewBoard).															
 
 test(_,[],N) :- N =< 0.
 test(A,[A|Bs],N) :- N1 is N-1, test(A,Bs,N1).
