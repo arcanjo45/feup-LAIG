@@ -248,6 +248,11 @@ getNShips(Board,1,N):-findall(X-Y,matrixGet(Board,X,Y,1),List),length(List,N).
 
 motherShipPositionValue(Board,Value):-whereM(Board,X,Y), Value is sqrt((abs(X-6)*abs(X-6)) + (abs(Y-6)*abs(Y-6))).
 
+parsingListOfPlays([],[],[],[]).
+
+parsingListOfPlays([X-Y-XF-YF-CostToSpend|List],[[X,Y]|InitList],[[XF,YF]|EndList],[CostToSpend|CostList]):-parsingListOfPlays(List,InitList,EndList,CostList).
+
+
 %listAllPossibleMoves(Board,Player,CostLeft,X,Y,XF,YF,CostToSpend,List).
 
 listAllPossibleMoves(Board,Player,CostLeft,List):-findall(X-Y-XF-YF-CostToSpend,allPossibleMoves(Board,Player,CostLeft,X,Y,XF,YF,CostToSpend),List).

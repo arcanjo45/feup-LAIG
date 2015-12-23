@@ -18,3 +18,29 @@ function makeRequest(req, successHandler, errorHandler, port) {
     console.log("Making request '"+req+"'");
     getPrologRequest(req, successHandler);
 }
+
+function matrixToList(matrix) {
+
+    var list = "[";
+    
+    for(mat in matrix)
+        list += "[" + matrix[mat] + "],";
+    
+    list = list.substring(0, list.length - 1);
+    
+    list += "]";
+        
+    console.log(list);
+        
+    return list;
+
+}
+
+
+function listToMatrix(list) {
+
+    console.log(list);
+
+    return JSON.parse(list);
+
+}

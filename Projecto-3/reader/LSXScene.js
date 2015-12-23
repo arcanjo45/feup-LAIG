@@ -37,14 +37,17 @@ LSXScene.prototype.init = function(application){
     this.grafo=[];
     var graphRootID;
 
-    
-    this.setPickEnabled(true);
     this.textures = [];
     this.materials = [];
     this.leaves = [];
     this.objects = [];
     this.anims = [];
    this.lightsEnabled = [];
+
+   this.flag = true;
+    this.state = "PROCESSING";
+    this.board = [];
+
 
     this.axis = new CGFaxis(this);
 
@@ -89,7 +92,6 @@ LSXScene.prototype.setDefaultAppearance = function() {
  */LSXScene.prototype.onGraphLoaded = function()
         {
     
-
      
              this.axis = new CGFaxis(this,this.graph.initials.reference);
 
@@ -152,21 +154,178 @@ LSXScene.prototype.setDefaultAppearance = function() {
                     console.log(anims[i]);
             }
 
+   this.Board = new Board(this);
+    
+    this.boardInitialized = false;
+    
     var self = this;
-    makeRequest("initialize", function(data) {
-        var board = data.target.response;
-         console.log(board);
-        // console.log("[" + typeof board + "]");
-        var array = JSON.parse(board);
-        console.log(array);
-        // console.log("[" + typeof array + "]");
-        var test = new Board(self,self.graph, array);
-         test.display();
-        self.initNodes();
+    
+    this.initBoard(
+        function(matrix){
+        self.Board.init(matrix);
+        }
+    );
+    this.getPlays(this.Board,function(listPlays) {
+                    self.Board.parsingPlays(listPlays);
+                    self.state = "IDLE";
     });
+};
+
+
+
+LSXScene.prototype.pickToCoord = function(pick) {
+
+                var Y = (Math.floor(pick/11))+1;
+                var X = (pick % 11)+1;
+                var coord = new Array(X,Y);
+
+return coord;
+
+}
+
+
+LSXScene.prototype.makePlays = function (Board,finalPick,callback, callbackObj){
+
+    var initC = this.pickToCoord(Board.selectedID);
+    var finalC = this.pickToCoord(finalPick);
+
+
+    var board = matrixToList(Board.matrix);
+
+getPrologRequest("makePlay("+board+","+initC[0]+","+initC[1]+","+finalC[0]+","+finalC[1]+")",function(data) {
+    
+    var matrix = listToMatrix(data.target.response);
+    if (typeof callback === "function") {
+              callback.apply(callbackObj,[matrix]);
+        }
+    },true);
+
+}
+
+LSXScene.prototype.getPlays = function (Board,callback, callbackObj){
+
+var board = matrixToList(Board.matrix);
+
+getPrologRequest("getPlays("+board+","+Board.currentPlayer+",2)",function(data) {
+    
+    var playList = data.target.response;
+    if (typeof callback === "function") {
+              callback.apply(callbackObj,[playList]);
+        }
+    },true);
+
+}
+
+
+LSXScene.prototype.initBoard = function (callback, callbackObj){
+
+    getPrologRequest("initialize",function(data) {
+    
+    var matrix = listToMatrix(data.target.response);
+    if (typeof callback === "function") {
+              callback.apply(callbackObj,[matrix]);
+        }
+    },true);
+}
+
+LSXScene.prototype.getListOfPicking = function (pick){
+
+                var coord = this.pickToCoord(pick);
+                var coordStr = coord.toString();
+                    
+                var list = this.getIdPieceLocation(coordStr);
+
+        return list;
+}
+
+LSXScene.prototype.isADest = function (pick,list){
+
+            var coord = this.pickToCoord(pick);
+            var coordStr = coord.toString();
+            
+            for(id in list)
+                {
+                    var tempCoord = this.Board.destLocation[list[id]];
+                    
+                    console.log(coordStr + " / " + tempCoord.toString());
+                    
+                    if(tempCoord.toString() == coord)
+                        return true;
+                }
+                
+        return false;
+}
+
+LSXScene.prototype.Picking = function ()
+{
+    if (this.pickMode == false) {
+        if (this.pickResults != null && this.pickResults.length > 0) {
+            for (var i=0; i< this.pickResults.length; i++) {
+            var obj = this.pickResults[i][0];
+            if (obj)
+            {
+                var pick = this.pickResults[i][1] - 1;  
+                //State machine for picking
+                switch(this.state){
+                case "IDLE":
+                    var list = this.getListOfPicking(pick);
+                    
+                    if(list.length != 0){
+                        this.Board.defineSelection(pick,list);
+                        this.state = "PRESSED";
+                        }
+                    break;
+                case "PROCESSING":
+                // waiting for requests 
+                    break;
+                    
+                case "PRESSED":
+                    console.log("yo");
+                    if(this.Board.selectedID == pick){ //reset selection
+                        this.Board.resetSelection();
+                        this.state = "IDLE";
+                        }
+                    else if(this.isADest(pick,this.Board.listSelected))
+                        {
+                            var self = this;
+                        
+                            this.makePlays(this.Board,pick,function(NewMatrix) {
+                            self.Board.newMatrix(NewMatrix);
+                            //make animation
+                            self.Board.updateBoard();
+                            self.getPlays(self.Board,function(listPlays) {
+                                self.Board.parsingPlays(listPlays);
+                                self.state = "IDLE";
+                                });
+                            });
+                        }
+                        break;
+                default: 
+                    break;
+                }               
+            }
+        }
+        this.pickResults.splice(0,this.pickResults.length);
+        }   
+    }
+}
+
+LSXScene.prototype.getIdPieceLocation = function (coord) {
+
+var list = [];
+
+    for(id in this.Board.piecesLocation)
+        {
+            var temp = this.Board.piecesLocation[id].toString();
+            if(temp == coord)
+                list.push(id);
+        }
+    return list;
+}
 
             //this.initNodes();
-        };
+
+
 /**
  * LSXSCene SceneTexture
 
@@ -238,21 +397,7 @@ LSXScene.prototype.setDefaultAppearance = function() {
 
         };
 
- LSXScene.prototype.logPicking = function ()
- {
-    if (this.pickMode == false) {
-        if (this.pickResults != null && this.pickResults.length > 0) {
-            for (var i=0; i< this.pickResults.length; i++) {
-                var obj = this.pickResults[i][0];
-                if (obj){
-                    var customId = this.pickResults[i][1];
-                    console.log("Picked object: " + obj + ", with pick id " + customId);
-                }
-            }
-            this.pickResults.splice(0,this.pickResults.length);
-        }
-    }
-};
+
 
 
 /**
@@ -524,6 +669,10 @@ LSXScene.prototype.updateLights = function() {
  Função que faz display de toda a cena
  */
  LSXScene.prototype.display = function() {
+
+    this.Picking();
+    this.clearPickRegistration();
+    
                 //this.shader.bind();
                 this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
                 this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
@@ -543,48 +692,11 @@ LSXScene.prototype.updateLights = function() {
                  
                   for (var i = 0; i < this.lights.length; i++)
                     this.lights[i].update();
-    // Nodes
-    /*
-    for (i = 0; i < this.nodes.length; i++) {
-        var node = this.nodes[i];
-        this.pushMatrix();
-        if(node.material != null)
-            node.material.setTexture(node.texture);
-        else
-            if(node.material == null)
-            {
-                node.material = this.materialDefault;
-                node.material.setTexture(node.texture);
-            }
-        if (node.texture != null) {
-            node.primitive.updateTex(node.texture.amplif_factor.s, node.texture.amplif_factor.t);
-        }
 
 
-        if(node.material != null)
-            node.material.apply();
-        this.multMatrix(node.matrix);
-        node.primitive.display();
-        this.popMatrix();
-    }
-
-*/
-
-  for(var i =0; i < this.objects.length;i++)
-  {
-  	var obj = this.objects[i];
-    //console.log(obj);
-  	obj.draw(this);
-    if(obj.id=="tube")
-    {
-        //console.log(obj);
-     this.registerForPick(i+1, obj);
-    }
-  }
-   this.clearPickRegistration();
-   this.logPicking();
+            this.Board.display();
+        
 }
-
 //this.shader.unbind();
 };
 
