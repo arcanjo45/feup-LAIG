@@ -15,12 +15,14 @@ function Board(scene) {
     
     this.matrix = [];
     this.currentPlayer = 0;
+    this.currentIDFromList = -1;
     this.prevMatrixs = [];
     this.inAnimation = false;
     this.currentAnimation;
     
     //selection
     this.selectedID = -1;
+    this.currentCostLeft = 2;
     this.listSelected = [];
     //this.atackingPiece = new atackingPiece();
     //this.defendingPiece = new defendingPiece();
@@ -41,6 +43,7 @@ Board.prototype.resetSelection = function() {
 
     this.selectedID = -1;
     this.listSelected = [];
+    this.currentIDFromList = -1;
 
 }
 
@@ -71,10 +74,15 @@ Board.prototype.newMatrix = function(newMatrix) {
 }
 
 Board.prototype.updateBoard = function() {
-    //cost left 0 -> muda jogador
-    if(this.currentPlayer == 0)
-        this.currentPlayer = 1;
-    else this.currentPlayer = 0;
+   
+    this.currentCostLeft = this.costMove[this.currentIDFromList];
+    
+    if(this.currentCostLeft == 0){
+        if(this.currentPlayer == 0)
+            this.currentPlayer = 1;
+        else this.currentPlayer = 0;
+        this.currentCostLeft = 2;
+    }
     this.resetSelection();
 }
 
@@ -103,7 +111,7 @@ Board.prototype.display = function() {
             this.fire.bind();
             else this.head_texture.bind();
             this.scene.board[i].display();
-           
+
             this.scene.pushMatrix();
             switch(this.matrix[row][col]){
             
