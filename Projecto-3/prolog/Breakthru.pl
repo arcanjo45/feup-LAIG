@@ -1,28 +1,24 @@
 
-
-:-use_module(library(lists)).
 :-use_module(library(between)).
+:-use_module(library(lists)).
 :-use_module(library(random)).
-
-
 
 %%% Jogador Amarelo = 0 %%%
 %%% Jogador Cinzento = 1 %%%
 
 initial_board(
- 	[[0,0,0,0,0,0,0,0,0,0,0],
- 	[0,0,0,1,1,1,1,1,0,0,0],
- 	[0,0,0,0,0,0,0,0,0,0,0],
- 	[0,1,0,0,2,2,2,0,0,1,0],	
- 	[0,1,0,2,0,0,0,2,0,1,0],
- 	[0,1,0,2,0,5,0,2,0,1,0],	
- 	[0,1,0,2,0,0,0,2,0,1,0],
- 	[0,1,0,0,2,2,2,0,0,1,0],
- 	[0,0,0,0,0,0,0,0,0,0,0],
- 	[0,0,0,1,1,1,1,1,0,0,0],
- 	[0,0,0,0,0,0,0,0,0,0,0]]).
+	[[0,0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,1,1,1,1,1,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0],
+	[0,1,0,0,2,2,2,0,0,1,0],	
+	[0,1,0,2,0,0,0,2,0,1,0],
+	[0,1,0,2,0,5,0,2,0,1,0],	
+	[0,1,0,2,0,0,0,2,0,1,0],
+	[0,1,0,0,2,2,2,0,0,1,0],
+	[0,0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,1,1,1,1,1,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0]]).
 	
-%:-initialization(menu).
 	
 %%%% MENUS %%%%
 
@@ -42,7 +38,7 @@ playMenuAnswer(4):-initial_board(Board), playFirst(Board,1,1),!,menu.
 playMenuAnswer(5):-!,menu.
 playMenuAnswer(_):-write('Wrong Input'),nl,nl,!,playMenu.
 
-menu:- nl, write('Welcome to BreakThru'),nl,
+menu:- nl, write('Bem Vindo ao BreakThru'),nl,
 nl,
 write('1 - Play '),nl,
 write('2 - Credits '),nl,
@@ -252,7 +248,6 @@ parsingListOfPlays([],[],[],[]).
 
 parsingListOfPlays([X-Y-XF-YF-CostToSpend|List],[[X,Y]|InitList],[[XF,YF]|EndList],[CostToSpend|CostList]):-parsingListOfPlays(List,InitList,EndList,CostList).
 
-
 %listAllPossibleMoves(Board,Player,CostLeft,X,Y,XF,YF,CostToSpend,List).
 
 listAllPossibleMoves(Board,Player,CostLeft,List):-findall(X-Y-XF-YF-CostToSpend,allPossibleMoves(Board,Player,CostLeft,X,Y,XF,YF,CostToSpend),List).
@@ -369,5 +364,3 @@ writePiece(5,0):-write(' M |'). %%%% Objetivo %%%%
 writePiece(1,1):-write('(D)|'). %%%% Defesa %%%%
 writePiece(2,1):-write('(A)|'). %%%% Ataque %%%%
 writePiece(5,1):-write('(M)|'). %%%% Objetivo %%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

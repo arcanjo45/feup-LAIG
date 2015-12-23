@@ -14,6 +14,10 @@ LSXScene.prototype = Object.create(CGFscene.prototype);
 
 LSXScene.prototype.constructor = LSXScene;
 
+LSXScene.prototype.Controls = function () {
+    console.log("Controls init");
+};
+
 /**
  * LSXSCene init
  * @param {Object} application
@@ -162,9 +166,10 @@ LSXScene.prototype.setDefaultAppearance = function() {
     
     this.initBoard(
         function(matrix){
+            console.log(matrix);
         self.Board.init(matrix);
-        }
-    );
+        });
+    console.log(this.Board.matrix);
     this.getPlays(this.Board,function(listPlays) {
                     self.Board.parsingPlays(listPlays);
                     self.state = "IDLE";
@@ -202,6 +207,17 @@ getPrologRequest("makePlay("+board+","+initC[0]+","+initC[1]+","+finalC[0]+","+f
 
 }
 
+LSXScene.prototype.initBoard = function (callback, callbackObj){
+
+    getPrologRequest("initialize",function(data) {
+    
+    var matrix = listToMatrix(data.target.response);
+    if (typeof callback === "function") {
+              callback.apply(callbackObj,[matrix]);
+        }
+    },true);
+}
+
 LSXScene.prototype.getPlays = function (Board,callback, callbackObj){
 
 var board = matrixToList(Board.matrix);
@@ -217,16 +233,7 @@ getPrologRequest("getPlays("+board+","+Board.currentPlayer+",2)",function(data) 
 }
 
 
-LSXScene.prototype.initBoard = function (callback, callbackObj){
 
-    getPrologRequest("initialize",function(data) {
-    
-    var matrix = listToMatrix(data.target.response);
-    if (typeof callback === "function") {
-              callback.apply(callbackObj,[matrix]);
-        }
-    },true);
-}
 
 LSXScene.prototype.getListOfPicking = function (pick){
 

@@ -13,7 +13,7 @@ function Board(scene) {
     this.head_texture = new CGFtexture(this.scene, "scenes/res/z.png");
     this.fire = new CGFtexture(this.scene, "scenes/res/blue.jpg");
     
-    this.matrix;
+    this.matrix = [];
     this.currentPlayer = 0;
     this.prevMatrixs = [];
     this.inAnimation = false;
