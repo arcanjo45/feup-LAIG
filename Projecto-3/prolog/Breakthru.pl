@@ -363,3 +363,5 @@ writePiece(5,0):-write(' M |'). %%%% Objetivo %%%%
 writePiece(1,1):-write('(D)|'). %%%% Defesa %%%%
 writePiece(2,1):-write('(A)|'). %%%% Ataque %%%%
 writePiece(5,1):-write('(M)|'). %%%% Objetivo %%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

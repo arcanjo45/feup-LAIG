@@ -25,6 +25,7 @@ LSXScene.prototype.Controls = function () {
  Função que inicia os elementos da cena
  */
 LSXScene.prototype.init = function(application){
+    this.interf=null;
 
     CGFscene.prototype.init.call(this,application);
 
@@ -52,6 +53,11 @@ LSXScene.prototype.init = function(application){
     this.state = "PROCESSING";
     this.board = [];
 
+    this.Player1Difficulty = "Human";
+    this.Player2Difficulty = "Human";
+    
+    this.player1Dificulty = ["Human", "Easy", "Hard"];
+    this.player2Dificulty = ["Human", "Easy", "Hard"];
 
     this.axis = new CGFaxis(this);
 
@@ -158,23 +164,35 @@ LSXScene.prototype.setDefaultAppearance = function() {
                     console.log(anims[i]);
             }
 
-   this.Board = new Board(this);
+            this.RESETBOARD();
+
+            if (this.interf != null)
+        this.interf.onGraphLoaded();
+
+};
+
+
+LSXScene.prototype.RESETBOARD = function() {
+
+    this.state = "PROCESSING";
+
+    this.Board = null;
     
-    this.boardInitialized = false;
+    this.Board = new Board(this);
     
     var self = this;
     
     this.initBoard(
         function(matrix){
-            console.log(matrix);
         self.Board.init(matrix);
-        });
-    console.log(this.Board.matrix);
+        }
+    );
     this.getPlays(this.Board,function(listPlays) {
                     self.Board.parsingPlays(listPlays);
                     self.state = "IDLE";
     });
-};
+
+}
 
 
 
@@ -188,22 +206,84 @@ return coord;
 
 }
 
+LSXScene.prototype.continueGame = function (self,callback, callbackObj){
 
-LSXScene.prototype.makePlays = function (Board,finalPick,callback, callbackObj){
+    self.state = "PROCESSING"; // waiting for requests
 
-    var initC = this.pickToCoord(Board.selectedID);
+    var board = matrixToList(self.Board.matrix);
+
+    getPrologRequest("continue("+board+")",function(data) {
+    
+    var answer = data.target.response;
+    
+    if (typeof callback === "function") {
+              callback.apply(callbackObj,[answer]);
+        }
+    },true);
+}
+
+LSXScene.prototype.makeHardPlay = function (self,callback, callbackObj){
+
+    self.state = "PROCESSING"; // waiting for requests
+
+    var board = matrixToList(self.Board.matrix);
+
+    getPrologRequest("playBest("+board+","+self.Board.currentPlayer+","+ self.Board.currentCostLeft +")",function(data) {
+    
+    var temp = listToMatrix(data.target.response);
+    
+    var matrix = temp[0];
+    
+    self.Board.updateCostLeft(temp[1]);
+    
+    if (typeof callback === "function") {
+              callback.apply(callbackObj,[self,matrix]);
+        }
+    },true);
+
+}
+
+LSXScene.prototype.makeEasyPlay = function (self,callback, callbackObj){
+
+    self.state = "PROCESSING"; // waiting for requests
+
+    var board = matrixToList(self.Board.matrix);
+    console.log(self.Board.currentCostLeft);
+
+    getPrologRequest("playRandom("+board+","+self.Board.currentPlayer+","+ self.Board.currentCostLeft +")",function(data) {
+    
+    var temp = listToMatrix(data.target.response);
+    
+    var matrix = temp[0];
+
+    console.log(self.Board.currentCostLeft);
+    self.Board.updateCostLeft(temp[1]);
+    console.log(self.Board.currentCostLeft);
+    
+    if (typeof callback === "function") {
+              callback.apply(callbackObj,[self,matrix]);
+        }
+    },true);
+
+}
+
+
+LSXScene.prototype.makePlays = function (self,finalPick,callback, callbackObj){
+
+    var initC = this.pickToCoord(self.Board.selectedID);
     var finalC = this.pickToCoord(finalPick);
 
 
-    var board = matrixToList(Board.matrix);
-
-    console.log(board);
+    var board = matrixToList(self.Board.matrix);
 
 getPrologRequest("makePlay("+board+","+initC[0]+","+initC[1]+","+finalC[0]+","+finalC[1]+")",function(data) {
     
     var matrix = listToMatrix(data.target.response);
+    
+    self.Board.updateCostLeft(self.Board.costMove[self.Board.currentIDFromList]);
+    
     if (typeof callback === "function") {
-              callback.apply(callbackObj,[matrix]);
+              callback.apply(callbackObj,[self,matrix]);
         }
     },true);
 
@@ -224,7 +304,7 @@ LSXScene.prototype.getPlays = function (Board,callback, callbackObj){
 
 var board = matrixToList(Board.matrix);
 
-getPrologRequest("getPlays("+board+","+Board.currentPlayer +"," + Board.currentCostLeft + ")",function(data) {
+getPrologRequest("getPlays("+board+","+Board.currentPlayer+","+ Board.currentCostLeft + ")",function(data) {
     
     var playList = data.target.response;
     if (typeof callback === "function") {
@@ -265,6 +345,25 @@ LSXScene.prototype.isADest = function (pick,list){
         return false;
 }
 
+
+LSXScene.prototype.putBoardAndGetPlays = function (self,matrix){
+                            self.Board.newMatrix(matrix);
+                            self.continueGame(self,function(answer) {
+                                if(answer == 1){
+                                    self.state = "GAMEOVER";
+                                    self.Board.resetSelection();
+                                    }
+                            });
+                            if(self.state != "GAMEOVER"){
+                            self.Board.updateBoard();
+                            self.getPlays(self.Board,function(listPlays) {
+                                self.Board.parsingPlays(listPlays);
+                                self.state = "IDLE";
+                                });
+                                }
+}
+
+
 LSXScene.prototype.Picking = function ()
 {
     if (this.pickMode == false) {
@@ -297,15 +396,7 @@ LSXScene.prototype.Picking = function ()
                         {
                             var self = this;
                         
-                            this.makePlays(this.Board,pick,function(NewMatrix) {
-                            self.Board.newMatrix(NewMatrix);
-                            //make animation
-                            self.Board.updateBoard();
-                            self.getPlays(self.Board,function(listPlays) {
-                                self.Board.parsingPlays(listPlays);
-                                self.state = "IDLE";
-                                });
-                            });
+                            this.makePlays(self,pick,this.putBoardAndGetPlays);
                         }
                         break;
                 default: 
@@ -333,7 +424,39 @@ var list = [];
 
             //this.initNodes();
 
-
+LSXScene.prototype.PLAY = function () {
+    if(this.state == "IDLE")
+    {
+        var self = this;
+        
+        switch(this.Board.currentPlayer){
+        
+            case 0:
+                if(this.Player1Difficulty == "Easy")
+                    {
+                        this.makeEasyPlay(self,this.putBoardAndGetPlays);
+                    }
+                else if(this.Player1Difficulty == "Hard")
+                    {
+                        this.makeHardPlay(self,this.putBoardAndGetPlays);
+                    }
+                break;
+            case 1:
+                if(this.Player2Difficulty == "Easy")
+                    {
+                        this.makeEasyPlay(self,this.putBoardAndGetPlays);
+                    }
+                else if(this.Player2Difficulty == "Hard")
+                    {
+                        this.makeHardPlay(self,this.putBoardAndGetPlays);
+                    }
+                break;
+        
+        }
+    
+    
+    }
+}
 /**
  * LSXSCene SceneTexture
 
@@ -401,7 +524,7 @@ var list = [];
         LSXScene.prototype.setInterface = function(interface)
         {
 
-            this.interface=interface;
+            this.interf=interface;
 
         };
 
@@ -449,7 +572,7 @@ var list = [];
                  
                 //this.shader.unbind();
 
-                this.interface.callLight();
+                this.interf.callLight();
             };
 /**
  * LSXSCene updateLights
@@ -700,6 +823,26 @@ LSXScene.prototype.updateLights = function() {
                  
                   for (var i = 0; i < this.lights.length; i++)
                     this.lights[i].update();
+
+             this.interf.updateInterface();
+        if(this.state != "GAMEOVER")
+            if(this.Board.currentPlayer == 0 && this.Player1Difficulty == "Human"){
+                this.setPickEnabled(true);
+                this.Picking();
+                this.clearPickRegistration();
+            }
+            else if(this.Board.currentPlayer == 1 && this.Player2Difficulty == "Human"){
+                this.setPickEnabled(true);
+                this.Picking();
+                this.clearPickRegistration();
+            }   
+            else{
+                //bot plays
+                this.setPickEnabled(false);
+            }
+        else {
+        this.setPickEnabled(false);
+        }
 
             
             this.Board.display();

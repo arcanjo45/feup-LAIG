@@ -1,7 +1,9 @@
 :-use_module(library(sockets)).
 :-use_module(library(lists)).
 :-use_module(library(codesio)).
+
 :- include('Breakthru.pl').
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%                                        Server                                                   %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -105,15 +107,23 @@ print_header_line(_).
 
 parse_input(handshake, handshake).
 parse_input(test(C,N), Res) :- test(C,Res,N).
-
 parse_input(quit, goodbye).
 
-parse_input(initialize,Initial_board):- initial_board(Initial_board).
+%% New Functions
+
+parse_input(continue(Board),0):-continueGame(Board).
+parse_input(continue(Board),1).
+
+parse_input(playBest(Board,Player,CostLeft),[NewBoard,CostToSpend]):-getBestMove(Board,Player,X,Y,XF,YF,CostLeft,CostToSpend),movePiece(Board,X,Y,XF,YF,NewBoard).
+
+parse_input(playRandom(Board,Player,CostLeft),[NewBoard,CostToSpend]):-getRandomMove(Board,Player,CostLeft,X,Y,XF,YF,CostToSpend),movePiece(Board,X,Y,XF,YF,NewBoard).
+
+parse_input(makePlay(Board,X,Y,XF,YF),NewBoard):-movePiece(Board,X,Y,XF,YF,NewBoard).
+
+parse_input(initialize,InitialBoard):- initial_board(InitialBoard).
 
 parse_input(getPlays(Board,Player,CostLeft),[InitList,EndList,CostList]):- listAllPossibleMoves(Board,Player,CostLeft,List),
 															parsingListOfPlays(List,InitList,EndList,CostList).
-
-parse_input(makePlay(Board,X,Y,XF,YF),NewBoard):- movePiece(Board,X,Y,XF,YF,NewBoard).															
 
 test(_,[],N) :- N =< 0.
 test(A,[A|Bs],N) :- N1 is N-1, test(A,Bs,N1).

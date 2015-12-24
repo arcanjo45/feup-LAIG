@@ -73,9 +73,16 @@ Board.prototype.newMatrix = function(newMatrix) {
     this.matrix = newMatrix;
 }
 
+
+Board.prototype.updateCostLeft = function(NewCostLeft) {
+
+this.currentCostLeft = NewCostLeft;
+
+}
+
 Board.prototype.updateBoard = function() {
    
-    this.currentCostLeft = this.costMove[this.currentIDFromList];
+    //this.currentCostLeft = this.costMove[this.currentIDFromList];
     
     if(this.currentCostLeft == 0){
         if(this.currentPlayer == 0)
