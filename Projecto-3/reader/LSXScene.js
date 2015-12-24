@@ -78,8 +78,8 @@ LSXScene.prototype.init = function(application){
  Função que inicia os elementos da câmara
  */
 LSXScene.prototype.initCameras = function() {
-    this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(70, 70, 70), vec3.fromValues(0, 0, 0));
-            //this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(0, 0, 10), vec3.fromValues(0, 0, 0));
+    //this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(70, 70, 70), vec3.fromValues(0, 0, 0));
+            this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(30, 30, 30), vec3.fromValues(0, 0, 0));
         };
 
 /**
@@ -846,6 +846,8 @@ LSXScene.prototype.updateLights = function() {
 
             
             this.Board.display();
+
+ 
         
 }
 //this.shader.unbind();
