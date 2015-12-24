@@ -24,7 +24,7 @@ function Board(scene) {
     this.selectedID = -1;
     this.currentCostLeft = 2;
     this.listSelected = [];
-    //this.atackingPiece = new atackingPiece();
+    this.test = new MyPiece(scene);
     //this.defendingPiece = new defendingPiece();
     //this.motherShip = new motherShip();
 }
@@ -107,7 +107,7 @@ this.costMove = temp[2];
 Board.prototype.display = function() {
 
     this.scene.pushMatrix();
-    this.scene.translate(-this.nCol/2 + 0.5, 0.1, -this.nRow/2 + 0.5); // adicionar largura do emptyspace
+   this.scene.translate(-this.nCol*1.1/2 + 0.5, 0.01, -this.nRow*1.1/2 + 0.5); // adicionar largura do emptyspace
 
     var i = 0;
     
@@ -122,17 +122,16 @@ Board.prototype.display = function() {
             this.scene.pushMatrix();
             switch(this.matrix[row][col]){
             
-            case 1: this.scene.translate(0,2,0);        
-                    //this.atackingPiece.display();
-                    this.scene.board[i].display();
+            case 1: this.scene.translate(0.5,0,0.5);        
+                    this.test.display();
                     break;
-            case 2: this.scene.translate(0,2,0);        
+            case 2: this.scene.translate(0.5,0,0.5);
+                    this.test.display();       
                     //this.defendingPiece.display();
-                    this.scene.board[i].display();
                     break;
-            case 5: this.scene.translate(0,2,0);        
+            case 5: this.scene.translate(0.5,0,0.5);  
+                    this.test.display();      
                     //this.motherShip.display();
-                    this.scene.board[i].display();
                     break;
             default:
                     break;
@@ -141,10 +140,10 @@ Board.prototype.display = function() {
                 this.fire.unbind();
             else this.head_texture.unbind();
             this.scene.popMatrix();
-            this.scene.translate(1,0,0); // adicionar largura do emptyspace
+            this.scene.translate(1.1,0,0); // adicionar largura do emptyspace
             i++;
         }
-        this.scene.translate(-this.nCol, 0, 1);// adicionar largura do emptyspace
+         this.scene.translate(-this.nCol*1.1, 0, 1.1)// adicionar largura do emptyspace
     }
 
     this.scene.popMatrix();
