@@ -10,8 +10,9 @@ function Board(scene) {
     
     //o maia é burro depois é perciso mudar
     
-    this.head_texture = new CGFtexture(this.scene, "scenes/res/z.png");
-    this.fire = new CGFtexture(this.scene, "scenes/res/blue.jpg");
+    this.choice = new CGFtexture(this.scene, "scenes/res/z.png");
+    this.selection = new CGFtexture(this.scene, "scenes/res/blue.jpg");
+    this.selected = new CGFtexture(this.scene, "scenes/res/orange.jpg");
     
     this.matrix = [];
     this.currentPlayer = 0;
@@ -24,7 +25,9 @@ function Board(scene) {
     this.selectedID = -1;
     this.currentCostLeft = 2;
     this.listSelected = [];
-    this.test = new MyPiece(scene);
+    this.attack = new MyPiece(scene,1);
+    this.defend = new MyPiece(scene,2);
+    this.king = new MyPiece(scene,5);
     //this.defendingPiece = new defendingPiece();
     //this.motherShip = new motherShip();
 }
@@ -106,6 +109,9 @@ this.costMove = temp[2];
 
 Board.prototype.display = function() {
 
+    this.scene.setActiveShaderSimple(this.scene.defaultShader);
+
+
     this.scene.pushMatrix();
    this.scene.translate(-this.nCol*1.1/2 + 0.5, 0.01, -this.nRow*1.1/2 + 0.5); // adicionar largura do emptyspace
 
@@ -114,31 +120,46 @@ Board.prototype.display = function() {
     for (var row = 0; row < this.nRow; ++row) {
         for (var col = 0; col < this.nCol; ++col) {
             this.scene.registerForPick(i+1,this.scene.board[i]);
-            if(this.selectedID == i) // TODO alterar esta merda toda
-            this.fire.bind();
-            else this.head_texture.bind();
+
+            var flag = false;
+            
+            for(id in this.listSelected)
+                {
+                    var index = this.listSelected[id];
+                    var coord = this.destLocation[index];
+                    var coordTemp = this.scene.pickToCoord(i);
+                    if(coordTemp.toString() == coord.toString())
+                        flag = true;
+                }
+          if(this.selectedID == i) // TODO alterar esta merda toda
+                this.selected.bind();
+            else if(this.selectedID != -1 && flag)
+                this.selection.bind();
+            else this.choice.bind();
             this.scene.board[i].display();
 
             this.scene.pushMatrix();
             switch(this.matrix[row][col]){
             
             case 1: this.scene.translate(0.5,0,0.5);        
-                    this.test.display();
+                    this.attack.display();
                     break;
             case 2: this.scene.translate(0.5,0,0.5);
-                    this.test.display();       
+                    this.defend.display();       
                     //this.defendingPiece.display();
                     break;
             case 5: this.scene.translate(0.5,0,0.5);  
-                    this.test.display();      
+                    this.king.display();      
                     //this.motherShip.display();
                     break;
             default:
                     break;
             }
-            if(this.selectedID == i)// TODO alterar esta merda toda
-                this.fire.unbind();
-            else this.head_texture.unbind();
+           if(this.selectedID == i) // TODO alterar esta merda toda
+                this.selected.unbind();
+            else if(this.selectedID != -1 && flag)
+                this.selection.unbind();
+            else this.choice.unbind();
             this.scene.popMatrix();
             this.scene.translate(1.1,0,0); // adicionar largura do emptyspace
             i++;
