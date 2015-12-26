@@ -55,6 +55,7 @@ MyInterface.prototype.updateInterface = function(){
 		this.player2.remove(this.button2);
 		this.player2Play = false;
 	}
+	
 }
 
 MyInterface.prototype.onGraphLoaded = function(){
@@ -65,6 +66,7 @@ this.player1=this.gui.addFolder("Player1");
 	//this.player1.open();
 	
 	this.player1.add(this.scene, 'Player1Difficulty', this.scene.player1Dificulty);
+	this.player1.add(this.scene, "Points",this.scene.Points);
 	
 	
 	

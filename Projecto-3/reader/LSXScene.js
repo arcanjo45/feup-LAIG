@@ -54,6 +54,7 @@ LSXScene.prototype.init = function(application){
     this.board = [];
 
     this.Player1Difficulty = "Human";
+    this.Points = 0;
     this.Player2Difficulty = "Human";
     
     this.player1Dificulty = ["Human", "Easy", "Hard"];
@@ -267,6 +268,11 @@ LSXScene.prototype.makeEasyPlay = function (self,callback, callbackObj){
 
 }
 
+LSXScene.prototype.updatePoints = function()
+{
+    this.Points = this.Points +1;
+};
+
 
 LSXScene.prototype.makePlays = function (self,finalPick,callback, callbackObj){
 
@@ -275,10 +281,13 @@ LSXScene.prototype.makePlays = function (self,finalPick,callback, callbackObj){
 
 
     var board = matrixToList(self.Board.matrix);
+    this.updatePoints();
+     console.log(this.Points);
 
 getPrologRequest("makePlay("+board+","+initC[0]+","+initC[1]+","+finalC[0]+","+finalC[1]+")",function(data) {
     
     var matrix = listToMatrix(data.target.response);
+
     
     self.Board.updateCostLeft(self.Board.costMove[self.Board.currentIDFromList]);
     
@@ -873,6 +882,8 @@ for(light in this.lightsEnabled)
         }
     }
 }
+
+  
 
 var delta = currTime - this.currTime;
     this.currTime = currTime;
