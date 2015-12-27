@@ -81,7 +81,7 @@ LSXScene.prototype.init = function(application){
  */
 LSXScene.prototype.initCameras = function() {
     //this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(70, 70, 70), vec3.fromValues(0, 0, 0));
-            this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(30, 30, 30), vec3.fromValues(0, 0, 0));
+            this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(0, 30, 30), vec3.fromValues(0, 0, 0));
         };
 
 /**
@@ -179,6 +179,8 @@ LSXScene.prototype.RESETBOARD = function() {
     this.state = "PROCESSING";
 
     this.Board = null;
+
+    this.resetPoints();
     
     this.Board = new Board(this);
     
@@ -280,6 +282,12 @@ LSXScene.prototype.updatePoints2 = function()
     this.Points2 = this.Points2 + 1;
     
 };
+
+LSXScene.prototype.resetPoints = function()
+{
+    this.Points1 = 0;
+    this.Points2 = 0;
+}
 
 
 LSXScene.prototype.makePlays = function (self,finalPick,callback, callbackObj){
