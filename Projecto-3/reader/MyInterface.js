@@ -66,7 +66,7 @@ this.player1=this.gui.addFolder("Player1");
 	//this.player1.open();
 	
 	this.player1.add(this.scene, 'Player1Difficulty', this.scene.player1Dificulty);
-	this.player1.add(this.scene, "Points",this.scene.Points);
+	this.player1.add(this.scene, "Points1",this.scene.Points1).listen();
 	
 	
 	
@@ -74,6 +74,7 @@ this.player1=this.gui.addFolder("Player1");
 	//this.player2.open();
 	
 	this.player2.add(this.scene, 'Player2Difficulty', this.scene.player2Dificulty);
+	this.player2.add(this.scene, "Points2",this.scene.Points2).listen();
 	
 	//restartButton
 	
