@@ -20,6 +20,10 @@ MyInterface.prototype.init = function(application){
 
 
 };
+MyInterface.prototype.processMouse = function(event)
+{
+
+};
 
 MyInterface.prototype.callLight = function()
 {
@@ -43,7 +47,19 @@ MyInterface.prototype.updateInterface = function(){
 		this.player1.remove(this.button1);
 		this.player1Play = false;
 	}
-	
+		
+	if(this.scene.Player1Difficulty == "Human" && this.scene.Board.currentPlayer==0)
+	{
+		this.player1.open();
+		this.player2.close();
+	}
+
+	if(this.scene.Player1Difficulty == "Human" && this.scene.Board.currentPlayer==1)
+	{
+		this.player1.close();
+		this.player2.open();
+		
+	}
 		
 	if(this.scene.Player2Difficulty != "Human" && !this.player2Play && this.scene.Board.currentPlayer == 1){
 		this.scene.Board.resetSelection();
@@ -61,6 +77,8 @@ MyInterface.prototype.updateInterface = function(){
 MyInterface.prototype.onGraphLoaded = function(){
 	this.gui.add(this.scene, 'Controls');	
 
+
+
 	// add a group of controls (and open/expand by default)
 this.player1=this.gui.addFolder("Player1");
 	//this.player1.open();
@@ -75,6 +93,12 @@ this.player1=this.gui.addFolder("Player1");
 	
 	this.player2.add(this.scene, 'Player2Difficulty', this.scene.player2Dificulty);
 	this.player2.add(this.scene, "Points2",this.scene.Points2).listen();
+
+	//this.player2.remove(this.timer2);
+		this.player1.add(this.scene, 'remainingTime', 0, 10).listen();
+		
+		//this.player1.remove(this.timer1);
+		this.player2.add(this.scene, 'remainingTime', 0, 10).listen();
 	
 	//restartButton
 	

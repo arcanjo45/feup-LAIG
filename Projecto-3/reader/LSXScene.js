@@ -42,6 +42,10 @@ LSXScene.prototype.init = function(application){
     this.grafo=[];
     var graphRootID;
 
+    this.nextPLayer = 1;
+
+
+
     this.textures = [];
     this.materials = [];
     this.leaves = [];
@@ -70,6 +74,13 @@ LSXScene.prototype.init = function(application){
 
     this.currTime = new Date().getTime();
     this.setUpdatePeriod(10);
+    this.cameraRot = 0;
+    this.cameraRotBoolp1 = true;
+     this.cameraRotBoolp2 = true;
+     this.bool=true;
+     this.secondsElapsed= 0;
+     this.remainingTime = 10;
+     
 
 
 };
@@ -96,6 +107,31 @@ LSXScene.prototype.setDefaultAppearance = function() {
             this.setSpecular(0.2, 0.4, 0.8, 1.0);
             this.setShininess(10.0);
  };
+
+ LSXScene.prototype.animateCamera = function(){
+    this.bool = true;
+    this.cameraRot+= this.elapsedTime;
+
+var axis = vec3.fromValues(0,1,0);
+if (this.cameraRot  >= Math.PI) {
+                        this.cameraRot = 0;
+                        this.bool = false;
+                       
+                    }
+
+
+
+if (this.cameraRot + this.elapsedTime/1000 >= Math.PI) {
+                       this.camera.orbit(axis,Math.PI - this.cameraRot);
+                       
+                    }
+                    else
+                        if(this.cameraRot < Math.PI)
+    this.camera.orbit(axis,this.elapsedTime);
+//else this.camera.position = 
+
+
+ }
 
  /**
  * LSXSCene onGraphLoaded
@@ -289,6 +325,11 @@ LSXScene.prototype.resetPoints = function()
     this.Points2 = 0;
 }
 
+LSXScene.prototype.updateMove = function()
+{
+    this.move = true;
+}
+
 
 LSXScene.prototype.makePlays = function (self,finalPick,callback, callbackObj){
 
@@ -297,11 +338,21 @@ LSXScene.prototype.makePlays = function (self,finalPick,callback, callbackObj){
 
 
     var board = matrixToList(self.Board.matrix);
-    if(self.Board.currentPlayer == 0)
+    if(this.Board.currentPlayer == 0 && this.Player1Difficulty == "Human")
+    {
+         console.log(this.move);
     this.updatePoints1();
-   if(self.Board.currentPlayer == 1)
+    this.updateMove();
+    console.log(this.move);
+}
+   if(this.Board.currentPlayer == 1 && this.Player2Difficulty == "Human")
+   {
+     console.log(this.move);
     this.updatePoints2();
-     console.log(this.Points1);
+   this.updateMove();
+    console.log(this.move);
+}
+  
 
 getPrologRequest("makePlay("+board+","+initC[0]+","+initC[1]+","+finalC[0]+","+finalC[1]+")",function(data) {
     
@@ -314,6 +365,11 @@ getPrologRequest("makePlay("+board+","+initC[0]+","+initC[1]+","+finalC[0]+","+f
               callback.apply(callbackObj,[self,matrix]);
         }
     },true);
+
+
+
+
+
 
 }
 
@@ -388,6 +444,7 @@ LSXScene.prototype.putBoardAndGetPlays = function (self,matrix){
                                 self.Board.parsingPlays(listPlays);
                                 self.state = "IDLE";
                                 });
+
                                 }
 }
 
@@ -855,14 +912,59 @@ LSXScene.prototype.updateLights = function() {
              this.interf.updateInterface();
         if(this.state != "GAMEOVER")
             if(this.Board.currentPlayer == 0 && this.Player1Difficulty == "Human"){
-                this.setPickEnabled(true);
-                this.Picking();
-                this.clearPickRegistration();
+                if(this.bool)
+                this.animateCamera();
+                //this.update();
+                /*
+                console.log(this.move);
+                if(this.move){
+                    if (this.cameraRotBoolp1)
+                    {
+                        this.animateCamera();
+                        this.move = false;
+                        
+                        
+                    }
+
+               } 
+                    if (this.cameraRot >= Math.PI) {
+                        this.cameraRot = 0;
+                        this.cameraRotBoolp1 = false;
+                       
+                    }
+                */    
+                    this.setPickEnabled(true);
+                    this.Picking();
+                    this.clearPickRegistration();
+                    console.log(this.Board.currentCostLeft);                
+
             }
             else if(this.Board.currentPlayer == 1 && this.Player2Difficulty == "Human"){
+                if(this.bool)
+                this.animateCamera();
+                 //this.update();
+               
+                /*
+                if(this.move){
+                    if (this.cameraRotBoolp2)
+                    {
+                        this.animateCamera();
+                        this.move = false;
+
+                        
+                    }
+                      
+                }
+                if (this.cameraRot >= Math.PI) {
+                    this.cameraRot = 0;
+                    this.cameraRotBoolp2 = false;
+                   
+                }
+                */
                 this.setPickEnabled(true);
                 this.Picking();
                 this.clearPickRegistration();
+
             }   
             else{
                 //bot plays
@@ -874,12 +976,24 @@ LSXScene.prototype.updateLights = function() {
 
             
             this.Board.display();
+            /*
+            if(this.bool)
+                this.animateCamera();
+            */
 
  
         
 }
 //this.shader.unbind();
 };
+
+LSXScene.prototype.updatePlayer = function()
+{
+        if(this.Board.currentPlayer == 1)
+    this.Board.currentPlayer = 0;
+else if(this.Board.currentPlayer ==0)
+    this.Board.currentPlayer = 1;
+}
 
 LSXScene.prototype.update = function(currTime){
 
@@ -902,11 +1016,39 @@ for(light in this.lightsEnabled)
     }
 }
 
+if(this.lastUpdate != 0)
+{
 
-  
+this.elapsedTime = currTime - this.lastUpdate;
+this.elapsedTime = this.elapsedTime/1000;
+
+}
+
+
+
 
 var delta = currTime - this.currTime;
     this.currTime = currTime;
+
+if(this.remainingTime > 0)
+{
+    this.initTime = this.lastUpdate;
+
+
+this.secondsElapsed = (delta)/1000;
+
+ this.remainingTime -=this.secondsElapsed;
+ //console.log(this.remainingTime);
+}
+else if(this.remainingTime < 0.5)
+{
+    //this.bool = true;
+    this.animateCamera();
+ this.remainingTime = 10;
+
+
+}
+
 //console.log(delta);
     for (var i = 0; i < this.objects.length; ++i)
         this.objects[i].updateAnims(delta);
