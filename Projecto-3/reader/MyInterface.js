@@ -20,11 +20,12 @@ MyInterface.prototype.init = function(application){
 
 
 };
+/*
 MyInterface.prototype.processMouse = function(event)
 {
 
 };
-
+*/
 MyInterface.prototype.callLight = function()
 {
 
@@ -77,6 +78,9 @@ MyInterface.prototype.updateInterface = function(){
 MyInterface.prototype.onGraphLoaded = function(){
 	this.gui.add(this.scene, 'Controls');	
 
+var bg = this.gui.addFolder("Background");
+
+	bg.add(this.scene, 'currentBackground', this.scene.bgList);
 
 
 	// add a group of controls (and open/expand by default)

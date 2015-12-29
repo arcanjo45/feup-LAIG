@@ -65,11 +65,18 @@ LSXScene.prototype.init = function(application){
     this.player1Dificulty = ["Human", "Easy", "Hard"];
     this.player2Dificulty = ["Human", "Easy", "Hard"];
 
+    this.currentBackground = "Background 1";
+
+    this.bgList = ["Background 1", "Background 2", "Background 3"];
+
+    this.backgroundWalls = new MyBackground(this);
+
     this.axis = new CGFaxis(this);
 
     this.materialDefault = new CGFappearance(this);
 
         this.setPickEnabled(true);
+        this.back = new MyBackground(this);
 
 
     this.currTime = new Date().getTime();
@@ -976,6 +983,7 @@ LSXScene.prototype.updateLights = function() {
 
             
             this.Board.display();
+            this.back.display();
             /*
             if(this.bool)
                 this.animateCamera();
