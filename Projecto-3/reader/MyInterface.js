@@ -80,6 +80,9 @@ MyInterface.prototype.onGraphLoaded = function(){
 
 var bg = this.gui.addFolder("Background");
 
+var cam = this.gui.addFolder("Camera");
+
+cam.add(this.scene, 'currentCamera', this.scene.camList);
 	bg.add(this.scene, 'currentBackground', this.scene.bgList);
 
 

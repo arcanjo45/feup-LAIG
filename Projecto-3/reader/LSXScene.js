@@ -67,6 +67,10 @@ LSXScene.prototype.init = function(application){
 
     this.currentBackground = "Background 1";
 
+    this.currentCamera = "Position 1";
+
+    this.camList = ["Position 1","Position 2"];
+
     this.bgList = ["Background 1", "Background 2", "Background 3"];
 
     this.backgroundWalls = new MyBackground(this);
@@ -84,7 +88,8 @@ LSXScene.prototype.init = function(application){
     this.cameraRot = 0;
     this.cameraRotBoolp1 = true;
      this.cameraRotBoolp2 = true;
-     this.bool=true;
+     this.bool1 = true;
+     this.bool2 == true;
      this.secondsElapsed= 0;
      this.remainingTime = 10;
      
@@ -116,13 +121,15 @@ LSXScene.prototype.setDefaultAppearance = function() {
  };
 
  LSXScene.prototype.animateCamera = function(){
-    this.bool = true;
+    this.bool1 = true;
+    this.bool2 = true;
     this.cameraRot+= this.elapsedTime;
 
 var axis = vec3.fromValues(0,1,0);
 if (this.cameraRot  >= Math.PI) {
                         this.cameraRot = 0;
-                        this.bool = false;
+                        this.bool1 = false;
+                        this.bool2 = false;
                        
                     }
 
@@ -919,8 +926,7 @@ LSXScene.prototype.updateLights = function() {
              this.interf.updateInterface();
         if(this.state != "GAMEOVER")
             if(this.Board.currentPlayer == 0 && this.Player1Difficulty == "Human"){
-                if(this.bool)
-                this.animateCamera();
+               
                 //this.update();
                 /*
                 console.log(this.move);
@@ -947,8 +953,7 @@ LSXScene.prototype.updateLights = function() {
 
             }
             else if(this.Board.currentPlayer == 1 && this.Player2Difficulty == "Human"){
-                if(this.bool)
-                this.animateCamera();
+             
                  //this.update();
                
                 /*
@@ -984,6 +989,17 @@ LSXScene.prototype.updateLights = function() {
             
             this.Board.display();
             this.back.display();
+
+            if(this.currentCamera == "Position 1" && this.bool1 == true)
+{
+    this.animateCamera();
+    this.bool2 = true;
+}
+else if(this.currentCamera == "Position 2" && this.bool2 == true)
+{
+    this.animateCamera();
+     this.bool1= true;
+}
             /*
             if(this.bool)
                 this.animateCamera();
@@ -1051,7 +1067,7 @@ this.secondsElapsed = (delta)/1000;
 else if(this.remainingTime < 0.5)
 {
     //this.bool = true;
-    this.animateCamera();
+   // this.animateCamera();
  this.remainingTime = 10;
 
 
