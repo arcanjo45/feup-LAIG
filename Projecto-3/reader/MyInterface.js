@@ -102,10 +102,10 @@ this.player1=this.gui.addFolder("Player1");
 	this.player2.add(this.scene, "Points2",this.scene.Points2).listen();
 
 	//this.player2.remove(this.timer2);
-		this.player1.add(this.scene, 'remainingTime', 0, 10).listen();
+		this.player1.add(this.scene, 'remainingTime', 0, 20).listen();
 		
 		//this.player1.remove(this.timer1);
-		this.player2.add(this.scene, 'remainingTime', 0, 10).listen();
+		this.player2.add(this.scene, 'remainingTime', 0, 20).listen();
 	
 	//restartButton
 	

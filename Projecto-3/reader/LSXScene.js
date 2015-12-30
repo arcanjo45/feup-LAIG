@@ -91,7 +91,7 @@ LSXScene.prototype.init = function(application){
      this.bool1 = true;
      this.bool2 == true;
      this.secondsElapsed= 0;
-     this.remainingTime = 10;
+     this.remainingTime = 20;
      
 
 
@@ -926,6 +926,11 @@ LSXScene.prototype.updateLights = function() {
              this.interf.updateInterface();
         if(this.state != "GAMEOVER")
             if(this.Board.currentPlayer == 0 && this.Player1Difficulty == "Human"){
+                 if(this.remainingTime < 0) 
+                 {
+                    var self = this;
+                   this.makeHardPlay(self,this.putBoardAndGetPlays);
+               }
                
                 //this.update();
                 /*
@@ -953,6 +958,11 @@ LSXScene.prototype.updateLights = function() {
 
             }
             else if(this.Board.currentPlayer == 1 && this.Player2Difficulty == "Human"){
+                if(this.remainingTime < 0) 
+                 {
+                    var self = this;
+                   this.makeHardPlay(self,this.putBoardAndGetPlays);
+               }
              
                  //this.update();
                
@@ -1064,11 +1074,12 @@ this.secondsElapsed = (delta)/1000;
  this.remainingTime -=this.secondsElapsed;
  //console.log(this.remainingTime);
 }
-else if(this.remainingTime < 0.5)
+else if(this.remainingTime < 0)
 {
     //this.bool = true;
    // this.animateCamera();
- this.remainingTime = 10;
+
+ this.remainingTime = 20;
 
 
 }
