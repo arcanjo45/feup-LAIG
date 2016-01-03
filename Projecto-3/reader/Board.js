@@ -8,8 +8,9 @@ function Board(scene) {
 
     this.scene = scene;
     
-    //o maia é burro depois é perciso mudar
-    
+    /*
+    Estado da cor dos quadrados
+    */
     this.choice = new CGFtexture(this.scene, "scenes/res/z.png");
     this.selection = new CGFtexture(this.scene, "scenes/res/blue.jpg");
     this.selected = new CGFtexture(this.scene, "scenes/res/orange.jpg");
@@ -35,13 +36,22 @@ function Board(scene) {
 Board.prototype = Object.create(CGFobject.prototype);
 Board.prototype.constructor = Board;
 
+/**
+ * defineSelection
+ * @param{ ID(int), list(string)}
+ Define a peça que esta seleccionada
+ */
 Board.prototype.defineSelection = function(ID,list) {
 
     this.selectedID = ID;
     this.listSelected = list;
 
 }
-
+/**
+ * resetSelection
+ * @param{ }
+Poe a selecção de volta ao estado inicial
+ */
 Board.prototype.resetSelection = function() {
 
     this.selectedID = -1;
@@ -49,7 +59,11 @@ Board.prototype.resetSelection = function() {
     this.currentIDFromList = -1;
 
 }
-
+/**
+ * resetSelection
+ * @param{ matrix(Matrix)}
+Inicia o tabuleiro com as peças colocados segundo a disposição do Prolog
+ */
 Board.prototype.init = function(matrix) {
     this.matrix = matrix;
     this.nRow = matrix.length;
@@ -69,20 +83,34 @@ for (var row = 0; row < this.nRow; ++row) {
     }
     
 }
-
+/**
+ * newMatrix
+ * @param{ newMatrix(Matrix)}
+Cria uma nova matriz e poe a antiga no array de matrizes antigas
+ */
 Board.prototype.newMatrix = function(newMatrix) {
 
     this.prevMatrixs.push(this.matrix);
     this.matrix = newMatrix;
 }
 
-
+/**
+ * updateCostLeft
+ * @param{ newCostLeft(int)}
+Atualiza o custo disponivel para cada jogada do jogador
+ */
 Board.prototype.updateCostLeft = function(NewCostLeft) {
 
 this.currentCostLeft = NewCostLeft;
 
 }
 
+/**
+ * updateBoard
+ * @param{}
+Da update a todas as variaveis do Board fazendo a troca de jogadores a atualização do custo
+e a atualização da peça seleccionada
+ */
 Board.prototype.updateBoard = function() {
    
     //this.currentCostLeft = this.costMove[this.currentIDFromList];
@@ -96,6 +124,12 @@ Board.prototype.updateBoard = function() {
     this.resetSelection();
 }
 
+/**
+ * parsingPlays
+ * @param{playlist(String)}
+Transforma a lista que vem da função getPlays do Prolog com todas as jogadas possiveis,o jogador em jogo e o custo restante
+em respectivamente um array com todas as jogadas possiveis e os dois restantes atributos em inteiros
+ */
 Board.prototype.parsingPlays = function(playList) {
 
 var temp = listToMatrix(playList);
@@ -106,7 +140,12 @@ this.costMove = temp[2];
 
 }
 
-
+/**
+ * display
+ * @param{}
+Função que faz display de todo o tabuleiro com as peças nos seus resptivos lugares e que atualiza cada vez que é ativado
+o picking numa peça e que mostra a peça que esta seleccionada
+ */
 Board.prototype.display = function() {
 
     this.scene.setActiveShaderSimple(this.scene.defaultShader);

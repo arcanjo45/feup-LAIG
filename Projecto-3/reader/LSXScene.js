@@ -120,6 +120,13 @@ LSXScene.prototype.setDefaultAppearance = function() {
             this.setShininess(10.0);
  };
 
+
+/**
+ * LSXSCene animateCamera
+ 
+
+ Função que faz rodar a camera a distancia pretendida pelo utilizador atraves de sucessivos updates
+ */
  LSXScene.prototype.animateCamera = function(){
     this.bool1 = true;
     this.bool2 = true;
@@ -223,7 +230,12 @@ if (this.cameraRot + this.elapsedTime/1000 >= Math.PI) {
 
 };
 
+/**
+ * LSXSCene RESETBOARD
+ 
 
+ Função que poe todas as variaveis do tabuleiro no seu estado inicial ao criar um novo tabuleiro
+ */
 LSXScene.prototype.RESETBOARD = function() {
 
     this.state = "PROCESSING";
@@ -249,7 +261,12 @@ LSXScene.prototype.RESETBOARD = function() {
 }
 
 
+/**
+ * LSXSCene pickToCoord
+ 
 
+ Função que transforma uma selecção numa coordenada
+ */
 LSXScene.prototype.pickToCoord = function(pick) {
 
                 var Y = (Math.floor(pick/11))+1;
@@ -260,6 +277,12 @@ return coord;
 
 }
 
+/**
+ * LSXSCene continueGame
+ 
+
+ Função que envia um request ao Prolog a perguntar se ainda é possivel o jogo continuar ou não
+ */
 LSXScene.prototype.continueGame = function (self,callback, callbackObj){
 
     self.state = "PROCESSING"; // waiting for requests
@@ -276,6 +299,12 @@ LSXScene.prototype.continueGame = function (self,callback, callbackObj){
     },true);
 }
 
+/**
+ * LSXSCene makeHardPlay
+ 
+
+ Função que envia um request ao Prolog para que o bot realize uma jogada de nivel de dificuldade 2
+ */
 LSXScene.prototype.makeHardPlay = function (self,callback, callbackObj){
 
     self.state = "PROCESSING"; // waiting for requests
@@ -297,6 +326,13 @@ LSXScene.prototype.makeHardPlay = function (self,callback, callbackObj){
 
 }
 
+
+/**
+ * LSXSCene makeEasyPlay
+ 
+
+ Função que envia um request ao Prolog para que o bot realize uma jogada de nivel de dificuldade 1
+ */
 LSXScene.prototype.makeEasyPlay = function (self,callback, callbackObj){
 
     self.state = "PROCESSING"; // waiting for requests
@@ -321,18 +357,36 @@ LSXScene.prototype.makeEasyPlay = function (self,callback, callbackObj){
 
 }
 
+/**
+ * LSXSCene updatePoints1
+ 
+
+ Função que atualiza os pontos do jogador 1
+ */
 LSXScene.prototype.updatePoints1 = function()
 {
     this.Points1 = this.Points1 + 1;
     
 };
 
+/**
+ * LSXSCene updatePoints2
+ 
+
+ Função que atualiza os pontos do jogador 2
+ */
 LSXScene.prototype.updatePoints2 = function()
 {
     this.Points2 = this.Points2 + 1;
     
 };
 
+/**
+ * LSXSCene resetPoints
+ 
+
+ Função que retorna os pontos dos 2 jogadores a 0
+ */
 LSXScene.prototype.resetPoints = function()
 {
     this.Points1 = 0;
@@ -344,7 +398,13 @@ LSXScene.prototype.updateMove = function()
     this.move = true;
 }
 
+/**
+ * LSXSCene makePlays
+ 
 
+ Função que envia um request ao Prolog para fazer uma jogada de acordo com as informações do jogador que vai a jogo 
+ e que posteriormente atuaiza essta informação
+ */
 LSXScene.prototype.makePlays = function (self,finalPick,callback, callbackObj){
 
     var initC = this.pickToCoord(self.Board.selectedID);
@@ -380,13 +440,14 @@ getPrologRequest("makePlay("+board+","+initC[0]+","+initC[1]+","+finalC[0]+","+f
         }
     },true);
 
-
-
-
-
-
 }
 
+/**
+ * LSXSCene initiBoard
+ 
+
+ Função que envia um request ao Prolog para receber o tabuleiro inicial do jogo
+ */
 LSXScene.prototype.initBoard = function (callback, callbackObj){
 
     getPrologRequest("initialize",function(data) {
@@ -398,6 +459,12 @@ LSXScene.prototype.initBoard = function (callback, callbackObj){
     },true);
 }
 
+/**
+ * LSXSCene getPlays
+ 
+
+ Função que recebe do Prolog todas as jogadas possiveis de fazer por um jogador com o estado atual do tabuleiro
+ */
 LSXScene.prototype.getPlays = function (Board,callback, callbackObj){
 
 var board = matrixToList(Board.matrix);
@@ -414,7 +481,12 @@ getPrologRequest("getPlays("+board+","+Board.currentPlayer+","+ Board.currentCos
 
 
 
+/**
+ * LSXSCene getListofPicking
+ 
 
+ Função que recebe todas as posições onde o picking vai estar ativado
+ */
 LSXScene.prototype.getListOfPicking = function (pick){
 
                 var coord = this.pickToCoord(pick);
@@ -425,6 +497,12 @@ LSXScene.prototype.getListOfPicking = function (pick){
         return list;
 }
 
+/**
+ * LSXSCene isADest
+ 
+
+ Função que verifica se uma certa posição é um destino possivel
+ */
 LSXScene.prototype.isADest = function (pick,list){
 
             var coord = this.pickToCoord(pick);
@@ -443,7 +521,12 @@ LSXScene.prototype.isADest = function (pick,list){
         return false;
 }
 
+/**
+ * LSXSCene putBoardAndGetPlays
+ 
 
+ Função que de acordo com o estado de jogo coloca o tabuleiro e pede as jogadas
+ */
 LSXScene.prototype.putBoardAndGetPlays = function (self,matrix){
                             self.Board.newMatrix(matrix);
                             self.continueGame(self,function(answer) {
@@ -462,7 +545,12 @@ LSXScene.prototype.putBoardAndGetPlays = function (self,matrix){
                                 }
 }
 
+/**
+ * LSXSCene Picking
 
+ Função que faz o picking de acordo com todas as situações possiveis de o fazer ou seja so faz quando é possivel
+ de acordo com as regras do jogo
+ */
 LSXScene.prototype.Picking = function ()
 {
     if (this.pickMode == false) {
@@ -508,6 +596,11 @@ LSXScene.prototype.Picking = function ()
     }
 }
 
+/**
+ * LSXSCene getIdPieceLocation
+
+ Função que retorna o ID da peça pretendida
+ */
 LSXScene.prototype.getIdPieceLocation = function (coord) {
 
 var list = [];
@@ -523,6 +616,11 @@ var list = [];
 
             //this.initNodes();
 
+
+/**
+ * LSXSCene PLAY
+ Função que faz as jogadas do jogo
+ */
 LSXScene.prototype.PLAY = function () {
     if(this.state == "IDLE")
     {

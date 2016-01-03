@@ -1,3 +1,9 @@
+
+/**
+ * getPrologRequest
+ * @param{requestString(String)}
+Função que faz pedidos Ajax ao Prolog
+ */
 function getPrologRequest(requestString, onSuccess, onError, port,assinc) {
     var requestPort = port || 8081;
     var request = new XMLHttpRequest();
@@ -14,7 +20,11 @@ function getPrologRequest(requestString, onSuccess, onError, port,assinc) {
     request.send();
 }
 
-
+/**
+ * matrixToList
+ * @param{matrix(Matrix)}
+Função que transforma uma matrix de javascript numa lista para enviar para o Prolog
+ */
 function matrixToList(matrix) {
 
     var list = "[";
@@ -32,7 +42,11 @@ function matrixToList(matrix) {
 
 }
 
-
+/**
+ * listToMatrix
+ * @param{list(String)}
+Função que transforma uma lista de Prolog numa matriz de Javascript
+ */
 function listToMatrix(list) {
 
     console.log(list);

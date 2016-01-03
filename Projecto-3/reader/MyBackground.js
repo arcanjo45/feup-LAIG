@@ -1,3 +1,8 @@
+
+/**
+ * MyBackground
+ * @constructor
+ */
 function MyBackground(scene){
 	CGFobject.call(this,scene);
 
@@ -12,7 +17,11 @@ function MyBackground(scene){
     this.backgroundWall2.applyAmplifFactors(5,5);
 
 }
-
+/**
+ * display
+ * @param{}
+Função que faz display do cenário em volta do tabuleiro e que o atualiza de acordo com o que o utilizador pretende
+ */
 MyBackground.prototype.display = function() {
 	this.scene.pushMatrix();
 	if(this.scene.currentBackground == "Background 1")
